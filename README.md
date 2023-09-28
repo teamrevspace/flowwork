@@ -1,4 +1,4 @@
-# flow
+# Flow Space
 
 Goal: make a super minimalistic productivity app that will be in the menu bar/corner and allow people to do async coworking.
 
