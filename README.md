@@ -15,3 +15,5 @@ Bonus features:
 - track your screen time so you can check how productive you were
 - detect inactivity to pause the session
 
+https://github.com/teamrevspace/flow/assets/16998534/81eb3020-eb00-4325-a329-1ba728e55bc5
+
