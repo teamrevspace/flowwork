@@ -1,4 +1,4 @@
-# Flow Space
+# Flow Work
 
 Goal: make a super minimalistic productivity app that will be in the menu bar/corner and allow people to do async coworking.
 
@@ -15,5 +15,7 @@ Bonus features:
 - track your screen time so you can check how productive you were
 - detect inactivity to pause the session
 
-https://github.com/teamrevspace/flow/assets/16998534/81eb3020-eb00-4325-a329-1ba728e55bc5
+https://github.com/teamrevspace/flowwork/assets/16998534/01c3498d-b6a3-4da3-ae9b-ad3ed5165cc5
+
+
 
