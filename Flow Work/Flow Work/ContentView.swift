@@ -15,7 +15,7 @@ struct ContentView: View {
     var body: some View {
         VStack {
             if isSignedIn {
-                Text("You're signed in!")
+                Text("You're signed in as: \(Auth.auth().currentUser?.email ?? "Unknown")")
             } else {
                 Button("Sign in with Google") {
                     self.signInWithGoogle()
