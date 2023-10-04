@@ -7,9 +7,6 @@
 # General application configuration
 import Config
 
-config :flow_stream,
-  ecto_repos: [FlowStream.Repo]
-
 # Configures the endpoint
 config :flow_stream, FlowStreamWeb.Endpoint,
   url: [host: "localhost"],

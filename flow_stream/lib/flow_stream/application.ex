@@ -10,8 +10,6 @@ defmodule FlowStream.Application do
     children = [
       # Start the Telemetry supervisor
       FlowStreamWeb.Telemetry,
-      # Start the Ecto repository
-      FlowStream.Repo,
       # Start the PubSub system
       {Phoenix.PubSub, name: FlowStream.PubSub},
       # Start Finch

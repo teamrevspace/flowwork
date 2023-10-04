@@ -5,6 +5,9 @@ defmodule FlowStreamWeb.Router do
     plug :accepts, ["json"]
   end
 
+
+
+  # implement a JWT authentication in the /api scope
   scope "/api", FlowStreamWeb do
     pipe_through :api
   end
