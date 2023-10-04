@@ -8,7 +8,7 @@ defmodule FlowStreamWeb.UserSocket do
 
   ## Channels
 
-  channel "coworking_session:*", FlowStreamWeb.CoworkingSessionChannel
+  channel("coworking_session:*", FlowStreamWeb.CoworkingSessionChannel)
 
   # Socket params are passed from the client and can
   # be used to verify and authenticate a user. After
