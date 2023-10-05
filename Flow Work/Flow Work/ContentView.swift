@@ -9,23 +9,38 @@ import SwiftUI
 import Firebase
 import GoogleSignIn
 
-struct ContentView: View {
+struct AppView: View {
     @State private var isSignedIn = false
     
     var body: some View {
         VStack {
             if isSignedIn {
-                Text("You're signed in as: \(Auth.auth().currentUser?.email ?? "Unknown")")
+                if Auth.auth().currentUser != nil {
+                    VStack {
+                        Text("Hi \(Auth.auth().currentUser?.displayName ?? "there")!")
+                        Button("Create a session") {
+                            
+                        }.frame(maxWidth: .infinity, maxHeight: .infinity)
+                        Button("Join a session") {
+                        }.frame(maxWidth: .infinity, maxHeight: .infinity)
+                        Button("Log out") {
+                        }.frame(maxWidth: .infinity, maxHeight: .infinity)
+                    }.padding()
+                } else {
+                    VStack{
+                        Text("User error. Please log in again.")
+                        Button("Sign in with Google") {
+                            self.signInWithGoogle()
+                        }
+                    }.padding()
+                }
             } else {
                 Button("Sign in with Google") {
                     self.signInWithGoogle()
                 }
-                .padding()
-                .background(Color.blue)
-                .foregroundColor(.white)
-                .cornerRadius(40)
             }
-        }
+        }.frame(minWidth:360, minHeight: 120)
+            .fixedSize().background(Color(NSColor.windowBackgroundColor))
     }
     
     private func signInWithGoogle() {
@@ -67,6 +82,6 @@ struct ContentView: View {
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-        ContentView()
+        AppView()
     }
 }
