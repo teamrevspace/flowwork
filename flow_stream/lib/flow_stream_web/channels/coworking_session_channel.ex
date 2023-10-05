@@ -25,6 +25,20 @@ defmodule FlowStreamWeb.CoworkingSessionChannel do
     {:noreply, socket}
   end
 
+  @impl true
+  def handle_in("create_session", %{"name" => name} = _payload, socket) do
+    uuid = UUID.uuid4()
+
+    case Firestore.create_session(%{id: uuid, name: name}) do
+      {:ok, new_session} ->
+        {:reply, {:ok, new_session}, socket}
+
+      {:error, error} ->
+        error_message = "Failed to create session: #{inspect(error)}"
+        {:reply, {:error, error_message}, socket}
+    end
+  end
+
   # Add authorization logic here as required.
   defp authorized?(_payload) do
     true

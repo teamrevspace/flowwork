@@ -41,7 +41,11 @@ defmodule FlowStream.MixProject do
       {:telemetry_poller, "~> 1.0"},
       {:gettext, "~> 0.20"},
       {:jason, "~> 1.2"},
-      {:plug_cowboy, "~> 2.5"}
+      {:plug_cowboy, "~> 2.5"},
+      {:uuid, "~> 1.1"},
+      {:tesla, "~> 1.7.0"},
+      {:jose, "~> 1.11.6"},
+      {:joken, "~> 2.6.0"}
     ]
   end
 
@@ -53,10 +57,8 @@ defmodule FlowStream.MixProject do
   # See the documentation for `Mix` for more info on aliases.
   defp aliases do
     [
-      setup: ["deps.get", "ecto.setup"],
-      "ecto.setup": ["ecto.create", "ecto.migrate", "run priv/repo/seeds.exs"],
-      "ecto.reset": ["ecto.drop", "ecto.setup"],
-      test: ["ecto.create --quiet", "ecto.migrate --quiet", "test"]
+      setup: ["deps.get"],
+      test: ["test"]
     ]
   end
 end
