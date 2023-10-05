@@ -24,6 +24,13 @@ struct AppView: View {
                         Button("Join a session") {
                         }.frame(maxWidth: .infinity, maxHeight: .infinity)
                         Button("Log out") {
+                            do {
+                                try Auth.auth().signOut()
+                                self.isSignedIn = false
+                            } catch let signOutError as NSError {
+                                print("Error signing out: %@", signOutError)
+                            }
+                        
                         }.frame(maxWidth: .infinity, maxHeight: .infinity)
                     }.padding()
                 } else {
