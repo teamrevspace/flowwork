@@ -107,7 +107,7 @@ export default function Home() {
   }
 
   return (
-    <div className="h-screen w-full flex flex-col bg-white">
+    <div className="h-full lg:h-screen w-full flex flex-col bg-white">
       <Head>
         <title>Flow Work</title>
         <meta name="description" content={`A social productivity tool designed to help you find your flow.`} />
@@ -115,18 +115,17 @@ export default function Home() {
       </Head>
 
       <div id="nav" className="flex flex-row justify-between w-full py-8 px-12">
-        {/* this is a placeholder */}
-        <div className="h-6"></div>
       </div>
-      <div id="main" className="flex flex-col lg:flex-row justify-center items-center w-full h-full gap-12">
+      <div id="main" className="flex flex-col lg:flex-row justify-center items-center w-full h-full gap-12 mx-auto sm:px-8">
         <div id="hero" className='flex flex-col gap-y-5 min-w-[24rem]'>
+          <img className="h-24 w-24 sm:h-32 sm:w-32" src="/logo.png" />
           <h1 className='text-6xl sm:text-7xl font-bold text-[#001122]'>Flow Work</h1>
-          <h2 className='text-[#999999] text-xl font-medium'>Cowork with your team in real time,<br />get sh*t done, and find your flow.</h2>
+          <h2 className='text-[#999999] text-xl font-medium'>Cowork with friends in real time,<br />find your flow, and get sh*t done.</h2>
           <div className="flex flex-row gap-x-3">
             {(status === ResponseStatus.SuccessfullyAdded || status === ResponseStatus.AlreadyExists) ? (
-              <span className="text-metallic-gray">
-                Download will start shortly. If it doesn't, <a href="https://flowwork.xyz/download" className="text-electric-blue">click here</a>.
-              </span>
+              <p className="flex justify-center text-[#222222] h-[52px]">
+                Download will start shortly. If it doesn&apos;t, <a href="https://flowwork.xyz/download" className="text-electric-blue">{`click here`}</a>.
+              </p>
             ) : (
               <>
                 <input ref={emailInputRef}
@@ -175,50 +174,4 @@ export default function Home() {
       </div>
     </div>
   )
-}
-
-function LeftSide() {
-  return <div className="flex-[1/2] m-auto p-8">
-    <img width="154" height="27" src="/logo.svg" />
-    <h1 className="text-6xl font-bold text-white">
-      Flow Work<br />
-      <span className="text-[#909aeb]">Waitlist</span>
-    </h1>
-    <div className="mt-5 text-xl font-light text-white">
-      A social productivity tool designed to create a distraction-free co-working space, helping you get into flow state.
-    </div>
-    <Form />
-  </div>
-}
-
-function RightSide() {
-  return <div className="flex-[1/2] m-auto p-8">
-    <img width="100%" height="100%" src="/code.svg" />
-  </div>
-}
-
-function Form() {
-  const [ email, setEmail ] = useState("");
-  const [ hasSubmitted, setHasSubmitted ] = useState(false);
-  const [ error, setError ] = useState(null);
-
-  const submit = async (e: any) => {
-    // We will submit the form ourselves
-    e.preventDefault()
-
-    // TODO: make a POST request to our backend
-  }
-
-  // If the user successfully submitted their email,
-  //   display a thank you message
-  if (hasSubmitted) {
-    return (<div className="pt-12 flex flex-wrap">
-      <span className="text-xl font-light text-white">
-        Thanks for signing up! We will be in touch soon.
-      </span>
-    </div>)
-  }
-
-  // Otherwise, display the form
-  return
 }
