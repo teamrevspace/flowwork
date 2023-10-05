@@ -160,7 +160,7 @@ export default function Home() {
           </div>
         </div>
         <div id="demo" className="w-full sm:w-[40rem] h-auto aspect-auto">
-          <video loop autoPlay muted className="object-cover sm:shadow-2xl sm:rounded-lg">
+          <video loop autoPlay muted className="object-cover w-full h-full sm:shadow-2xl sm:rounded-lg bg-black">
             <source src={'flowwork-demo.mp4'} type="video/mp4" />
           </video>
         </div>
