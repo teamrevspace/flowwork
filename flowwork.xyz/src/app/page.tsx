@@ -4,6 +4,7 @@ import Head from 'next/head'
 import { useRef, useState } from 'react';
 import clsx from 'clsx';
 import posthog from 'posthog-js';
+import Image from 'next/image';
 
 import Airtable from 'airtable';
 import { ResponseStatus } from '@/types';
@@ -37,8 +38,6 @@ const captureSignupMailingList = (email: string) => {
 
 export default function Home() {
   const [ email, setEmail ] = useState("");
-  const [ hasSubmitted, setHasSubmitted ] = useState(false);
-  const [ error, setError ] = useState(null);
 
   const [ status, setStatus ] = useState<ResponseStatus>(ResponseStatus.Waiting);
   const [ loading, setLoading ] = useState(false);
@@ -124,9 +123,9 @@ export default function Home() {
           <h2 className='text-[#999999] text-xl font-medium'>Cowork with friends in real time,<br />find your flow, and get sh*t done.</h2>
           <div className="flex flex-row gap-x-3">
             {(status === ResponseStatus.SuccessfullyAdded || status === ResponseStatus.AlreadyExists) ? (
-              <p className="flex items-center justify-center text-[#222222] h-[52px]">
+              <p className="flex items-center justify-center text-[#3a3a3a] h-[52px]">
                 {/* Download will start shortly. If it doesn&apos;t,&nbsp; <Link href="/download" className="text-electric-blue">{`click here`}</Link>. */}
-                We&apos;ll send you an email when it&apos;s ready 👀
+                Jk - we&apos;ll send you an email when we&apos;re launching 👀
               </p>
             ) : (
               <>
@@ -155,7 +154,12 @@ export default function Home() {
                   )}
                   placeholder="name@email.com" />
                 <button onClick={(e) => signup(e)} type="button" className="px-5 py-3 border-none rounded-xl text-lg font-medium w-2/5 bg-electric-blue hover:bg-electric-blue-accent text-white">
-                  Download
+                  {loading ? (
+                    <div className="flex justify-center items-center w-full h-7">
+                      <Image className="animate-spin" width={24} height={24} src="spinner.svg" alt={'Loading...'} />
+                    </div>
+                  ) : 'Download'
+                  }
                 </button>
               </>
             )}
