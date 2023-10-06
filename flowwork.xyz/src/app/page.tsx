@@ -107,7 +107,7 @@ export default function Home() {
   }
 
   return (
-    <div className="h-full lg:h-screen w-full flex flex-col bg-white">
+    <div className="h-full min-h-screen lg:h-screen w-full flex flex-col bg-white">
       <Head>
         <title>Flow Work</title>
         <meta name="description" content={`A social productivity tool designed to help you find your flow.`} />
@@ -117,7 +117,7 @@ export default function Home() {
       <div id="nav" className="flex flex-row justify-between w-full py-8 px-12">
       </div>
       <div id="main" className="flex flex-col lg:flex-row justify-center items-center w-full h-full gap-12 mx-auto sm:px-8">
-        <div id="hero" className='flex flex-col gap-y-5 min-w-[24rem]'>
+        <div id="hero" className='flex flex-col gap-y-5 min-w-[24rem] px-8 sm:px-0'>
           <img className="h-24 w-24 sm:h-32 sm:w-32" src="/logo.png" />
           <h1 className='text-6xl sm:text-7xl font-bold text-[#001122]'>Flow Work</h1>
           <h2 className='text-[#999999] text-xl font-medium'>Cowork with friends in real time,<br />find your flow, and get sh*t done.</h2>
@@ -171,7 +171,7 @@ export default function Home() {
           </video>
         </div>
       </div>
-      <div id="footer" className="flex flex-row justify-between w-full py-8 px-12">
+      <div id="footer" className="flex flex-row justify-between w-full py-8 px-12 flex-grow items-end">
         <p className="text-metallic-gray font-medium">© 2023 <a href="https://rev.school" target='_blank' referrerPolicy='no-referrer' className="hover:underline">rev</a></p>
         <div className="flex flex-row gap-x-4">
           <a target='_blank' referrerPolicy='no-referrer' href="https://twitter.com/rev_neu" className="text-metallic-gray font-medium hover:underline">Twitter</a>
