@@ -125,7 +125,8 @@ export default function Home() {
           <div className="flex flex-row gap-x-3">
             {(status === ResponseStatus.SuccessfullyAdded || status === ResponseStatus.AlreadyExists) ? (
               <p className="flex items-center justify-center text-[#222222] h-[52px]">
-                Download will start shortly. If it doesn&apos;t,&nbsp; <Link href="/download" className="text-electric-blue">{`click here`}</Link>.
+                {/* Download will start shortly. If it doesn&apos;t,&nbsp; <Link href="/download" className="text-electric-blue">{`click here`}</Link>. */}
+                We&apos;ll send you an email when it&apos;s ready 👀
               </p>
             ) : (
               <>
