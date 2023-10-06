@@ -52,7 +52,7 @@ COPY lib lib
 COPY assets assets
 
 # compile assets
-RUN mix assets.deploy
+# RUN mix assets.deploy
 
 # Compile the release
 RUN mix compile
@@ -82,6 +82,7 @@ RUN chown nobody /app
 
 # set runner ENV
 ENV MIX_ENV="prod"
+ENV SECRET_KEY_BASE="$(mix phx.gen.secret)"
 
 # Only copy the final release from the build stage
 COPY --from=builder --chown=nobody:root /app/_build/${MIX_ENV}/rel/flow_stream ./
