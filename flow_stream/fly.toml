@@ -1,4 +1,4 @@
-# fly.toml app configuration file generated for flowwork on 2023-10-06T13:17:22-04:00
+# fly.toml app configuration file generated for flowwork on 2023-10-06T14:58:38-04:00
 #
 # See https://fly.io/docs/reference/configuration/ for information about how to use this file.
 #
@@ -11,6 +11,7 @@ swap_size_mb = 512
 [build]
 
 [deploy]
+  # release_command = "/app/bin/migrate"
 
 [env]
   PHX_HOST = "flowwork.fly.dev"

@@ -26,15 +26,25 @@ defmodule FlowStreamWeb.CoworkingSessionChannel do
   end
 
   @impl true
-  def handle_in("create_session", %{"name" => name} = _payload, socket) do
-    uuid = UUID.uuid4()
-
-    case Firestore.create_session(%{id: uuid, name: name}) do
-      {:ok, new_session} ->
-        {:reply, {:ok, new_session}, socket}
+  def handle_in("create_session", payload, socket) do
+    case Firestore.create_session(payload) do
+      {:ok, session} ->
+        {:reply, {:ok, session}, socket}
 
       {:error, error} ->
         error_message = "Failed to create session: #{inspect(error)}"
+        {:reply, {:error, error_message}, socket}
+    end
+  end
+
+  @impl true
+  def handle_in("join_session", payload, socket) do
+    case Firestore.join_session(payload) do
+      {:ok, session} ->
+        {:reply, {:ok, session}, socket}
+
+      {:error, error} ->
+        error_message = "Failed to join session: #{inspect(error)}"
         {:reply, {:error, error_message}, socket}
     end
   end
