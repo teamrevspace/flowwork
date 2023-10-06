@@ -50,12 +50,11 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             
             window.orderFrontRegardless()
             
-            let appView = AppView()
+            let appView = AppView(webSocketManager: WebSocketManager(url: URL(string: "ws://localhost:4000/session/websocket")!))
             window.contentView = NSHostingView(rootView: appView)
             let controller = NSWindowController(window: window)
             controller.showWindow(self)
         }
-        FirebaseApp.configure()
     }
     
     //    private func setupWindow() {
@@ -93,9 +92,13 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 struct Flow_WorkApp: App {
     @NSApplicationDelegateAdaptor(AppDelegate.self) var delegate
     
+    init() {
+        FirebaseApp.configure()
+    }
+    
     var body: some Scene {
         WindowGroup {
-            AppView()
+            AppView(webSocketManager: WebSocketManager(url: URL(string: "ws://localhost:4000/session/websocket")!))
         }
     }
 }
