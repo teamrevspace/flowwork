@@ -23,17 +23,21 @@ class WebSocketManager: ObservableObject {
             request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
         }
         socket = URLSession.shared.webSocketTask(with: request)
+        print("WebSocket connection initiated")
     }
     
     func connectCoworkingSession() {
         socket?.resume()
+        let payload: [String: Any] = [:]
+        
         let joinLobbyMessage: [String: Any] = [
             "topic": "coworking_session:lobby",
             "event": "phx_join",
-            "payload": [],
+            "payload": payload,
             "ref": "1"
         ]
         sendJSON(joinLobbyMessage)
+        print("Coworking Session socket connected")
     }
     
     func sendJSON(_ dictionary: [String: Any]) {

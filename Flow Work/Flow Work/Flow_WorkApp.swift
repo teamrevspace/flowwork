@@ -50,36 +50,12 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             
             window.orderFrontRegardless()
             
-            let appView = AppView(webSocketManager: WebSocketManager(url: URL(string: "ws://localhost:4000/session/websocket")!))
+            let appView = AppView()
             window.contentView = NSHostingView(rootView: appView)
             let controller = NSWindowController(window: window)
             controller.showWindow(self)
         }
     }
-    
-    //    private func setupWindow() {
-    //        window = AlwaysOnTopWindow(
-    //            contentRect: NSRect(x: 0, y: 0, width: 360, height: 120),
-    //            styleMask: [.closable, .resizable, .fullSizeContentView],
-    //            backing: .buffered, defer: false
-    //        )
-    //        window.titleVisibility = .hidden
-    //        window.styleMask.remove(.titled)
-    //        window.backgroundColor = .clear
-    //        window.isMovableByWindowBackground = true
-    //        window.level = .screenSaver
-    //        window.orderFrontRegardless()
-    //
-    //        let contentView = NSHostingView(rootView: ContentView())
-    //        window.visualEffectView.addSubview(contentView)
-    //
-    //        NSLayoutConstraint.activate([
-    //            contentView.leadingAnchor.constraint(equalTo: window.visualEffectView.leadingAnchor),
-    //            contentView.trailingAnchor.constraint(equalTo: window.visualEffectView.trailingAnchor),
-    //            contentView.topAnchor.constraint(equalTo: window.visualEffectView.topAnchor),
-    //            contentView.bottomAnchor.constraint(equalTo: window.visualEffectView.bottomAnchor)
-    //        ])
-    //    }
     
     func application(_ app: NSApplication, open urls: [URL]) {
         for url in urls {
@@ -98,7 +74,7 @@ struct Flow_WorkApp: App {
     
     var body: some Scene {
         WindowGroup {
-            AppView(webSocketManager: WebSocketManager(url: URL(string: "ws://localhost:4000/session/websocket")!))
+            AppView()
         }
     }
 }

@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		110C430E2AD052FF00201CD5 /* SessionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 110C430D2AD052FF00201CD5 /* SessionView.swift */; };
 		114AFDE42AC765B700AB9A8B /* Flow_WorkApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 114AFDE32AC765B700AB9A8B /* Flow_WorkApp.swift */; };
 		114AFDE62AC765B700AB9A8B /* AppView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 114AFDE52AC765B700AB9A8B /* AppView.swift */; };
 		114AFDE82AC765B800AB9A8B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 114AFDE72AC765B800AB9A8B /* Assets.xcassets */; };
@@ -18,9 +19,24 @@
 		114AFE022AC7714100AB9A8B /* GoogleSignIn in Frameworks */ = {isa = PBXBuildFile; productRef = 114AFE012AC7714100AB9A8B /* GoogleSignIn */; };
 		116D18F32ACF8A7700CB4F1D /* WebSocketManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 116D18F22ACF8A7700CB4F1D /* WebSocketManager.swift */; };
 		116D18F92ACFB07400CB4F1D /* AuthManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 116D18F82ACFB07400CB4F1D /* AuthManager.swift */; };
+		116D18FF2ACFD2D200CB4F1D /* Session.swift in Sources */ = {isa = PBXBuildFile; fileRef = 116D18FE2ACFD2D200CB4F1D /* Session.swift */; };
+		116D19012ACFD34B00CB4F1D /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 116D19002ACFD34B00CB4F1D /* User.swift */; };
+		116D19032ACFD3C400CB4F1D /* LoginViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 116D19022ACFD3C400CB4F1D /* LoginViewModel.swift */; };
+		116D19072ACFD67B00CB4F1D /* JoinSessionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 116D19062ACFD67B00CB4F1D /* JoinSessionView.swift */; };
+		116D19092ACFD75300CB4F1D /* JoinSessionViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 116D19082ACFD75300CB4F1D /* JoinSessionViewModel.swift */; };
+		116D190B2ACFDA8F00CB4F1D /* AppError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 116D190A2ACFDA8F00CB4F1D /* AppError.swift */; };
+		116D190F2ACFDB9400CB4F1D /* ErrorPublisher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 116D190E2ACFDB9400CB4F1D /* ErrorPublisher.swift */; };
+		116D19122ACFDD1D00CB4F1D /* AppCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 116D19112ACFDD1D00CB4F1D /* AppCoordinator.swift */; };
+		116D19142ACFDD4E00CB4F1D /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 116D19132ACFDD4E00CB4F1D /* LoginView.swift */; };
+		116D19172ACFDE4D00CB4F1D /* StandardFrameModifer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 116D19162ACFDE4D00CB4F1D /* StandardFrameModifer.swift */; };
+		116D19192ACFDEF800CB4F1D /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 116D19182ACFDEF800CB4F1D /* HomeView.swift */; };
+		116D191B2ACFE41E00CB4F1D /* PrimaryButtonModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 116D191A2ACFE41E00CB4F1D /* PrimaryButtonModifier.swift */; };
+		116D191D2ACFE4FA00CB4F1D /* HomeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 116D191C2ACFE4FA00CB4F1D /* HomeViewModel.swift */; };
+		116D191F2AD04F0100CB4F1D /* ErrorModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 116D191E2AD04F0100CB4F1D /* ErrorModifier.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		110C430D2AD052FF00201CD5 /* SessionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionView.swift; sourceTree = "<group>"; };
 		114AFDE02AC765B700AB9A8B /* Flow Work.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Flow Work.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		114AFDE32AC765B700AB9A8B /* Flow_WorkApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Flow_WorkApp.swift; sourceTree = "<group>"; };
 		114AFDE52AC765B700AB9A8B /* AppView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppView.swift; sourceTree = "<group>"; };
@@ -31,6 +47,20 @@
 		114AFE032AC7716300AB9A8B /* Flow-Work-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "Flow-Work-Info.plist"; sourceTree = SOURCE_ROOT; };
 		116D18F22ACF8A7700CB4F1D /* WebSocketManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebSocketManager.swift; sourceTree = "<group>"; };
 		116D18F82ACFB07400CB4F1D /* AuthManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthManager.swift; sourceTree = "<group>"; };
+		116D18FE2ACFD2D200CB4F1D /* Session.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Session.swift; sourceTree = "<group>"; };
+		116D19002ACFD34B00CB4F1D /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
+		116D19022ACFD3C400CB4F1D /* LoginViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewModel.swift; sourceTree = "<group>"; };
+		116D19062ACFD67B00CB4F1D /* JoinSessionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JoinSessionView.swift; sourceTree = "<group>"; };
+		116D19082ACFD75300CB4F1D /* JoinSessionViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JoinSessionViewModel.swift; sourceTree = "<group>"; };
+		116D190A2ACFDA8F00CB4F1D /* AppError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppError.swift; sourceTree = "<group>"; };
+		116D190E2ACFDB9400CB4F1D /* ErrorPublisher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorPublisher.swift; sourceTree = "<group>"; };
+		116D19112ACFDD1D00CB4F1D /* AppCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppCoordinator.swift; sourceTree = "<group>"; };
+		116D19132ACFDD4E00CB4F1D /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
+		116D19162ACFDE4D00CB4F1D /* StandardFrameModifer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StandardFrameModifer.swift; sourceTree = "<group>"; };
+		116D19182ACFDEF800CB4F1D /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
+		116D191A2ACFE41E00CB4F1D /* PrimaryButtonModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrimaryButtonModifier.swift; sourceTree = "<group>"; };
+		116D191C2ACFE4FA00CB4F1D /* HomeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewModel.swift; sourceTree = "<group>"; };
+		116D191E2AD04F0100CB4F1D /* ErrorModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorModifier.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -67,12 +97,16 @@
 		114AFDE22AC765B700AB9A8B /* Flow Work */ = {
 			isa = PBXGroup;
 			children = (
-				116D18F62ACF9D9200CB4F1D /* UI */,
+				116D19152ACFDDE600CB4F1D /* Modifiers */,
+				116D19102ACFDC0500CB4F1D /* Publishers */,
+				116D18FD2ACFD2AF00CB4F1D /* Coordinators */,
+				116D18FC2ACFD2A200CB4F1D /* ViewModels */,
+				116D18FB2ACFD29900CB4F1D /* Views */,
+				116D18FA2ACFD29400CB4F1D /* Models */,
 				116D18F52ACF9D8300CB4F1D /* Services */,
 				114AFE032AC7716300AB9A8B /* Flow-Work-Info.plist */,
 				114AFDF72AC76F1300AB9A8B /* GoogleService-Info.plist */,
 				114AFDE32AC765B700AB9A8B /* Flow_WorkApp.swift */,
-				114AFDE52AC765B700AB9A8B /* AppView.swift */,
 				114AFDE72AC765B800AB9A8B /* Assets.xcassets */,
 				114AFDEC2AC765B800AB9A8B /* Flow_Work.entitlements */,
 				114AFDE92AC765B800AB9A8B /* Preview Content */,
@@ -97,19 +131,62 @@
 			path = Services;
 			sourceTree = "<group>";
 		};
-		116D18F62ACF9D9200CB4F1D /* UI */ = {
+		116D18FA2ACFD29400CB4F1D /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				116D18F72ACF9D9700CB4F1D /* Component */,
+				116D18FE2ACFD2D200CB4F1D /* Session.swift */,
+				116D19002ACFD34B00CB4F1D /* User.swift */,
+				116D190A2ACFDA8F00CB4F1D /* AppError.swift */,
 			);
-			path = UI;
+			path = Models;
 			sourceTree = "<group>";
 		};
-		116D18F72ACF9D9700CB4F1D /* Component */ = {
+		116D18FB2ACFD29900CB4F1D /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				114AFDE52AC765B700AB9A8B /* AppView.swift */,
+				116D19062ACFD67B00CB4F1D /* JoinSessionView.swift */,
+				116D19132ACFDD4E00CB4F1D /* LoginView.swift */,
+				116D19182ACFDEF800CB4F1D /* HomeView.swift */,
+				110C430D2AD052FF00201CD5 /* SessionView.swift */,
 			);
-			path = Component;
+			path = Views;
+			sourceTree = "<group>";
+		};
+		116D18FC2ACFD2A200CB4F1D /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+				116D19022ACFD3C400CB4F1D /* LoginViewModel.swift */,
+				116D19082ACFD75300CB4F1D /* JoinSessionViewModel.swift */,
+				116D191C2ACFE4FA00CB4F1D /* HomeViewModel.swift */,
+			);
+			path = ViewModels;
+			sourceTree = "<group>";
+		};
+		116D18FD2ACFD2AF00CB4F1D /* Coordinators */ = {
+			isa = PBXGroup;
+			children = (
+				116D19112ACFDD1D00CB4F1D /* AppCoordinator.swift */,
+			);
+			path = Coordinators;
+			sourceTree = "<group>";
+		};
+		116D19102ACFDC0500CB4F1D /* Publishers */ = {
+			isa = PBXGroup;
+			children = (
+				116D190E2ACFDB9400CB4F1D /* ErrorPublisher.swift */,
+			);
+			path = Publishers;
+			sourceTree = "<group>";
+		};
+		116D19152ACFDDE600CB4F1D /* Modifiers */ = {
+			isa = PBXGroup;
+			children = (
+				116D19162ACFDE4D00CB4F1D /* StandardFrameModifer.swift */,
+				116D191A2ACFE41E00CB4F1D /* PrimaryButtonModifier.swift */,
+				116D191E2AD04F0100CB4F1D /* ErrorModifier.swift */,
+			);
+			path = Modifiers;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -193,10 +270,25 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				116D191D2ACFE4FA00CB4F1D /* HomeViewModel.swift in Sources */,
+				116D19072ACFD67B00CB4F1D /* JoinSessionView.swift in Sources */,
+				116D19092ACFD75300CB4F1D /* JoinSessionViewModel.swift in Sources */,
+				116D18FF2ACFD2D200CB4F1D /* Session.swift in Sources */,
+				116D19142ACFDD4E00CB4F1D /* LoginView.swift in Sources */,
 				114AFDE62AC765B700AB9A8B /* AppView.swift in Sources */,
+				116D19192ACFDEF800CB4F1D /* HomeView.swift in Sources */,
+				116D19032ACFD3C400CB4F1D /* LoginViewModel.swift in Sources */,
+				116D19012ACFD34B00CB4F1D /* User.swift in Sources */,
+				116D19122ACFDD1D00CB4F1D /* AppCoordinator.swift in Sources */,
 				116D18F92ACFB07400CB4F1D /* AuthManager.swift in Sources */,
+				116D19172ACFDE4D00CB4F1D /* StandardFrameModifer.swift in Sources */,
+				116D190B2ACFDA8F00CB4F1D /* AppError.swift in Sources */,
 				114AFDE42AC765B700AB9A8B /* Flow_WorkApp.swift in Sources */,
+				116D191B2ACFE41E00CB4F1D /* PrimaryButtonModifier.swift in Sources */,
+				116D190F2ACFDB9400CB4F1D /* ErrorPublisher.swift in Sources */,
+				110C430E2AD052FF00201CD5 /* SessionView.swift in Sources */,
 				116D18F32ACF8A7700CB4F1D /* WebSocketManager.swift in Sources */,
+				116D191F2AD04F0100CB4F1D /* ErrorModifier.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
