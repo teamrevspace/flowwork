@@ -7,6 +7,7 @@ import posthog from 'posthog-js';
 
 import Airtable from 'airtable';
 import { ResponseStatus } from '@/types';
+import Link from 'next/link';
 
 // Airtable API
 Airtable.configure({
@@ -123,8 +124,8 @@ export default function Home() {
           <h2 className='text-[#999999] text-xl font-medium'>Cowork with friends in real time,<br />find your flow, and get sh*t done.</h2>
           <div className="flex flex-row gap-x-3">
             {(status === ResponseStatus.SuccessfullyAdded || status === ResponseStatus.AlreadyExists) ? (
-              <p className="flex justify-center text-[#222222] h-[52px]">
-                Download will start shortly. If it doesn&apos;t, <a href="https://flowwork.xyz/download" className="text-electric-blue">{`click here`}</a>.
+              <p className="flex items-center justify-center text-[#222222] h-[52px]">
+                Download will start shortly. If it doesn&apos;t,&nbsp; <Link href="/download" className="text-electric-blue">{`click here`}</Link>.
               </p>
             ) : (
               <>
