@@ -19,6 +19,6 @@ class LoginViewModel: ObservableObject {
     }
     
     func signInWithGoogle() {
-        authManager.signInWithGoogle()
+        self.authManager.signInWithGoogle()
     }
 }

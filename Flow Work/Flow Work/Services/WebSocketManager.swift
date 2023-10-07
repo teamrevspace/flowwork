@@ -15,6 +15,7 @@ class WebSocketManager: ObservableObject {
     var socket: URLSessionWebSocketTask?
     var cancellable: AnyCancellable?
     var authToken: String?
+    @Published var isConnected: Bool = false
     
     init(url: URL, authToken: String? = nil) {
         self.authToken = authToken
@@ -23,10 +24,11 @@ class WebSocketManager: ObservableObject {
             request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
         }
         socket = URLSession.shared.webSocketTask(with: request)
+        self.connect()
         print("WebSocket connection initiated")
     }
     
-    func connectCoworkingSession() {
+    func connect() {
         socket?.resume()
         let payload: [String: Any] = [:]
         
@@ -37,10 +39,30 @@ class WebSocketManager: ObservableObject {
             "ref": "1"
         ]
         sendJSON(joinLobbyMessage)
+        isConnected = true
         print("Coworking Session socket connected")
     }
     
+    func disconnect() {
+        socket?.cancel()
+        let payload: [String: Any] = [:]
+        
+        let leaveLobbyMessage: [String: Any] = [
+            "topic": "coworking_session:lobby",
+            "event": "phx_leave",
+            "payload": payload,
+            "ref": "1"
+        ]
+        sendJSON(leaveLobbyMessage)
+        isConnected = false
+        print("Coworking Session socket disconnected")
+    }
+    
     func sendJSON(_ dictionary: [String: Any]) {
+        guard isConnected else {  // Check connection status before sending
+            print("Not connected to the channel.")
+            return
+        }
         guard let jsonData = try? JSONSerialization.data(withJSONObject: dictionary, options: []),
               let jsonString = String(data: jsonData, encoding: .utf8) else {
             print("Failed to serialize JSON")
@@ -51,9 +73,5 @@ class WebSocketManager: ObservableObject {
                 print("WebSocket sending error: \(error)")
             }
         }
-    }
-    
-    func disconnect() {
-        socket?.cancel()
     }
 }

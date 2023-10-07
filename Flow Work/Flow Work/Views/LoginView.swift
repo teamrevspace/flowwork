@@ -10,6 +10,7 @@ import SwiftUI
 
 struct LoginView: View {
     @ObservedObject var viewModel: LoginViewModel
+    @ObservedObject var errorPublisher: ErrorPublisher
     
     var body: some View {
         VStack{
@@ -17,7 +18,8 @@ struct LoginView: View {
                 viewModel.signInWithGoogle()
             }) {
                 Text("Sign in with Google")
-            }.primaryButton()
+            }
         }.standardFrame()
+            .errorOverlay(errorPublisher: errorPublisher)
     }
 }

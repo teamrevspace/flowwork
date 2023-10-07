@@ -12,11 +12,13 @@ import SwiftUI
 class JoinSessionViewModel: ObservableObject {
     @Published var webSocketManager: WebSocketManager
     @Published var inputText: String = ""
-    var errorPublisher: ErrorPublisher
+    @Published var errorPublisher: ErrorPublisher
+    var appCoordinator: AppCoordinator
     
-    init(webSocketManager: WebSocketManager, errorPublisher: ErrorPublisher) {
+    init(webSocketManager: WebSocketManager, errorPublisher: ErrorPublisher, appCoordinator: AppCoordinator) {
         self.webSocketManager = webSocketManager
         self.errorPublisher = errorPublisher
+        self.appCoordinator = appCoordinator
     }
     
     func joinSession() {
@@ -27,19 +29,25 @@ class JoinSessionViewModel: ObservableObject {
             if pathComponents.count > 2 && pathComponents[1] == "s" {
                 code = pathComponents[2]
             } else {
-                errorPublisher.publish(error: AppError.invalidURLFormat)
+                self.errorPublisher.publish(error: AppError.invalidURLFormat)
                 return
             }
         } else {
             code = inputText
         }
         
+        self.webSocketManager.connect()
+        
         let jsonObject: [String: Any] = [
             "topic": "coworking_session:lobby",
             "event": "join_session",
-            "payload": ["code": code],
+            "payload": ["id": code],
             "ref": "1"
         ]
-        webSocketManager.sendJSON(jsonObject)
+        self.webSocketManager.sendJSON(jsonObject)
+    }
+    
+    func returnToHome() {
+        self.appCoordinator.showHomeView()
     }
 }

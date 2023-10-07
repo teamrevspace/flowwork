@@ -11,6 +11,7 @@ import Firebase
 
 struct HomeView: View {
     @ObservedObject var viewModel: HomeViewModel
+    @ObservedObject var errorPublisher: ErrorPublisher
     
     var body: some View {
         VStack {
@@ -25,5 +26,6 @@ struct HomeView: View {
                 viewModel.signOut()
             }
         }.standardFrame()
+            .errorOverlay(errorPublisher: errorPublisher)
     }
 }

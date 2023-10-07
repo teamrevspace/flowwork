@@ -11,15 +11,17 @@ import Firebase
 
 class HomeViewModel: ObservableObject {
     @Published var authManager: AuthManager
-    @Published var webSocketManager: WebSocketManager?
+    @Published var webSocketManager: WebSocketManager
     @Published var isSignedIn: Bool = false
     @Published var displayName: String = "there"
+    var appCoordinator: AppCoordinator
     
     private var cancellables = Set<AnyCancellable>()
     
-    init(authManager: AuthManager, webSocketManager: WebSocketManager) {
+    init(authManager: AuthManager, webSocketManager: WebSocketManager, appCoordinator: AppCoordinator) {
         self.authManager = authManager
         self.webSocketManager = webSocketManager
+        self.appCoordinator = appCoordinator
         
         self.authManager.$isSignedIn
             .assign(to: \.isSignedIn, on: self)
@@ -31,21 +33,24 @@ class HomeViewModel: ObservableObject {
     }
     
     func createSession() {
+        self.webSocketManager.connect()
+        
         let jsonObject: [String: Any] = [
             "topic": "coworking_session:lobby",
             "event": "create_session",
             "payload": ["name": "rev"],
             "ref": "1"
         ]
-        webSocketManager?.sendJSON(jsonObject)
+        webSocketManager.sendJSON(jsonObject)
+        self.appCoordinator.showSessionView()
     }
     
     func joinSession() {
-        
+        self.appCoordinator.showJoinSessionView()
     }
     
     func signOut() {
-        authManager.signOut()
+        self.authManager.signOut()
     }
     
     

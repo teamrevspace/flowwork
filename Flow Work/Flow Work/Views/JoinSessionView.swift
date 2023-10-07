@@ -13,16 +13,22 @@ struct JoinSessionView: View {
     @ObservedObject var errorPublisher: ErrorPublisher
     
     var body: some View {
-        VStack(spacing: 20) {
+        VStack() {
             TextField("Enter session code or URL", text:  $viewModel.inputText)
                 .padding()
                 .textFieldStyle(RoundedBorderTextFieldStyle())
-            
-            Button(action: {
-                viewModel.joinSession()
-            }) {
-                Text("Join")
-            }.primaryButton()
+            HStack(spacing: 10) {
+                Button(action: {
+                    viewModel.returnToHome()
+                }) {
+                    Text("Back")
+                }
+                Button(action: {
+                    viewModel.joinSession()
+                }) {
+                    Text("Join")
+                }
+            }
         }.standardFrame()
             .errorOverlay(errorPublisher: errorPublisher)
     }

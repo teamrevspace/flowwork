@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		110C430E2AD052FF00201CD5 /* SessionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 110C430D2AD052FF00201CD5 /* SessionView.swift */; };
+		110C43122AD0997A00201CD5 /* SessionViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 110C43112AD0997A00201CD5 /* SessionViewModel.swift */; };
+		110C43152AD0B20200201CD5 /* SocketIO in Frameworks */ = {isa = PBXBuildFile; productRef = 110C43142AD0B20200201CD5 /* SocketIO */; };
 		114AFDE42AC765B700AB9A8B /* Flow_WorkApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 114AFDE32AC765B700AB9A8B /* Flow_WorkApp.swift */; };
 		114AFDE62AC765B700AB9A8B /* AppView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 114AFDE52AC765B700AB9A8B /* AppView.swift */; };
 		114AFDE82AC765B800AB9A8B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 114AFDE72AC765B800AB9A8B /* Assets.xcassets */; };
@@ -37,6 +39,7 @@
 
 /* Begin PBXFileReference section */
 		110C430D2AD052FF00201CD5 /* SessionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionView.swift; sourceTree = "<group>"; };
+		110C43112AD0997A00201CD5 /* SessionViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionViewModel.swift; sourceTree = "<group>"; };
 		114AFDE02AC765B700AB9A8B /* Flow Work.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Flow Work.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		114AFDE32AC765B700AB9A8B /* Flow_WorkApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Flow_WorkApp.swift; sourceTree = "<group>"; };
 		114AFDE52AC765B700AB9A8B /* AppView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppView.swift; sourceTree = "<group>"; };
@@ -71,6 +74,7 @@
 				114AFDFB2AC76F4E00AB9A8B /* FirebaseAnalytics in Frameworks */,
 				114AFE022AC7714100AB9A8B /* GoogleSignIn in Frameworks */,
 				114AFDFD2AC76F4E00AB9A8B /* FirebaseAuth in Frameworks */,
+				110C43152AD0B20200201CD5 /* SocketIO in Frameworks */,
 				114AFDFF2AC76F4E00AB9A8B /* FirebaseFirestore in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -159,6 +163,7 @@
 				116D19022ACFD3C400CB4F1D /* LoginViewModel.swift */,
 				116D19082ACFD75300CB4F1D /* JoinSessionViewModel.swift */,
 				116D191C2ACFE4FA00CB4F1D /* HomeViewModel.swift */,
+				110C43112AD0997A00201CD5 /* SessionViewModel.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -210,6 +215,7 @@
 				114AFDFC2AC76F4E00AB9A8B /* FirebaseAuth */,
 				114AFDFE2AC76F4E00AB9A8B /* FirebaseFirestore */,
 				114AFE012AC7714100AB9A8B /* GoogleSignIn */,
+				110C43142AD0B20200201CD5 /* SocketIO */,
 			);
 			productName = "Flow Work";
 			productReference = 114AFDE02AC765B700AB9A8B /* Flow Work.app */;
@@ -242,6 +248,7 @@
 			packageReferences = (
 				114AFDF92AC76F4E00AB9A8B /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
 				114AFE002AC7714100AB9A8B /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */,
+				110C43132AD0B20200201CD5 /* XCRemoteSwiftPackageReference "socket" */,
 			);
 			productRefGroup = 114AFDE12AC765B700AB9A8B /* Products */;
 			projectDirPath = "";
@@ -271,6 +278,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				116D191D2ACFE4FA00CB4F1D /* HomeViewModel.swift in Sources */,
+				110C43122AD0997A00201CD5 /* SessionViewModel.swift in Sources */,
 				116D19072ACFD67B00CB4F1D /* JoinSessionView.swift in Sources */,
 				116D19092ACFD75300CB4F1D /* JoinSessionViewModel.swift in Sources */,
 				116D18FF2ACFD2D200CB4F1D /* Session.swift in Sources */,
@@ -490,6 +498,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		110C43132AD0B20200201CD5 /* XCRemoteSwiftPackageReference "socket" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/socketio/socket.io-client-swift";
+			requirement = {
+				branch = master;
+				kind = branch;
+			};
+		};
 		114AFDF92AC76F4E00AB9A8B /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/firebase/firebase-ios-sdk";
@@ -509,6 +525,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		110C43142AD0B20200201CD5 /* SocketIO */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 110C43132AD0B20200201CD5 /* XCRemoteSwiftPackageReference "socket" */;
+			productName = SocketIO;
+		};
 		114AFDFA2AC76F4E00AB9A8B /* FirebaseAnalytics */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 114AFDF92AC76F4E00AB9A8B /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;

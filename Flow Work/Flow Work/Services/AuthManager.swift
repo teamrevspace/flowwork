@@ -58,12 +58,6 @@ class AuthManager: ObservableObject {
                     print("Signed in to Firebase as: \(authResult?.user.email ?? "Unknown")")
                     self.isSignedIn = true
                 }
-//                authResult?.user.getIDToken(completion: { token, error in
-//                    if let token = token {
-//                        self.webSocketManager = WebSocketManager(url: URL(string: "ws://localhost:4000/session/websocket")!, authToken: token)
-//                        self.webSocketManager?.connectCoworkingSession()
-//                    }
-//                })
             }
         }
     }
@@ -81,8 +75,7 @@ class AuthManager: ObservableObject {
         
         user.getIDToken { token, error in
             if let token = token {
-                self.webSocketManager = WebSocketManager(url: URL(string: "ws://localhost:4000/session/websocket")!, authToken: token)
-                self.webSocketManager?.connectCoworkingSession()
+                self.webSocketManager = WebSocketManager(url: URL(string: "ws://flowwork.fly.dev/session/websocket")!, authToken: token)
             } else if let error = error {
                 print("Error getting ID token: \(error.localizedDescription)")
             }
