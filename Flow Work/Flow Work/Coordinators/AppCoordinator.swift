@@ -8,6 +8,7 @@
 import Foundation
 import SwiftUI
 import Combine
+import Firebase
 
 class AppCoordinator: ObservableObject {
     @Published var currentView: AnyView
@@ -18,12 +19,13 @@ class AppCoordinator: ObservableObject {
     private var cancellables = Set<AnyCancellable>()
     
     init() {
-        let authManager = AuthManager()
+        let webSocketManager = WebSocketManager()
+        let authManager = AuthManager(webSocketManager: webSocketManager)
         let errorPublisher = ErrorPublisher()
         let loginViewModel = LoginViewModel(authManager: authManager)
         
         self.authManager = authManager
-        self.webSocketManager = WebSocketManager(url: URL(string: "ws://flowwork.fly.dev/session/websocket")!)
+        self.webSocketManager = webSocketManager
         self.errorPublisher = errorPublisher
         self.currentView = AnyView(LoginView(viewModel: loginViewModel, errorPublisher: errorPublisher))
         

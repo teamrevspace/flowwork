@@ -24,7 +24,7 @@ class SessionViewModel: ObservableObject {
     }
     
     func leaveSession() {
-        self.webSocketManager.disconnect()
+        self.webSocketManager.leaveSessionLobby()
         self.appCoordinator.showHomeView()
     }
 }

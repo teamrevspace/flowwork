@@ -1,77 +1,143 @@
-//
-//  WebSocketManager.swift
-//  Flow Work
-//
-//  Created by Allen Lin on 10/5/23.
-//
-
-import Foundation
-
 import Foundation
 import SwiftUI
 import Combine
+import NIO
+import NIOHTTP1
+import NIOWebSocket
 
 class WebSocketManager: ObservableObject {
-    var socket: URLSessionWebSocketTask?
-    var cancellable: AnyCancellable?
-    var authToken: String?
-    @Published var isConnected: Bool = false
+    private var webSocketTask: URLSessionWebSocketTask?
+    private var session: URLSession
+    private var isConnected: Bool = false
+    @Published var authToken: String?
     
-    init(url: URL, authToken: String? = nil) {
+    init(authToken: String? = nil) {
         self.authToken = authToken
-        var request = URLRequest(url: url)
-        if let token = authToken {
-            request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
-        }
-        socket = URLSession.shared.webSocketTask(with: request)
-        self.connect()
-        print("WebSocket connection initiated")
+        self.session = URLSession(configuration: .default)
     }
     
     func connect() {
-        socket?.resume()
-        let payload: [String: Any] = [:]
+        guard let url = URL(string: "wss://flowwork.fly.dev/session/websocket") else { return }
         
-        let joinLobbyMessage: [String: Any] = [
+        var request = URLRequest(url: url)
+        if let token = authToken {
+            request.addValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+        }
+        
+        webSocketTask = session.webSocketTask(with: request)
+        webSocketTask?.resume()
+        print("Connected to websocket")
+        
+        receiveMessage()
+    }
+    
+    private func joinSessionLobby() {
+        let payload: [String: Any] = [:]
+        let message: [String: Any] = [
             "topic": "coworking_session:lobby",
             "event": "phx_join",
             "payload": payload,
             "ref": "1"
         ]
-        sendJSON(joinLobbyMessage)
-        isConnected = true
-        print("Coworking Session socket connected")
+        self.sendMessage(message: message)
+        self.isConnected = true
+        print("Joined session lobby")
     }
     
-    func disconnect() {
-        socket?.cancel()
+    func leaveSessionLobby() {
         let payload: [String: Any] = [:]
-        
-        let leaveLobbyMessage: [String: Any] = [
+        let message: [String: Any] = [
             "topic": "coworking_session:lobby",
             "event": "phx_leave",
             "payload": payload,
             "ref": "1"
         ]
-        sendJSON(leaveLobbyMessage)
-        isConnected = false
-        print("Coworking Session socket disconnected")
+        self.sendMessage(message: message)
+        self.isConnected = false
+        print("Left session lobby")
     }
     
-    func sendJSON(_ dictionary: [String: Any]) {
-        guard isConnected else {  // Check connection status before sending
-            print("Not connected to the channel.")
-            return
+    func createSession(sessionName: String) {
+        if !self.isConnected {
+            self.joinSessionLobby()
         }
-        guard let jsonData = try? JSONSerialization.data(withJSONObject: dictionary, options: []),
-              let jsonString = String(data: jsonData, encoding: .utf8) else {
-            print("Failed to serialize JSON")
-            return
+        
+        let payload: [String: Any] = [
+            "name": sessionName
+        ]
+        let message: [String: Any] = [
+            "topic": "coworking_session:lobby",
+            "event": "create_session",
+            "payload": payload,
+            "ref": "1"
+        ]
+        self.sendMessage(message: message)
+        print("Created session \"\(sessionName)\"")
+    }
+    
+    func joinSession(sessionId: String) {
+        if !self.isConnected {
+            self.joinSessionLobby()
         }
-        socket?.send(.string(jsonString)) { error in
-            if let error = error {
-                print("WebSocket sending error: \(error)")
+        
+        let payload: [String: Any] = [
+            "id": sessionId
+        ]
+        let message: [String: Any] = [
+            "topic": "coworking_session:lobby",
+            "event": "join_session",
+            "payload": payload,
+            "ref": "1"
+        ]
+        self.sendMessage(message: message)
+        print("Joined session \"\(sessionId)\"")
+    }
+    
+    private func receiveMessage() {
+        webSocketTask?.receive(completionHandler: { [weak self] result in
+            switch result {
+            case .failure(let error):
+                print("WebSocket received error: \(error)")
+            case .success(let message):
+                switch message {
+                case .string(let text):
+                    print("Received string: \(text)")
+                    // Handle string message
+                case .data(let data):
+                    print("Received data: \(data)")
+                    // Handle binary data
+                @unknown default:
+                    print("Unknown message type")
+                }
             }
+            self?.receiveMessage()
+        })
+    }
+    
+    func sendMessage(message: [String: Any]) {
+        do {
+            let jsonData = try JSONSerialization.data(withJSONObject: message, options: [])
+            if let jsonString = String(data: jsonData, encoding: .utf8) {
+                let message = URLSessionWebSocketTask.Message.string(jsonString)
+                webSocketTask?.send(message, completionHandler: { error in
+                    if let error = error {
+                        print("WebSocket send error: \(error)")
+                    }
+                })
+            } else {
+                print("Failed to convert JSON data to string")
+            }
+        } catch {
+            print("Failed to serialize message to JSON: \(error)")
         }
+    }
+    
+    func disconnect() {
+        if self.isConnected {
+            self.leaveSessionLobby()
+        }
+        
+        webSocketTask?.cancel(with: .goingAway, reason: nil)
+        print("Disconnected from websocket")
     }
 }

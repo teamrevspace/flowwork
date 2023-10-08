@@ -8,6 +8,7 @@
 import Combine
 import SwiftUI
 import Firebase
+import LoremSwiftum
 
 class HomeViewModel: ObservableObject {
     @Published var authManager: AuthManager
@@ -32,16 +33,14 @@ class HomeViewModel: ObservableObject {
         }
     }
     
-    func createSession() {
-        self.webSocketManager.connect()
-        
-        let jsonObject: [String: Any] = [
-            "topic": "coworking_session:lobby",
-            "event": "create_session",
-            "payload": ["name": "rev"],
-            "ref": "1"
-        ]
-        webSocketManager.sendJSON(jsonObject)
+    func generateSlug() -> String {
+        let words = Lorem.words(3)
+        let slug = words.replacingOccurrences(of: " ", with: "-").lowercased()
+        return slug
+    }
+    
+    func createSession(sessionName: String) {
+        self.webSocketManager.createSession(sessionName: sessionName)
         self.appCoordinator.showSessionView()
     }
     

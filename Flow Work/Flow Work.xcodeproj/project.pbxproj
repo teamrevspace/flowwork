@@ -10,6 +10,8 @@
 		110C430E2AD052FF00201CD5 /* SessionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 110C430D2AD052FF00201CD5 /* SessionView.swift */; };
 		110C43122AD0997A00201CD5 /* SessionViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 110C43112AD0997A00201CD5 /* SessionViewModel.swift */; };
 		110C43152AD0B20200201CD5 /* SocketIO in Frameworks */ = {isa = PBXBuildFile; productRef = 110C43142AD0B20200201CD5 /* SocketIO */; };
+		110C43182AD20BC500201CD5 /* NIOWebSocket in Frameworks */ = {isa = PBXBuildFile; productRef = 110C43172AD20BC500201CD5 /* NIOWebSocket */; };
+		110C431B2AD2E1AD00201CD5 /* LoremSwiftum in Frameworks */ = {isa = PBXBuildFile; productRef = 110C431A2AD2E1AD00201CD5 /* LoremSwiftum */; };
 		114AFDE42AC765B700AB9A8B /* Flow_WorkApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 114AFDE32AC765B700AB9A8B /* Flow_WorkApp.swift */; };
 		114AFDE62AC765B700AB9A8B /* AppView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 114AFDE52AC765B700AB9A8B /* AppView.swift */; };
 		114AFDE82AC765B800AB9A8B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 114AFDE72AC765B800AB9A8B /* Assets.xcassets */; };
@@ -72,10 +74,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				114AFDFB2AC76F4E00AB9A8B /* FirebaseAnalytics in Frameworks */,
+				110C431B2AD2E1AD00201CD5 /* LoremSwiftum in Frameworks */,
 				114AFE022AC7714100AB9A8B /* GoogleSignIn in Frameworks */,
 				114AFDFD2AC76F4E00AB9A8B /* FirebaseAuth in Frameworks */,
 				110C43152AD0B20200201CD5 /* SocketIO in Frameworks */,
 				114AFDFF2AC76F4E00AB9A8B /* FirebaseFirestore in Frameworks */,
+				110C43182AD20BC500201CD5 /* NIOWebSocket in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -216,6 +220,8 @@
 				114AFDFE2AC76F4E00AB9A8B /* FirebaseFirestore */,
 				114AFE012AC7714100AB9A8B /* GoogleSignIn */,
 				110C43142AD0B20200201CD5 /* SocketIO */,
+				110C43172AD20BC500201CD5 /* NIOWebSocket */,
+				110C431A2AD2E1AD00201CD5 /* LoremSwiftum */,
 			);
 			productName = "Flow Work";
 			productReference = 114AFDE02AC765B700AB9A8B /* Flow Work.app */;
@@ -249,6 +255,8 @@
 				114AFDF92AC76F4E00AB9A8B /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
 				114AFE002AC7714100AB9A8B /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */,
 				110C43132AD0B20200201CD5 /* XCRemoteSwiftPackageReference "socket" */,
+				110C43162AD20BC500201CD5 /* XCRemoteSwiftPackageReference "swift-nio" */,
+				110C43192AD2E1AD00201CD5 /* XCRemoteSwiftPackageReference "LoremSwiftum" */,
 			);
 			productRefGroup = 114AFDE12AC765B700AB9A8B /* Products */;
 			projectDirPath = "";
@@ -506,6 +514,22 @@
 				kind = branch;
 			};
 		};
+		110C43162AD20BC500201CD5 /* XCRemoteSwiftPackageReference "swift-nio" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/apple/swift-nio.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.0.0;
+			};
+		};
+		110C43192AD2E1AD00201CD5 /* XCRemoteSwiftPackageReference "LoremSwiftum" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/lukaskubanek/LoremSwiftum.git";
+			requirement = {
+				branch = master;
+				kind = branch;
+			};
+		};
 		114AFDF92AC76F4E00AB9A8B /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/firebase/firebase-ios-sdk";
@@ -529,6 +553,16 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 110C43132AD0B20200201CD5 /* XCRemoteSwiftPackageReference "socket" */;
 			productName = SocketIO;
+		};
+		110C43172AD20BC500201CD5 /* NIOWebSocket */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 110C43162AD20BC500201CD5 /* XCRemoteSwiftPackageReference "swift-nio" */;
+			productName = NIOWebSocket;
+		};
+		110C431A2AD2E1AD00201CD5 /* LoremSwiftum */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 110C43192AD2E1AD00201CD5 /* XCRemoteSwiftPackageReference "LoremSwiftum" */;
+			productName = LoremSwiftum;
 		};
 		114AFDFA2AC76F4E00AB9A8B /* FirebaseAnalytics */ = {
 			isa = XCSwiftPackageProductDependency;

@@ -36,18 +36,11 @@ class JoinSessionViewModel: ObservableObject {
             code = inputText
         }
         
-        self.webSocketManager.connect()
-        
-        let jsonObject: [String: Any] = [
-            "topic": "coworking_session:lobby",
-            "event": "join_session",
-            "payload": ["id": code],
-            "ref": "1"
-        ]
-        self.webSocketManager.sendJSON(jsonObject)
+        self.webSocketManager.joinSession(sessionId: code)
     }
     
     func returnToHome() {
+        self.webSocketManager.disconnect()
         self.appCoordinator.showHomeView()
     }
 }

@@ -17,7 +17,8 @@ struct HomeView: View {
         VStack {
             Text("Hi \(viewModel.displayName)!")
             Button("Create a session") {
-                viewModel.createSession()
+                let sessionName = self.viewModel.generateSlug()
+                viewModel.createSession(sessionName: sessionName)
             }
             Button("Join a session") {
                 viewModel.joinSession()

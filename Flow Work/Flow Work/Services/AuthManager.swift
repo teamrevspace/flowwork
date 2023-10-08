@@ -11,11 +11,12 @@ import GoogleSignIn
 
 class AuthManager: ObservableObject {
     @Published var isSignedIn = false
-    @Published var webSocketManager: WebSocketManager?
+    @Published var webSocketManager: WebSocketManager
     
     private var handle: AuthStateDidChangeListenerHandle?
     
-    init() {
+    init(webSocketManager: WebSocketManager) {
+        self.webSocketManager = webSocketManager
         handle = Auth.auth().addStateDidChangeListener { (auth, user) in
             self.isSignedIn = Auth.auth().currentUser != nil
             self.connectWebSocketIfSignedIn()
@@ -75,7 +76,8 @@ class AuthManager: ObservableObject {
         
         user.getIDToken { token, error in
             if let token = token {
-                self.webSocketManager = WebSocketManager(url: URL(string: "ws://flowwork.fly.dev/session/websocket")!, authToken: token)
+                self.webSocketManager.authToken = token
+                self.webSocketManager.connect()
             } else if let error = error {
                 print("Error getting ID token: \(error.localizedDescription)")
             }
