@@ -3,7 +3,6 @@ defmodule Firestore do
 
   @firestore_url Application.compile_env(:flow_stream, :firestore_url)
 
-  # plug(Firestore.TokenVerificationMiddleware)
   plug(Tesla.Middleware.Retry, delay: 100, max_retries: 5, should_retry: &should_retry/1)
 
   def create_session(%{"name" => name} = payload) do

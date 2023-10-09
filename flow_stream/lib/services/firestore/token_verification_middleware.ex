@@ -39,9 +39,8 @@ defmodule Firestore.TokenVerificationMiddleware do
       token ->
         try do
           verified_token = verify!(token)
-
+          Process.put(:verified_token, verified_token)
           env = %{env | opts: Map.put(env.opts, :verified_token, verified_token)}
-
           Tesla.run(env, next)
         rescue
           _ -> {:error, :unauthorized}
