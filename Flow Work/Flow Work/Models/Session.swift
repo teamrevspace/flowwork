@@ -7,11 +7,8 @@
 
 import Foundation
 
-struct Session: Identifiable {
+struct Session: Codable, Identifiable {
     var id: String
     var name: String
     var password: String?
-    var owner: User
-    var users: [User]
-    var isPrivate: Bool
 }

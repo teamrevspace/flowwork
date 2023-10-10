@@ -19,28 +19,45 @@ class JoinSessionViewModel: ObservableObject {
         self.webSocketManager = webSocketManager
         self.errorPublisher = errorPublisher
         self.appCoordinator = appCoordinator
+        
+        self.setupWebSocketHandlers()
+    }
+    
+    private func setupWebSocketHandlers() {
+        
     }
     
     func joinSession() {
-        var code: String
+        var sessionId: String
         
         if let url = URL(string: inputText), let host = url.host, host == "flowwork.xyz" {
             let pathComponents = url.pathComponents
             if pathComponents.count > 2 && pathComponents[1] == "s" {
-                code = pathComponents[2]
+                sessionId = pathComponents[2]
             } else {
                 self.errorPublisher.publish(error: AppError.invalidURLFormat)
                 return
             }
         } else {
-            code = inputText
+            sessionId = inputText
         }
         
-        self.webSocketManager.joinSession(sessionId: code)
+        if !self.webSocketManager.hasJoinedSession {
+            self.webSocketManager.joinSessionLobby()
+        }
+        
+        let payload = ["id": sessionId]
+        let message = Message(
+            topic: "coworking_session:lobby",
+            event: "join_session",
+            payload: payload,
+            ref: "1")
+        self.webSocketManager.sendMessage(message: message)
+        print("Joined session: \(sessionId)")
     }
     
     func returnToHome() {
-        self.webSocketManager.disconnect()
+        self.webSocketManager.leaveSessionLobby()
         self.appCoordinator.showHomeView()
     }
 }

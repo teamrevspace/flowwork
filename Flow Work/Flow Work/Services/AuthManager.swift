@@ -12,21 +12,36 @@ import GoogleSignIn
 class AuthManager: ObservableObject {
     @Published var isSignedIn = false
     @Published var webSocketManager: WebSocketManager
+    @Published var session: User?
     
-    private var handle: AuthStateDidChangeListenerHandle?
+    var handle: AuthStateDidChangeListenerHandle?
+    let authRef = Auth.auth()
     
     init(webSocketManager: WebSocketManager) {
         self.webSocketManager = webSocketManager
-        handle = Auth.auth().addStateDidChangeListener { (auth, user) in
-            self.isSignedIn = Auth.auth().currentUser != nil
-            self.connectWebSocketIfSignedIn()
-        }
-        connectWebSocketIfSignedIn()
+        self.listen()
     }
     
     deinit {
+        unbind()
+    }
+    
+    func listen() {
+        handle = authRef.addStateDidChangeListener({(auth, user) in
+            if let user = user {
+                self.isSignedIn = true
+                self.session = User(id: user.uid, name: user.displayName!, emailAddress: user.email!, avatarURL: user.photoURL)
+                self.connectWebSocketIfSignedIn()
+            } else {
+                self.isSignedIn = false
+                self.session = nil
+            }
+        })
+    }
+    
+    func unbind() {
         if let handle = handle {
-            Auth.auth().removeStateDidChangeListener(handle)
+            authRef.removeStateDidChangeListener(handle)
         }
     }
     
@@ -55,29 +70,43 @@ class AuthManager: ObservableObject {
             Auth.auth().signIn(with: credential) { authResult, error in
                 if let error = error {
                     print("Firebase sign in error: \(error.localizedDescription)")
-                } else {
-                    print("Signed in to Firebase as: \(authResult?.user.email ?? "Unknown")")
-                    self.isSignedIn = true
+                    return
                 }
+                
+                guard let authResult = authResult else {
+                    print("No user data available")
+                    return
+                }
+                
+                print("Signed in to Firebase as: \(authResult.user.email!)")
+                self.isSignedIn = true
+                User.current = User(id: authResult.user.uid, name: authResult.user.displayName!, emailAddress: authResult.user.email!, avatarURL: authResult.user.photoURL)
             }
         }
     }
     
-    func signOut() {
+    func signOut() -> Bool {
         do {
             try Auth.auth().signOut()
+            self.session = nil
+            self.isSignedIn = false
+            return true
         } catch let signOutError as NSError {
             print("Error signing out: %@", signOutError)
+            return false
         }
     }
     
     private func connectWebSocketIfSignedIn() {
-        guard let user = Auth.auth().currentUser else { return }
+        guard let user = authRef.currentUser else { return }
         
         user.getIDToken { token, error in
             if let token = token {
                 self.webSocketManager.authToken = token
                 self.webSocketManager.connect()
+                if !self.webSocketManager.hasJoinedSession {
+                    self.webSocketManager.joinSessionLobby()
+                }
             } else if let error = error {
                 print("Error getting ID token: \(error.localizedDescription)")
             }

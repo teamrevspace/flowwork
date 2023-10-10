@@ -5,19 +5,63 @@ import NIO
 import NIOHTTP1
 import NIOWebSocket
 
+protocol WebSocketManagerDelegate: AnyObject {
+    func didJoinSession(_ session: Session)
+}
+
 class WebSocketManager: ObservableObject {
     private var webSocketTask: URLSessionWebSocketTask?
+    weak var delegate: WebSocketManagerDelegate?
     private var session: URLSession
-    private var isConnected: Bool = false
+    private var pingTimer: Timer?
+    @Published var isConnected: Bool = false
+    @Published var hasJoinedSession: Bool = false
     @Published var authToken: String?
     
     init(authToken: String? = nil) {
         self.authToken = authToken
         self.session = URLSession(configuration: .default)
+        schedulePing()
+    }
+    
+    deinit {
+        pingTimer?.invalidate()
+        self.disconnect()
+    }
+    
+    func updateConnectionStatus(_ isConnected: Bool) {
+        DispatchQueue.main.async {
+            self.isConnected = isConnected
+        }
+    }
+    
+    private func schedulePing() {
+        pingTimer = Timer.scheduledTimer(withTimeInterval: 10, repeats: true) { [weak self] _ in
+            self?.sendPing()
+        }
+    }
+    
+    private func sendPing() {
+        webSocketTask?.sendPing { (error) in
+            if let error = error {
+                self.updateConnectionStatus(false)
+                print("Failed to send ping: \(error)")
+            } else {
+                self.updateConnectionStatus(true)
+                print("Ping sent")
+            }
+        }
+    }
+    
+    func handle(message: Message) {
+        if message.topic == "coworking_session:lobby" && message.event == "join_session",
+           let response = message.payload as? Session {
+            delegate?.didJoinSession(response)
+        }
     }
     
     func connect() {
-        guard let url = URL(string: "wss://flowwork.fly.dev/session/websocket") else { return }
+        guard let url = URL(string: "ws://localhost:4000/session/websocket") else { return }
         
         var request = URLRequest(url: url)
         if let token = authToken {
@@ -28,69 +72,36 @@ class WebSocketManager: ObservableObject {
         webSocketTask?.resume()
         print("Connected to websocket")
         
+        self.updateConnectionStatus(true)
+        self.joinSessionLobby()
+        
         receiveMessage()
     }
     
-    private func joinSessionLobby() {
+    func joinSessionLobby() {
         let payload: [String: Any] = [:]
-        let message: [String: Any] = [
-            "topic": "coworking_session:lobby",
-            "event": "phx_join",
-            "payload": payload,
-            "ref": "1"
-        ]
+        let message = Message(
+            topic: "coworking_session:lobby",
+            event: "phx_join",
+            payload: payload,
+            ref: "1"
+        )
         self.sendMessage(message: message)
-        self.isConnected = true
+        self.hasJoinedSession = true
         print("Joined session lobby")
     }
     
     func leaveSessionLobby() {
         let payload: [String: Any] = [:]
-        let message: [String: Any] = [
-            "topic": "coworking_session:lobby",
-            "event": "phx_leave",
-            "payload": payload,
-            "ref": "1"
-        ]
+        let message = Message(
+            topic: "coworking_session:lobby",
+            event: "phx_leave",
+            payload: payload,
+            ref: "1"
+        )
         self.sendMessage(message: message)
-        self.isConnected = false
+        self.hasJoinedSession = false
         print("Left session lobby")
-    }
-    
-    func createSession(sessionName: String) {
-        if !self.isConnected {
-            self.joinSessionLobby()
-        }
-        
-        let payload: [String: Any] = [
-            "name": sessionName
-        ]
-        let message: [String: Any] = [
-            "topic": "coworking_session:lobby",
-            "event": "create_session",
-            "payload": payload,
-            "ref": "1"
-        ]
-        self.sendMessage(message: message)
-        print("Created session \"\(sessionName)\"")
-    }
-    
-    func joinSession(sessionId: String) {
-        if !self.isConnected {
-            self.joinSessionLobby()
-        }
-        
-        let payload: [String: Any] = [
-            "id": sessionId
-        ]
-        let message: [String: Any] = [
-            "topic": "coworking_session:lobby",
-            "event": "join_session",
-            "payload": payload,
-            "ref": "1"
-        ]
-        self.sendMessage(message: message)
-        print("Joined session \"\(sessionId)\"")
     }
     
     private func receiveMessage() {
@@ -114,9 +125,10 @@ class WebSocketManager: ObservableObject {
         })
     }
     
-    func sendMessage(message: [String: Any]) {
+    func sendMessage(message: Message) {
         do {
-            let jsonData = try JSONSerialization.data(withJSONObject: message, options: [])
+            let messageDictionary = message.toDictionary()
+            let jsonData = try JSONSerialization.data(withJSONObject: messageDictionary, options: [])
             if let jsonString = String(data: jsonData, encoding: .utf8) {
                 let message = URLSessionWebSocketTask.Message.string(jsonString)
                 webSocketTask?.send(message, completionHandler: { error in
@@ -133,7 +145,7 @@ class WebSocketManager: ObservableObject {
     }
     
     func disconnect() {
-        if self.isConnected {
+        if self.hasJoinedSession {
             self.leaveSessionLobby()
         }
         

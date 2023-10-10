@@ -17,9 +17,9 @@ struct SessionView: View {
     init(viewModel: SessionViewModel, errorPublisher: ErrorPublisher) {
         self.viewModel = viewModel
         self.errorPublisher = errorPublisher
-        let user1 = User(id: "test-user", name: "test-name", emailAddress: "test@example.com", isOnline: true)
+        let user1 = User(id: "test-user", name: "test-name", emailAddress: "test@example.com")
         self.testUser = user1
-        self.session = Session(id: "test", name: "test", owner: testUser, users: [testUser], isPrivate: false)
+        self.session = Session(id: "test", name: "test")
     }
     
     var body: some View {

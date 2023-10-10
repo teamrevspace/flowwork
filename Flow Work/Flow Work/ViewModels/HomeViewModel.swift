@@ -14,6 +14,7 @@ class HomeViewModel: ObservableObject {
     @Published var authManager: AuthManager
     @Published var webSocketManager: WebSocketManager
     @Published var isSignedIn: Bool = false
+    @Published var isConnected: Bool = false
     @Published var displayName: String = "there"
     var appCoordinator: AppCoordinator
     
@@ -23,6 +24,10 @@ class HomeViewModel: ObservableObject {
         self.authManager = authManager
         self.webSocketManager = webSocketManager
         self.appCoordinator = appCoordinator
+        
+        self.webSocketManager.$isConnected
+            .assign(to: \.isConnected, on: self)
+            .store(in: &cancellables)
         
         self.authManager.$isSignedIn
             .assign(to: \.isSignedIn, on: self)
@@ -40,7 +45,20 @@ class HomeViewModel: ObservableObject {
     }
     
     func createSession(sessionName: String) {
-        self.webSocketManager.createSession(sessionName: sessionName)
+        if !self.webSocketManager.hasJoinedSession {
+            self.webSocketManager.joinSessionLobby()
+        }
+        
+        let payload = ["name": sessionName]
+        let message = Message(
+            topic: "coworking_session:lobby",
+            event: "create_session",
+            payload: payload,
+            ref: "1"
+        )
+        self.webSocketManager.sendMessage(message: message)
+        print("Created session: \(sessionName)")
+        
         self.appCoordinator.showSessionView()
     }
     
@@ -51,6 +69,4 @@ class HomeViewModel: ObservableObject {
     func signOut() {
         self.authManager.signOut()
     }
-    
-    
 }

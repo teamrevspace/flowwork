@@ -15,18 +15,34 @@ struct HomeView: View {
     
     var body: some View {
         VStack {
-            Text("Hi \(viewModel.displayName)!")
-            Button("Create a session") {
-                let sessionName = self.viewModel.generateSlug()
-                viewModel.createSession(sessionName: sessionName)
+            VStack {
+                HStack {
+                    Spacer()
+                    HStack(spacing: 10) {
+                        Circle()
+                            .frame(width: 10, height: 10)
+                            .foregroundColor(viewModel.isConnected ? .green : .red)
+                        Text(viewModel.isConnected ? "online" : "offline")
+                    }
+                }
+                Spacer()
             }
-            Button("Join a session") {
-                viewModel.joinSession()
+            VStack{
+                Text("Hi \(viewModel.displayName)!")
+                Button("Create a session") {
+                    let sessionName = self.viewModel.generateSlug()
+                    viewModel.createSession(sessionName: sessionName)
+                }
+                Button("Join a session") {
+                    viewModel.joinSession()
+                }
+                Button("Log out") {
+                    viewModel.signOut()
+                }
             }
-            Button("Log out") {
-                viewModel.signOut()
-            }
-        }.standardFrame()
+        }
+        .padding(10)
+        .standardFrame()
             .errorOverlay(errorPublisher: errorPublisher)
     }
 }
