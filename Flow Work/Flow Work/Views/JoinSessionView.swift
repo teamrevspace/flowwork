@@ -19,7 +19,7 @@ struct JoinSessionView: View {
                 .onChange(of: viewModel.inputText) { _ in
                     self.errorPublisher.clearError()
                 }
-                List(viewModel.sessions) { session in
+                List(viewModel.availableSessions) { session in
                     HStack {
                         Text(session.name)
                         Spacer()

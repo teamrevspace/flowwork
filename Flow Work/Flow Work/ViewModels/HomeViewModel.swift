@@ -53,8 +53,7 @@ class HomeViewModel: ObservableObject {
         let message = Message(
             topic: "coworking_session:lobby",
             event: "create_session",
-            payload: payload,
-            ref: "1"
+            payload: payload
         )
         self.webSocketManager.sendMessage(message: message)
         print("Created session: \(sessionName)")

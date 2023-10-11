@@ -15,7 +15,11 @@ class SessionViewModel: ObservableObject {
     @Published var webSocketManager: WebSocketManager
     @Published var currentSession: Session?
     @Published var isLoading: Bool = false
+    @Published var sessionUserIds: [String]?
+    @Published var sessionUsers: [User] = []
     var appCoordinator: AppCoordinator
+    private let db = Firestore.firestore()
+    private let user = Auth.auth().currentUser
     
     private var cancellables = Set<AnyCancellable>()
     
@@ -23,6 +27,10 @@ class SessionViewModel: ObservableObject {
         self.authManager = authManager
         self.webSocketManager = webSocketManager
         self.appCoordinator = appCoordinator
+        
+        if (user != nil) {
+            self.sessionUserIds = [user?.uid ?? ""]
+        }
         
         self.webSocketManager.$currentSession
             .assign(to: \.currentSession, on: self)
@@ -37,6 +45,30 @@ class SessionViewModel: ObservableObject {
                 }
             }
             .store(in: &cancellables)
+    
+        self.fetchData()
+    }
+    
+    func fetchData() {
+        if (user != nil) {
+            db.collection("users").whereField("id", in: sessionUserIds!)
+                .addSnapshotListener({(snapshot, error) in
+                    guard let documents = snapshot?.documents else {
+                        print("No documents found")
+                        return
+                    }
+                    
+                    self.sessionUsers = documents.map({docSnapshot -> User in
+                        let data = docSnapshot.data()
+                        let docId = docSnapshot.documentID
+                        let name = data["name"] as? String ?? ""
+                        let emailAddress = data["emailAddress"] as? String ?? ""
+                        let avatarURL = URL(string: data["avatarURL"] as! String)
+                        return User(id: docId, name: name, emailAddress: emailAddress, avatarURL: avatarURL)
+                    })
+                })
+            
+        }
     }
     
     func getCurrentUser() -> User? {

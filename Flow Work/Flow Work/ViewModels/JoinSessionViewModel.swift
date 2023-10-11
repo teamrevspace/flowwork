@@ -17,7 +17,7 @@ class JoinSessionViewModel: ObservableObject {
     var appCoordinator: AppCoordinator
     
     @Published var currentSession: Session?
-    @Published var sessions = [Session]()
+    @Published var availableSessions = [Session]()
     private let db = Firestore.firestore()
     private let user = Auth.auth().currentUser
     
@@ -40,7 +40,7 @@ class JoinSessionViewModel: ObservableObject {
                         return
                     }
                     
-                    self.sessions = documents.map({docSnapshot -> Session in
+                    self.availableSessions = documents.map({docSnapshot -> Session in
                         let data = docSnapshot.data()
                         let docId = docSnapshot.documentID
                         let name = data["name"] as? String ?? ""
@@ -82,8 +82,8 @@ class JoinSessionViewModel: ObservableObject {
         let message = Message(
             topic: "coworking_session:lobby",
             event: "join_session",
-            payload: payload,
-            ref: "1")
+            payload: payload
+        )
         self.webSocketManager.sendMessage(message: message)
         print("Joined session: \(sessionId)")
         self.appCoordinator.showSessionView()

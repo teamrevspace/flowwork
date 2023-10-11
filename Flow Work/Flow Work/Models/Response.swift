@@ -7,26 +7,37 @@
 
 import Foundation
 
-struct SessionResponse: Decodable {
-    var ref: String
-    var payload: ResponsePayload
+struct LobbyResponse: Decodable {
+    var ref: String?
+    var payload: LobbyResponsePayload
     var topic: String
     var event: String
 }
 
-struct ResponsePayload: Decodable {
-    var status: String
-    var response: Response
+struct LobbyResponsePayload: Decodable {
+    var users: [String]
 }
 
-struct Response: Decodable {
+struct SessionResponse: Decodable {
+    var ref: String?
+    var payload: SessionResponsePayload
+    var topic: String
+    var event: String
+}
+
+struct SessionResponsePayload: Decodable {
+    var status: String
+    var response: SessionResponseBody
+}
+
+struct SessionResponseBody: Decodable {
     var createTime: String
-    var fields: ResponseFields
+    var fields: SessionResponseFields
     var name: String
     var updateTime: String?
 }
 
-struct ResponseFields: Decodable {
+struct SessionResponseFields: Decodable {
     var description: StringValue?
     var joinCode: StringValue?
     var name: StringValue

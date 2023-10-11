@@ -13,9 +13,11 @@ class WebSocketManager: ObservableObject {
     @Published var hasJoinedSession: Bool = false
     @Published var authToken: String?
     @Published var currentSession: Session?
+    @Published var userId: String?
     
-    init(authToken: String? = nil) {
+    init(authToken: String? = nil, userId: String? = nil) {
         self.authToken = authToken
+        self.userId = userId
         self.session = URLSession(configuration: .default)
         schedulePing()
     }
@@ -56,12 +58,21 @@ class WebSocketManager: ObservableObject {
     }
     
     func connect() {
-        guard let url = URL(string: "ws://localhost:4000/session/websocket") else { return }
+        var urlComponents = URLComponents()
+        urlComponents.scheme = "ws"
+        urlComponents.host = "localhost"
+        urlComponents.port = 4000
+        urlComponents.path = "/session/websocket"
+        urlComponents.queryItems = [
+            URLQueryItem(name: "user_id", value: userId),
+        ]
+
+        guard let url = urlComponents.url else { return }
         
-        var request = URLRequest(url: url)
-        if let token = authToken {
-            request.addValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
-        }
+        let request = URLRequest(url: url)
+        //        if let token = authToken {
+        //            request.addValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+        //        }
         
         webSocketTask = session.webSocketTask(with: request)
         webSocketTask?.resume()
@@ -78,8 +89,7 @@ class WebSocketManager: ObservableObject {
         let message = Message(
             topic: "coworking_session:lobby",
             event: "phx_join",
-            payload: payload,
-            ref: "1"
+            payload: payload
         )
         self.sendMessage(message: message)
         self.hasJoinedSession = true
@@ -91,8 +101,7 @@ class WebSocketManager: ObservableObject {
         let message = Message(
             topic: "coworking_session:lobby",
             event: "phx_leave",
-            payload: payload,
-            ref: "1"
+            payload: payload
         )
         self.sendMessage(message: message)
         self.hasJoinedSession = false
@@ -107,27 +116,18 @@ class WebSocketManager: ObservableObject {
             case .success(let message):
                 switch message {
                 case .string(let text):
+                    let data = Data(text.utf8)
+                    let decoder = JSONDecoder()
                     do {
-                        let data = Data(text.utf8)
-                        let decoder = JSONDecoder()
                         let messageObject = try decoder.decode(SessionResponse.self, from: data)
-                        
-                        if messageObject.topic == "coworking_session:lobby" && messageObject.event == "phx_reply" && messageObject.payload.status == "ok" {
-                            let sessionFields = messageObject.payload.response.fields
-                            let sessionUsers = sessionFields.users.arrayValue.values.map { $0.stringValue }
-                            let sessionId = messageObject.payload.response.name.components(separatedBy: "/").last!
-                            let session = Session(
-                                id: sessionId,
-                                name: sessionFields.name.stringValue,
-                                description: sessionFields.description?.stringValue,
-                                joinCode: sessionFields.joinCode?.stringValue,
-                                users: sessionUsers
-                            )
-                            self?.updateSession(session)
-                            print("Received session: \(session)")
-                        }
+                        self?.handleSessionResponse(messageObject)
                     } catch {
-                        print("Received message: \(message)")
+                        do {
+                            let messageObject = try decoder.decode(LobbyResponse.self, from: data)
+                            self?.handleLobbyResponse(messageObject)
+                        } catch {
+                            print("Received message: \(message)")
+                        }
                     }
                 case .data(let data):
                     print("Received data: \(data)")
@@ -138,6 +138,29 @@ class WebSocketManager: ObservableObject {
             }
             self?.receiveMessage()
         })
+    }
+    
+    private func handleSessionResponse(_ response: SessionResponse) {
+        if response.topic == "coworking_session:lobby" && response.event == "phx_reply" && response.payload.status == "ok" {
+            let sessionFields = response.payload.response.fields
+            let sessionUsers = sessionFields.users.arrayValue.values.map { $0.stringValue }
+            let sessionId = response.payload.response.name.components(separatedBy: "/").last!
+            let session = Session(
+                id: sessionId,
+                name: sessionFields.name.stringValue,
+                description: sessionFields.description?.stringValue,
+                joinCode: sessionFields.joinCode?.stringValue,
+                users: sessionUsers
+            )
+            self.updateSession(session)
+            print("Received session: \(session)")
+        }
+    }
+    
+    private func handleLobbyResponse(_ response: LobbyResponse) {
+        if response.topic == "coworking_session:lobby" && response.event == "lobby_update" {
+            
+        }
     }
     
     func sendMessage(message: Message) {

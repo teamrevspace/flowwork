@@ -11,9 +11,9 @@ struct Message {
     var topic: String
     var event: String
     var payload: [String: Any]
-    var ref: String
+    var ref: String?
     
     func toDictionary() -> [String: Any] {
-        return ["topic": topic, "event": event, "payload": payload, "ref": ref]
+        return ["topic": topic, "event": event, "payload": payload, "ref": ref ?? ""]
     }
 }

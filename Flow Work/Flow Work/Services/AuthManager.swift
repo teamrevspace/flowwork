@@ -14,6 +14,8 @@ class AuthManager: ObservableObject {
     @Published var webSocketManager: WebSocketManager
     @Published var currentUser: User?
     
+    private let db = Firestore.firestore()
+    
     var handle: AuthStateDidChangeListenerHandle?
     let authRef = Auth.auth()
     
@@ -67,6 +69,7 @@ class AuthManager: ObservableObject {
             let credential = GoogleAuthProvider.credential(withIDToken: idToken,
                                                            accessToken: user.accessToken.tokenString)
             
+            
             Auth.auth().signIn(with: credential) { authResult, error in
                 if let error = error {
                     print("Firebase sign in error: \(error.localizedDescription)")
@@ -80,7 +83,27 @@ class AuthManager: ObservableObject {
                 
                 print("Signed in to Firebase as: \(authResult.user.email!)")
                 self.isSignedIn = true
+                let isNewUser = authResult.additionalUserInfo?.isNewUser ?? false
+                
+                if (isNewUser) {
+                    self.addUserToFirestore(user: authResult.user)
+                }
+                
                 User.current = User(id: authResult.user.uid, name: authResult.user.displayName!, emailAddress: authResult.user.email!, avatarURL: authResult.user.photoURL)
+            }
+        }
+    }
+    
+    private func addUserToFirestore(user: Firebase.User) {
+        db.collection("users").document(user.uid).setData([
+            "name": user.displayName ?? "",
+            "emailAddress": user.email ?? "",
+            "avatarURL": user.photoURL?.absoluteString ?? ""
+        ]) { error in
+            if let error = error {
+                print("Error adding user: \(error.localizedDescription)")
+            } else {
+                print("User added")
             }
         }
     }
@@ -106,6 +129,7 @@ class AuthManager: ObservableObject {
         user.getIDToken { token, error in
             if let token = token {
                 self.webSocketManager.authToken = token
+                self.webSocketManager.userId = user.uid
                 self.webSocketManager.connect()
                 if !self.webSocketManager.hasJoinedSession {
                     self.webSocketManager.joinSessionLobby()

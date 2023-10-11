@@ -23,7 +23,7 @@ struct HomeView: View {
                         Circle()
                             .frame(width: 10, height: 10)
                             .foregroundColor(viewModel.isConnected ? .green : .red)
-                        Text(viewModel.isConnected ? "online" : "offline")
+                        Text(viewModel.isConnected ? "connected" : "not connected")
                     }
                 }
                 Spacer()
