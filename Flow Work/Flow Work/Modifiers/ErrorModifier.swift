@@ -16,17 +16,22 @@ struct ErrorOverlayModifier: ViewModifier {
         content
             .overlay(
                 Group {
-                    if let errorMessage = errorMessage {
-                        Text(errorMessage)
-                            .padding()
-                            .background(Color.red)
-                            .foregroundColor(.white)
-                            .cornerRadius(8)
+                    if self.errorPublisher.showError {
+                        if let errorMessage = errorMessage {
+                            Text(errorMessage)
+                                .padding()
+                                .background(Color.red)
+                                .foregroundColor(.white)
+                                .cornerRadius(8)
+                        }
                     }
                 }
             )
             .onReceive(errorPublisher.errorPublisher) { error in
                 self.errorMessage = error
+                Timer.scheduledTimer(withTimeInterval: 3.0, repeats: false) { _ in
+                    self.errorPublisher.clearError()
+                }
             }
     }
 }

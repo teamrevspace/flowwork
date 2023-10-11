@@ -15,8 +15,20 @@ struct JoinSessionView: View {
     var body: some View {
         VStack() {
             TextField("Enter session code or URL", text:  $viewModel.inputText)
-                .padding()
                 .textFieldStyle(RoundedBorderTextFieldStyle())
+                .onChange(of: viewModel.inputText) { _ in
+                    self.errorPublisher.clearError()
+                }
+                List(viewModel.sessions) { session in
+                    HStack {
+                        Text(session.name)
+                        Spacer()
+                    }.onTapGesture {
+                        viewModel.joinSession(session.id)
+                    }
+                }
+                .frame(height: 240)
+                .cornerRadius(5)
             HStack(spacing: 10) {
                 Button(action: {
                     viewModel.returnToHome()
@@ -29,7 +41,9 @@ struct JoinSessionView: View {
                     Text("Join")
                 }
             }
-        }.standardFrame()
+        }
+        .padding(10)
+        .standardFrame()
             .errorOverlay(errorPublisher: errorPublisher)
     }
 }

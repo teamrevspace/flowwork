@@ -5,18 +5,14 @@ import NIO
 import NIOHTTP1
 import NIOWebSocket
 
-protocol WebSocketManagerDelegate: AnyObject {
-    func didJoinSession(_ session: Session)
-}
-
 class WebSocketManager: ObservableObject {
     private var webSocketTask: URLSessionWebSocketTask?
-    weak var delegate: WebSocketManagerDelegate?
     private var session: URLSession
     private var pingTimer: Timer?
     @Published var isConnected: Bool = false
     @Published var hasJoinedSession: Bool = false
     @Published var authToken: String?
+    @Published var currentSession: Session?
     
     init(authToken: String? = nil) {
         self.authToken = authToken
@@ -53,10 +49,9 @@ class WebSocketManager: ObservableObject {
         }
     }
     
-    func handle(message: Message) {
-        if message.topic == "coworking_session:lobby" && message.event == "join_session",
-           let response = message.payload as? Session {
-            delegate?.didJoinSession(response)
+    func updateSession(_ session: Session) {
+        DispatchQueue.main.async {
+            self.currentSession = session
         }
     }
     
@@ -112,8 +107,28 @@ class WebSocketManager: ObservableObject {
             case .success(let message):
                 switch message {
                 case .string(let text):
-                    print("Received string: \(text)")
-                    // Handle string message
+                    do {
+                        let data = Data(text.utf8)
+                        let decoder = JSONDecoder()
+                        let messageObject = try decoder.decode(SessionResponse.self, from: data)
+                        
+                        if messageObject.topic == "coworking_session:lobby" && messageObject.event == "phx_reply" && messageObject.payload.status == "ok" {
+                            let sessionFields = messageObject.payload.response.fields
+                            let sessionUsers = sessionFields.users.arrayValue.values.map { $0.stringValue }
+                            let sessionId = messageObject.payload.response.name.components(separatedBy: "/").last!
+                            let session = Session(
+                                id: sessionId,
+                                name: sessionFields.name.stringValue,
+                                description: sessionFields.description?.stringValue,
+                                joinCode: sessionFields.joinCode?.stringValue,
+                                users: sessionUsers
+                            )
+                            self?.updateSession(session)
+                            print("Received session: \(session)")
+                        }
+                    } catch {
+                        print("Received message: \(message)")
+                    }
                 case .data(let data):
                     print("Received data: \(data)")
                     // Handle binary data

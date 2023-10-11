@@ -24,7 +24,7 @@ class HomeViewModel: ObservableObject {
         self.authManager = authManager
         self.webSocketManager = webSocketManager
         self.appCoordinator = appCoordinator
-        
+                
         self.webSocketManager.$isConnected
             .assign(to: \.isConnected, on: self)
             .store(in: &cancellables)
@@ -49,7 +49,7 @@ class HomeViewModel: ObservableObject {
             self.webSocketManager.joinSessionLobby()
         }
         
-        let payload = ["name": sessionName]
+        let payload: [String: Any] = ["name": sessionName, "users": [self.authManager.currentUser!.id]]
         let message = Message(
             topic: "coworking_session:lobby",
             event: "create_session",
@@ -58,6 +58,7 @@ class HomeViewModel: ObservableObject {
         )
         self.webSocketManager.sendMessage(message: message)
         print("Created session: \(sessionName)")
+        self.webSocketManager.currentSession = Session(id: "1", name: sessionName, users: [self.authManager.currentUser!.id])
         
         self.appCoordinator.showSessionView()
     }

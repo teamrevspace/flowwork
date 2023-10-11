@@ -17,6 +17,7 @@ struct HomeView: View {
         VStack {
             VStack {
                 HStack {
+                    Text("Hi \(viewModel.displayName)!")
                     Spacer()
                     HStack(spacing: 10) {
                         Circle()
@@ -28,7 +29,6 @@ struct HomeView: View {
                 Spacer()
             }
             VStack{
-                Text("Hi \(viewModel.displayName)!")
                 Button("Create a session") {
                     let sessionName = self.viewModel.generateSlug()
                     viewModel.createSession(sessionName: sessionName)

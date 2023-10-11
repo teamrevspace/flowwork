@@ -12,7 +12,7 @@ import GoogleSignIn
 class AuthManager: ObservableObject {
     @Published var isSignedIn = false
     @Published var webSocketManager: WebSocketManager
-    @Published var session: User?
+    @Published var currentUser: User?
     
     var handle: AuthStateDidChangeListenerHandle?
     let authRef = Auth.auth()
@@ -30,11 +30,11 @@ class AuthManager: ObservableObject {
         handle = authRef.addStateDidChangeListener({(auth, user) in
             if let user = user {
                 self.isSignedIn = true
-                self.session = User(id: user.uid, name: user.displayName!, emailAddress: user.email!, avatarURL: user.photoURL)
+                self.currentUser = User(id: user.uid, name: user.displayName!, emailAddress: user.email!, avatarURL: user.photoURL)
                 self.connectWebSocketIfSignedIn()
             } else {
                 self.isSignedIn = false
-                self.session = nil
+                self.currentUser = nil
             }
         })
     }
@@ -85,15 +85,18 @@ class AuthManager: ObservableObject {
         }
     }
     
-    func signOut() -> Bool {
+    private func signOutWithGoogle() {
+        GIDSignIn.sharedInstance.signOut()
+    }
+    
+    func signOut() {
         do {
             try Auth.auth().signOut()
-            self.session = nil
+            self.signOutWithGoogle()
+            self.currentUser = nil
             self.isSignedIn = false
-            return true
         } catch let signOutError as NSError {
             print("Error signing out: %@", signOutError)
-            return false
         }
     }
     

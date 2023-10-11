@@ -7,31 +7,63 @@
 
 import Foundation
 import SwiftUI
+import URLImage
 
 struct SessionView: View {
     @ObservedObject var viewModel: SessionViewModel
     @ObservedObject var errorPublisher: ErrorPublisher
-    private var testUser: User;
-    private var session: Session;
     
     init(viewModel: SessionViewModel, errorPublisher: ErrorPublisher) {
         self.viewModel = viewModel
         self.errorPublisher = errorPublisher
-        let user1 = User(id: "test-user", name: "test-name", emailAddress: "test@example.com")
-        self.testUser = user1
-        self.session = Session(id: "test", name: "test")
     }
     
     var body: some View {
         VStack{
-            Text("https://flowwork.xyz/s/\(session.id)")
-            Text("\(session.name)")
-            Button(action: {
-                viewModel.leaveSession()
-            }) {
-                Text("Leave")
+            if viewModel.isLoading {
+                Text("Loading...")
+            } else {
+                Group {
+                    HStack{
+                        Text("https://flowwork.xyz/s/\(viewModel.currentSession?.id ?? "...")")
+                        Spacer()
+                        Button(action: {
+                            viewModel.copyToClipboard(textToCopy: "https://flowwork.xyz/s/\(viewModel.currentSession?.id ?? "...")")
+                        }) {
+                            Image(systemName: "doc.on.doc")
+                        }
+                    
+                    }
+                    Text("\(viewModel.currentSession?.name ?? "...")")
+                    HStack {
+                        if let avatarUrl = viewModel.getCurrentUser()?.avatarURL {
+                            URLImage(avatarUrl) { image in
+                                image
+                                    .resizable()
+                                    .frame(width: 30, height: 30)
+                                    .cornerRadius(.infinity)
+                                    .aspectRatio(contentMode: .fit)
+                            }
+                        } else {
+                            Image(systemName: "person.circle")
+                                .resizable()
+                                .frame(width: 30, height: 30)
+                                .cornerRadius(.infinity)
+                                .aspectRatio(contentMode: .fit)
+                        }
+                        Spacer()
+                        Button(action: {
+                            viewModel.leaveSession()
+                        }) {
+                            Text("Leave")
+                        }
+                    }
+                }
+                
             }
-        }.standardFrame()
-            .errorOverlay(errorPublisher: errorPublisher)
+        }
+        .padding(10)
+        .standardFrame()
+        .errorOverlay(errorPublisher: errorPublisher)
     }
 }
