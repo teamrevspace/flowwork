@@ -34,10 +34,6 @@ config :logger, :console,
 # Use Jason for JSON parsing in Phoenix
 config :phoenix, :json_library, Jason
 
-config :flow_stream,
-       :firestore_url,
-       "https://firestore.googleapis.com/v1/projects/rev-flow-space/databases/(default)/documents"
-
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.
 import_config "#{config_env()}.exs"

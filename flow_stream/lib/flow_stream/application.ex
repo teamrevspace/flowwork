@@ -15,9 +15,9 @@ defmodule FlowStream.Application do
       # Start Finch
       {Finch, name: FlowStream.Finch},
       # Start the Endpoint (http/https)
-      FlowStreamWeb.Endpoint
+      FlowStreamWeb.Endpoint,
       # Start a worker by calling: FlowStream.Worker.start_link(arg)
-      # {FlowStream.Worker, arg}
+      {FlowStream.ChannelMonitor, []}
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html

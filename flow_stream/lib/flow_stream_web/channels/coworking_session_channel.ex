@@ -1,13 +1,47 @@
 defmodule FlowStreamWeb.CoworkingSessionChannel do
   use FlowStreamWeb, :channel
+  alias FlowStream.ChannelMonitor
 
   @impl true
   def join("coworking_session:lobby", payload, socket) do
     if authorized?(payload) do
+      current_user = socket.assigns.current_user
+
+      users =
+        ChannelMonitor.user_joined("coworking_session:lobby", current_user)
+
+      Process.send(self(), {:after_join, users}, [])
       {:ok, socket}
     else
-      {:error, %{reason: "unauthorized"}}
+      {:error, :unauthorized}
     end
+  end
+
+  @impl true
+  def terminate(_reason, socket) do
+    user_id = socket.assigns.current_user
+
+    users =
+      ChannelMonitor.user_left("coworking_session:lobby", user_id)
+
+    lobby_update(socket, users)
+    :ok
+  end
+
+  @impl true
+  def handle_info({:after_join, users}, socket) do
+    lobby_update(socket, users)
+    {:noreply, socket}
+  end
+
+  defp lobby_update(socket, users) do
+    broadcast!(socket, "lobby_update", %{users: get_userids(users)})
+  end
+
+  defp get_userids(nil), do: []
+
+  defp get_userids(users) do
+    Enum.map(users, & &1)
   end
 
   # Channels can be used in a request/response fashion

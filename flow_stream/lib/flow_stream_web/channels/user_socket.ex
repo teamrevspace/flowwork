@@ -25,8 +25,14 @@ defmodule FlowStreamWeb.UserSocket do
   # See `Phoenix.Token` documentation for examples in
   # performing token verification on connect.
   @impl true
-  def connect(_params, socket, _connect_info) do
+  def connect(%{"user_id" => user_id} = _params, socket) do
+    socket = assign(socket, :current_user, user_id)
     {:ok, socket}
+  end
+
+  @impl true
+  def connect(_params, _socket) do
+    {:error, :missing_user_id}
   end
 
   # Socket id's are topics that allow you to identify all sockets for a given user:

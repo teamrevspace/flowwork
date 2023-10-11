@@ -1,17 +1,24 @@
 defmodule Firestore do
   use Tesla
 
-  @firestore_url Application.compile_env(:flow_stream, :firestore_url)
+  @firestore_url "https://firestore.googleapis.com/v1/projects/rev-flow-space/databases/(default)/documents"
 
   plug(Tesla.Middleware.Retry, delay: 100, max_retries: 5, should_retry: &should_retry/1)
 
-  def create_session(%{"name" => name} = payload) do
+  def create_session(%{"name" => name, "users" => users} = payload) do
+    users = Enum.map(users, fn user ->
+      %{"stringValue" => user}
+    end)
     fields = %{
-      "name" => %{"stringValue" => name}
+      "name" => %{"stringValue" => name},
+      "users" => %{"arrayValue" => %{"values" => users}}
     }
 
     description = Map.get(payload, "description", "")
     fields = Map.put(fields, "description", %{"stringValue" => description})
+
+    joinCode = Map.get(payload, "joinCode", "")
+    fields = Map.put(fields, "joinCode", %{"stringValue" => joinCode})
 
     session_data = %{"fields" => fields}
     firestore_post("/sessions", session_data)
