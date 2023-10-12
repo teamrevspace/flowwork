@@ -24,7 +24,7 @@ defmodule Firestore do
     firestore_post("/sessions", session_data)
   end
 
-  def join_session(%{"id" => id} = _payload) do
+  def join_session(id) do
     firestore_get("/sessions/#{id}")
   end
 

@@ -3,13 +3,14 @@ defmodule FlowStreamWeb.CoworkingSessionChannel do
   alias FlowStream.ChannelMonitor
 
   @impl true
-  def join("coworking_session:lobby", payload, socket) do
+  def join("coworking_session:" <> session_id, payload, socket) do
     if authorized?(payload) do
       current_user = socket.assigns.current_user
 
       users =
-        ChannelMonitor.user_joined("coworking_session:lobby", current_user)
+        ChannelMonitor.user_joined("coworking_session:#{session_id}", current_user)
 
+      socket = assign(socket, :session_id, session_id)
       Process.send(self(), {:after_join, users}, [])
       {:ok, socket}
     else
@@ -20,9 +21,10 @@ defmodule FlowStreamWeb.CoworkingSessionChannel do
   @impl true
   def terminate(_reason, socket) do
     user_id = socket.assigns.current_user
+    session_id = socket.assigns.session_id
 
     users =
-      ChannelMonitor.user_left("coworking_session:lobby", user_id)
+      ChannelMonitor.user_left("coworking_session:#{session_id}", user_id)
 
     lobby_update(socket, users)
     :ok
@@ -35,7 +37,11 @@ defmodule FlowStreamWeb.CoworkingSessionChannel do
   end
 
   defp lobby_update(socket, users) do
-    broadcast!(socket, "lobby_update", %{users: get_userids(users)})
+    session_id = socket.assigns.session_id
+
+    broadcast!(socket, "coworking_session:#{session_id}:lobby_update", %{
+      users: get_userids(users)
+    })
   end
 
   defp get_userids(nil), do: []
@@ -44,15 +50,11 @@ defmodule FlowStreamWeb.CoworkingSessionChannel do
     Enum.map(users, & &1)
   end
 
-  # Channels can be used in a request/response fashion
-  # by sending replies to requests from the client
   @impl true
   def handle_in("ping", payload, socket) do
     {:reply, {:ok, payload}, socket}
   end
 
-  # It is also common to receive messages from the client and
-  # broadcast to everyone in the current topic (coworking_session:lobby).
   @impl true
   def handle_in("shout", payload, socket) do
     broadcast(socket, "shout", payload)
@@ -72,8 +74,10 @@ defmodule FlowStreamWeb.CoworkingSessionChannel do
   end
 
   @impl true
-  def handle_in("join_session", payload, socket) do
-    case Firestore.join_session(payload) do
+  def handle_in("join_session", _payload, socket) do
+    session_id = socket.assigns.session_id
+
+    case Firestore.join_session(session_id) do
       {:ok, session} ->
         {:reply, {:ok, session}, socket}
 
