@@ -88,14 +88,13 @@ class AuthManager: ObservableObject {
                 if (isNewUser) {
                     self.addUserToFirestore(user: authResult.user)
                 }
-                
-                User.current = User(id: authResult.user.uid, name: authResult.user.displayName!, emailAddress: authResult.user.email!, avatarURL: authResult.user.photoURL)
             }
         }
     }
     
     private func addUserToFirestore(user: Firebase.User) {
         db.collection("users").document(user.uid).setData([
+            "id": user.uid,
             "name": user.displayName ?? "",
             "emailAddress": user.email ?? "",
             "avatarURL": user.photoURL?.absoluteString ?? ""

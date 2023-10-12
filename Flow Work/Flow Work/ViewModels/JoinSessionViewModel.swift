@@ -73,20 +73,25 @@ class JoinSessionViewModel: ObservableObject {
             sessionId = id
         }
         
-        
-        if !self.webSocketManager.hasJoinedSession {
-            self.webSocketManager.joinSessionLobby()
+        db.collection("sessions").document(sessionId).getDocument { (document, error) in
+            if let document = document, document.exists {
+                if !self.webSocketManager.hasJoinedSession {
+                    self.webSocketManager.joinSessionLobby()
+                }
+                
+                let payload = ["id": sessionId]
+                let message = Message(
+                    topic: "coworking_session:lobby",
+                    event: "join_session",
+                    payload: payload
+                )
+                self.webSocketManager.sendMessage(message: message)
+                print("Joined session: \(sessionId)")
+                self.appCoordinator.showSessionView()
+            } else {
+                self.errorPublisher.publish(error: AppError.sessionNotFound)
+            }
         }
-        
-        let payload = ["id": sessionId]
-        let message = Message(
-            topic: "coworking_session:lobby",
-            event: "join_session",
-            payload: payload
-        )
-        self.webSocketManager.sendMessage(message: message)
-        print("Joined session: \(sessionId)")
-        self.appCoordinator.showSessionView()
     }
     
     func returnToHome() {

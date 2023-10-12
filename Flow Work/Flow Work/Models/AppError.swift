@@ -10,6 +10,7 @@ import Foundation
 enum AppError: LocalizedError {
     case invalidURLFormat
     case networkError(String)
+    case sessionNotFound
     
     var errorDescription: String? {
         switch self {
@@ -17,6 +18,8 @@ enum AppError: LocalizedError {
             return "Invalid URL format."
         case .networkError(let message):
             return message
+        case .sessionNotFound:
+            return "Session not found."
         }
     }
 }

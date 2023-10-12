@@ -4,6 +4,7 @@ import Combine
 import NIO
 import NIOHTTP1
 import NIOWebSocket
+import Firebase
 
 class WebSocketManager: ObservableObject {
     private var webSocketTask: URLSessionWebSocketTask?
@@ -13,7 +14,11 @@ class WebSocketManager: ObservableObject {
     @Published var hasJoinedSession: Bool = false
     @Published var authToken: String?
     @Published var currentSession: Session?
+    @Published var sessionUserIds: [String]?
+    @Published var sessionUsers: [User] = []
     @Published var userId: String?
+    
+    private let db = Firestore.firestore()
     
     init(authToken: String? = nil, userId: String? = nil) {
         self.authToken = authToken
@@ -54,6 +59,32 @@ class WebSocketManager: ObservableObject {
     func updateSession(_ session: Session) {
         DispatchQueue.main.async {
             self.currentSession = session
+        }
+    }
+    
+    func leaveSession() {
+        DispatchQueue.main.async {
+            self.currentSession = nil
+        }
+    }
+    
+    func updateSessionUserIds(_ userIds: [String]) {
+        DispatchQueue.main.async {
+            self.sessionUserIds = userIds
+            self.sessionUsers = []
+        }
+    }
+    
+    func updateSessionUsers(_ users: [User]) {
+        DispatchQueue.main.async {
+            self.sessionUsers = users
+        }
+    }
+    
+    func clearSessionUserIds() {
+        DispatchQueue.main.async {
+            self.sessionUserIds = [self.userId ?? ""]
+            self.sessionUsers = []
         }
     }
     
@@ -126,7 +157,12 @@ class WebSocketManager: ObservableObject {
                             let messageObject = try decoder.decode(LobbyResponse.self, from: data)
                             self?.handleLobbyResponse(messageObject)
                         } catch {
-                            print("Received message: \(message)")
+                            do {
+                                let messageObject = try decoder.decode(ErrorResponse.self, from: data)
+                                self?.handleErrorResponse(messageObject)
+                            } catch {
+                                print("Received message: \(message)")
+                            }
                         }
                     }
                 case .data(let data):
@@ -159,7 +195,15 @@ class WebSocketManager: ObservableObject {
     
     private func handleLobbyResponse(_ response: LobbyResponse) {
         if response.topic == "coworking_session:lobby" && response.event == "lobby_update" {
-            
+            self.updateSessionUserIds(response.payload.users)
+            print("Received session user ids: \(response.payload.users)")
+        }
+    }
+    
+    private func handleErrorResponse(_ response: ErrorResponse) {
+        if response.payload.status == "error" {
+            self.leaveSession()
+            print("Received error: \(response.payload.response)")
         }
     }
     

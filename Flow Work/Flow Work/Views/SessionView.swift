@@ -21,7 +21,16 @@ struct SessionView: View {
     var body: some View {
         VStack{
             if viewModel.isLoading {
-                Text("Loading...")
+                VStack {
+                    ProgressView()
+                    Button(action: {
+                        viewModel.leaveSession()
+                    }) {
+                        HStack {
+                            Text("Back")
+                        }
+                    }
+                }
             } else {
                 Group {
                     HStack{
@@ -32,24 +41,12 @@ struct SessionView: View {
                         }) {
                             Image(systemName: "doc.on.doc")
                         }
-                    
+                        
                     }
                     Text("\(viewModel.currentSession?.name ?? "...")")
                     HStack {
-                        if let avatarUrl = viewModel.getCurrentUser()?.avatarURL {
-                            URLImage(avatarUrl) { image in
-                                image
-                                    .resizable()
-                                    .frame(width: 30, height: 30)
-                                    .cornerRadius(.infinity)
-                                    .aspectRatio(contentMode: .fit)
-                            }
-                        } else {
-                            Image(systemName: "person.circle")
-                                .resizable()
-                                .frame(width: 30, height: 30)
-                                .cornerRadius(.infinity)
-                                .aspectRatio(contentMode: .fit)
+                        ForEach(viewModel.webSocketManager.sessionUsers) { user in
+                            AvatarView(avatarURL: user.avatarURL)
                         }
                         Spacer()
                         Button(action: {
@@ -59,7 +56,6 @@ struct SessionView: View {
                         }
                     }
                 }
-                
             }
         }
         .padding(10)

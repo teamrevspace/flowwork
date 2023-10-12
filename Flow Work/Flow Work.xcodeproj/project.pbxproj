@@ -39,6 +39,7 @@
 		116D191F2AD04F0100CB4F1D /* ErrorModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 116D191E2AD04F0100CB4F1D /* ErrorModifier.swift */; };
 		117FDB6F2AD6569E00E39E3F /* Response.swift in Sources */ = {isa = PBXBuildFile; fileRef = 117FDB6E2AD6569E00E39E3F /* Response.swift */; };
 		117FDB722AD6727B00E39E3F /* URLImage in Frameworks */ = {isa = PBXBuildFile; productRef = 117FDB712AD6727B00E39E3F /* URLImage */; };
+		11C839ED2AD7AC9300DE62D2 /* AvatarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11C839EC2AD7AC9300DE62D2 /* AvatarView.swift */; };
 		11D7C1A72AD5E73E00AF1EEE /* Message.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11D7C1A62AD5E73E00AF1EEE /* Message.swift */; };
 /* End PBXBuildFile section */
 
@@ -70,6 +71,7 @@
 		116D191C2ACFE4FA00CB4F1D /* HomeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewModel.swift; sourceTree = "<group>"; };
 		116D191E2AD04F0100CB4F1D /* ErrorModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorModifier.swift; sourceTree = "<group>"; };
 		117FDB6E2AD6569E00E39E3F /* Response.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Response.swift; sourceTree = "<group>"; };
+		11C839EC2AD7AC9300DE62D2 /* AvatarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AvatarView.swift; sourceTree = "<group>"; };
 		11D7C1A62AD5E73E00AF1EEE /* Message.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Message.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -111,6 +113,7 @@
 		114AFDE22AC765B700AB9A8B /* Flow Work */ = {
 			isa = PBXGroup;
 			children = (
+				11C839EB2AD7AC8800DE62D2 /* Components */,
 				116D19152ACFDDE600CB4F1D /* Modifiers */,
 				116D19102ACFDC0500CB4F1D /* Publishers */,
 				116D18FD2ACFD2AF00CB4F1D /* Coordinators */,
@@ -204,6 +207,14 @@
 				116D191E2AD04F0100CB4F1D /* ErrorModifier.swift */,
 			);
 			path = Modifiers;
+			sourceTree = "<group>";
+		};
+		11C839EB2AD7AC8800DE62D2 /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				11C839EC2AD7AC9300DE62D2 /* AvatarView.swift */,
+			);
+			path = Components;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -314,6 +325,7 @@
 				114AFDE42AC765B700AB9A8B /* Flow_WorkApp.swift in Sources */,
 				116D191B2ACFE41E00CB4F1D /* PrimaryButtonModifier.swift in Sources */,
 				116D190F2ACFDB9400CB4F1D /* ErrorPublisher.swift in Sources */,
+				11C839ED2AD7AC9300DE62D2 /* AvatarView.swift in Sources */,
 				110C430E2AD052FF00201CD5 /* SessionView.swift in Sources */,
 				116D18F32ACF8A7700CB4F1D /* WebSocketManager.swift in Sources */,
 				116D191F2AD04F0100CB4F1D /* ErrorModifier.swift in Sources */,

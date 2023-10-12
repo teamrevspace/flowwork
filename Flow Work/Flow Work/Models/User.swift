@@ -8,8 +8,6 @@
 import Foundation
 
 struct User: Identifiable {
-    static var current: User? = nil
-    
     var id: String
     var name: String
     var emailAddress: String

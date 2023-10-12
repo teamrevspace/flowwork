@@ -15,8 +15,13 @@ class SessionViewModel: ObservableObject {
     @Published var webSocketManager: WebSocketManager
     @Published var currentSession: Session?
     @Published var isLoading: Bool = false
-    @Published var sessionUserIds: [String]?
+    @Published var sessionUserIds: [String]? {
+        didSet {
+            fetchData()
+        }
+    }
     @Published var sessionUsers: [User] = []
+    
     var appCoordinator: AppCoordinator
     private let db = Firestore.firestore()
     private let user = Auth.auth().currentUser
@@ -29,11 +34,19 @@ class SessionViewModel: ObservableObject {
         self.appCoordinator = appCoordinator
         
         if (user != nil) {
-            self.sessionUserIds = [user?.uid ?? ""]
+            self.webSocketManager.updateSessionUserIds([user?.uid ?? ""])
         }
+        
+        self.webSocketManager.$sessionUserIds
+            .assign(to: \.sessionUserIds, on: self)
+            .store(in: &cancellables)
         
         self.webSocketManager.$currentSession
             .assign(to: \.currentSession, on: self)
+            .store(in: &cancellables)
+        
+        self.webSocketManager.$sessionUsers
+            .assign(to: \.sessionUsers, on: self)
             .store(in: &cancellables)
         
         self.webSocketManager.$currentSession
@@ -45,8 +58,8 @@ class SessionViewModel: ObservableObject {
                 }
             }
             .store(in: &cancellables)
-    
-        self.fetchData()
+        
+        fetchData()
     }
     
     func fetchData() {
@@ -58,7 +71,7 @@ class SessionViewModel: ObservableObject {
                         return
                     }
                     
-                    self.sessionUsers = documents.map({docSnapshot -> User in
+                    let users = documents.map({docSnapshot -> User in
                         let data = docSnapshot.data()
                         let docId = docSnapshot.documentID
                         let name = data["name"] as? String ?? ""
@@ -66,6 +79,7 @@ class SessionViewModel: ObservableObject {
                         let avatarURL = URL(string: data["avatarURL"] as! String)
                         return User(id: docId, name: name, emailAddress: emailAddress, avatarURL: avatarURL)
                     })
+                    self.webSocketManager.updateSessionUsers(users)
                 })
             
         }
@@ -83,6 +97,7 @@ class SessionViewModel: ObservableObject {
     
     func leaveSession() {
         self.webSocketManager.leaveSessionLobby()
-        self.appCoordinator.showJoinSessionView()
+        self.appCoordinator.showHomeView()
+        self.webSocketManager.leaveSession()
     }
 }

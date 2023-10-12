@@ -18,6 +18,18 @@ struct LobbyResponsePayload: Decodable {
     var users: [String]
 }
 
+struct ErrorResponse: Decodable {
+    var ref: String?
+    var payload: ErrorResponsePayload
+    var topic: String
+    var event: String
+}
+
+struct ErrorResponsePayload: Decodable {
+    var status: String
+    var response: String
+}
+
 struct SessionResponse: Decodable {
     var ref: String?
     var payload: SessionResponsePayload
