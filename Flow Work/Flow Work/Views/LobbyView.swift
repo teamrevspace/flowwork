@@ -1,23 +1,21 @@
 //
-//  JoinSessionView.swift
+//  LobbyView.swift
 //  Flow Work
 //
 //  Created by Allen Lin on 10/6/23.
 //
 
-import Foundation
 import SwiftUI
 
-struct JoinSessionView: View {
-    @ObservedObject var viewModel: JoinSessionViewModel
-    @ObservedObject var errorPublisher: ErrorPublisher
+struct LobbyView: View {
+    @ObservedObject var viewModel: LobbyViewModel
     
     var body: some View {
         VStack() {
             TextField("Enter session code or URL", text:  $viewModel.inputText)
                 .textFieldStyle(RoundedBorderTextFieldStyle())
                 .onChange(of: viewModel.inputText) { _ in
-                    self.errorPublisher.clearError()
+                    viewModel.errorService.clearError()
                 }
                 List(viewModel.availableSessions) { session in
                     HStack {
@@ -44,6 +42,6 @@ struct JoinSessionView: View {
         }
         .padding(10)
         .standardFrame()
-            .errorOverlay(errorPublisher: errorPublisher)
+        .errorOverlay(errorService: viewModel.errorService)
     }
 }

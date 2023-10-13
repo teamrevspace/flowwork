@@ -9,35 +9,31 @@ import Foundation
 import SwiftUI
 
 struct ErrorOverlayModifier: ViewModifier {
-    @ObservedObject var errorPublisher: ErrorPublisher
-    @State private var errorMessage: String? = nil
+    var errorService: ErrorServiceProtocol
     
     func body(content: Content) -> some View {
         content
             .overlay(
                 Group {
-                    if self.errorPublisher.showError {
-                        if let errorMessage = errorMessage {
-                            Text(errorMessage)
-                                .padding()
-                                .background(Color.red)
-                                .foregroundColor(.white)
-                                .cornerRadius(8)
-                        }
+                    if let errorMessage = errorService.errorMessage {
+                        Text(errorMessage)
+                            .padding()
+                            .background(Color.red)
+                            .foregroundColor(.white)
+                            .cornerRadius(8)
                     }
                 }
             )
-            .onReceive(errorPublisher.errorPublisher) { error in
-                self.errorMessage = error
+            .onReceive(errorService.errorPublisher) { error in
                 Timer.scheduledTimer(withTimeInterval: 3.0, repeats: false) { _ in
-                    self.errorPublisher.clearError()
+                    self.errorService.clearError()
                 }
             }
     }
 }
 
 extension View {
-    func errorOverlay(errorPublisher: ErrorPublisher) -> some View {
-        self.modifier(ErrorOverlayModifier(errorPublisher: errorPublisher))
+    func errorOverlay(errorService: ErrorServiceProtocol) -> some View {
+        self.modifier(ErrorOverlayModifier(errorService: errorService))
     }
 }

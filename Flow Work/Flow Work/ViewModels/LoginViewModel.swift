@@ -1,24 +1,26 @@
-// ViewModels/AppViewModel.swift
+//
+//  LoginViewModel.swift
+//  Flow Work
+//
+//  Created by Allen Lin on 10/6/23.
+//
 
 import Combine
-import SwiftUI
-import Firebase
+import Swinject
 
 class LoginViewModel: ObservableObject {
-    @Published var authManager: AuthManager
-    @Published var isSignedIn: Bool = Auth.auth().currentUser != nil
+    @Published var authService: AuthServiceProtocol
+    @Published var errorService: ErrorServiceProtocol
     
-    private var cancellables = Set<AnyCancellable>()
+    private let resolver: Resolver
     
-    init(authManager: AuthManager) {
-        self.authManager = authManager
-        
-        self.authManager.$isSignedIn
-            .assign(to: \.isSignedIn, on: self)
-            .store(in: &cancellables)
+    init(resolver: Resolver) {
+        self.resolver = resolver
+        self.authService = resolver.resolve(AuthServiceProtocol.self)!
+        self.errorService = resolver.resolve(ErrorServiceProtocol.self)!
     }
     
     func signInWithGoogle() {
-        self.authManager.signInWithGoogle()
+        self.authService.signInWithGoogle()
     }
 }

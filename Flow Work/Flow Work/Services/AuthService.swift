@@ -1,5 +1,5 @@
 //
-//  AuthManager.swift
+//  AuthService.swift
 //  Flow Work
 //
 //  Created by Allen Lin on 10/5/23.
@@ -8,31 +8,31 @@
 import Foundation
 import Firebase
 import GoogleSignIn
+import Swinject
 
-class AuthManager: ObservableObject {
-    @Published var isSignedIn = false
-    @Published var webSocketManager: WebSocketManager
-    @Published var currentUser: User?
+class AuthService: AuthServiceProtocol, ObservableObject {
+    weak var delegate: AuthServiceDelegate?
     
-    private let db = Firestore.firestore()
+    @Published var sessionService: SessionServiceProtocol
+    @Published var storeService: StoreServiceProtocol
+    
+    @Published var isSignedIn: Bool = false
+    @Published var currentUser: User? = nil
+    
+    private let authRef = Auth.auth()
+    private let resolver: Resolver
     
     var handle: AuthStateDidChangeListenerHandle?
-    let authRef = Auth.auth()
     
-    init(webSocketManager: WebSocketManager) {
-        self.webSocketManager = webSocketManager
-        self.listen()
-    }
-    
-    deinit {
-        unbind()
-    }
-    
-    func listen() {
+    init(resolver: Resolver) {
+        self.resolver = resolver
+        self.sessionService = resolver.resolve(SessionServiceProtocol.self)!
+        self.storeService = resolver.resolve(StoreServiceProtocol.self)!
+        
         handle = authRef.addStateDidChangeListener({(auth, user) in
             if let user = user {
                 self.isSignedIn = true
-                self.currentUser = User(id: user.uid, name: user.displayName!, emailAddress: user.email!, avatarURL: user.photoURL)
+                self.currentUser = User(id: user.uid, name: user.displayName!, emailAddress: user.email!, avatarURL: user.photoURL!)
                 self.connectWebSocketIfSignedIn()
             } else {
                 self.isSignedIn = false
@@ -41,7 +41,7 @@ class AuthManager: ObservableObject {
         })
     }
     
-    func unbind() {
+    deinit {
         if let handle = handle {
             authRef.removeStateDidChangeListener(handle)
         }
@@ -70,7 +70,7 @@ class AuthManager: ObservableObject {
                                                            accessToken: user.accessToken.tokenString)
             
             
-            Auth.auth().signIn(with: credential) { authResult, error in
+            self.authRef.signIn(with: credential) { authResult, error in
                 if let error = error {
                     print("Firebase sign in error: \(error.localizedDescription)")
                     return
@@ -83,27 +83,25 @@ class AuthManager: ObservableObject {
                 
                 print("Signed in to Firebase as: \(authResult.user.email!)")
                 self.isSignedIn = true
-                let isNewUser = authResult.additionalUserInfo?.isNewUser ?? false
+                self.delegate?.didSignIn()
                 
+                let isNewUser = authResult.additionalUserInfo?.isNewUser ?? false
                 if (isNewUser) {
-                    self.addUserToFirestore(user: authResult.user)
+                    self.storeService.addUser(authResult.user)
                 }
             }
         }
     }
     
-    private func addUserToFirestore(user: Firebase.User) {
-        db.collection("users").document(user.uid).setData([
-            "id": user.uid,
-            "name": user.displayName ?? "",
-            "emailAddress": user.email ?? "",
-            "avatarURL": user.photoURL?.absoluteString ?? ""
-        ]) { error in
-            if let error = error {
-                print("Error adding user: \(error.localizedDescription)")
-            } else {
-                print("User added")
-            }
+    func signOut() {
+        do {
+            try authRef.signOut()
+            self.signOutWithGoogle()
+            self.currentUser = nil
+            self.isSignedIn = false
+            self.delegate?.didSignOut()
+        } catch let signOutError as NSError {
+            print("Error signing out: %@", signOutError)
         }
     }
     
@@ -111,28 +109,12 @@ class AuthManager: ObservableObject {
         GIDSignIn.sharedInstance.signOut()
     }
     
-    func signOut() {
-        do {
-            try Auth.auth().signOut()
-            self.signOutWithGoogle()
-            self.currentUser = nil
-            self.isSignedIn = false
-        } catch let signOutError as NSError {
-            print("Error signing out: %@", signOutError)
-        }
-    }
-    
     private func connectWebSocketIfSignedIn() {
         guard let user = authRef.currentUser else { return }
         
         user.getIDToken { token, error in
-            if let token = token {
-                self.webSocketManager.authToken = token
-                self.webSocketManager.userId = user.uid
-                self.webSocketManager.connect()
-                if !self.webSocketManager.hasJoinedSession {
-                    self.webSocketManager.joinSessionLobby()
-                }
+            if token != nil {
+                self.sessionService.connect(user.uid)
             } else if let error = error {
                 print("Error getting ID token: \(error.localizedDescription)")
             }

@@ -1,5 +1,5 @@
 //
-//  SessionResponse.swift
+//  Response.swift
 //  Flow Work
 //
 //  Created by Allen Lin on 10/11/23.
@@ -15,7 +15,7 @@ struct LobbyResponse: Decodable {
 }
 
 struct LobbyResponsePayload: Decodable {
-    var users: [String]
+    var userIds: [String]
 }
 
 struct ErrorResponse: Decodable {
@@ -53,7 +53,7 @@ struct SessionResponseFields: Decodable {
     var description: StringValue?
     var joinCode: StringValue?
     var name: StringValue
-    var users: ArrayValue
+    var userIds: ArrayValue
 }
 
 struct StringValue: Decodable {

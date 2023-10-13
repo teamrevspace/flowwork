@@ -5,25 +5,22 @@
 //  Created by Allen Lin on 10/6/23.
 //
 
-import Foundation
 import SwiftUI
-import Firebase
 
 struct HomeView: View {
     @ObservedObject var viewModel: HomeViewModel
-    @ObservedObject var errorPublisher: ErrorPublisher
     
     var body: some View {
         VStack {
             VStack {
                 HStack {
-                    Text("Hi \(viewModel.displayName)!")
+                    Text("Hi \(viewModel.authService.currentUser!.name)!")
                     Spacer()
                     HStack(spacing: 10) {
                         Circle()
                             .frame(width: 10, height: 10)
-                            .foregroundColor(viewModel.isConnected ? .green : .red)
-                        Text(viewModel.isConnected ? "connected" : "not connected")
+                            .foregroundColor(viewModel.sessionService.isConnected ? .green : .red)
+                        Text(viewModel.sessionService.isConnected ? "connected" : "not connected")
                     }
                 }
                 Spacer()
@@ -31,10 +28,11 @@ struct HomeView: View {
             VStack{
                 Button("Create a session") {
                     let sessionName = self.viewModel.generateSlug()
-                    viewModel.createSession(sessionName: sessionName)
+                    let userIds = [self.viewModel.authService.currentUser!.id]
+                    viewModel.createSession(sessionName: sessionName, userIds: userIds)
                 }
                 Button("Join a session") {
-                    viewModel.joinSession()
+                    viewModel.goToLobby()
                 }
                 Button("Log out") {
                     viewModel.signOut()
@@ -43,6 +41,6 @@ struct HomeView: View {
         }
         .padding(10)
         .standardFrame()
-            .errorOverlay(errorPublisher: errorPublisher)
+        .errorOverlay(errorService: viewModel.errorService)
     }
 }

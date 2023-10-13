@@ -9,6 +9,8 @@ import SwiftUI
 import FirebaseCore
 import GoogleSignIn
 
+private let appAssembler = AppAssembler()
+
 class AppDelegate: NSObject, NSApplicationDelegate {
     func applicationDidFinishLaunching(_ notification: Notification) {
         if let window = NSApplication.shared.windows.first {
@@ -50,7 +52,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             
             window.orderFrontRegardless()
             
-            let appView = AppView()
+            let appView = AppView(coordinator: appAssembler.resolver.resolve(AppCoordinator.self)!)
             window.contentView = NSHostingView(rootView: appView)
             let controller = NSWindowController(window: window)
             controller.showWindow(self)
@@ -74,7 +76,7 @@ struct Flow_WorkApp: App {
     
     var body: some Scene {
         WindowGroup {
-            AppView()
+            AppView(coordinator: appAssembler.resolver.resolve(AppCoordinator.self)!)
         }
     }
 }

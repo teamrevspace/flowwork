@@ -1,12 +1,16 @@
-// Views/AppView.swift
+//
+//  AppView.swift
+//  Flow Work
+//
+//  Created by Allen Lin on 10/6/23.
+//
 
 import SwiftUI
-import Firebase
 
 struct AppView: View {
-    @StateObject private var appCoordinator = AppCoordinator()
+    @ObservedObject var coordinator: AppCoordinator
     
     var body: some View {
-        appCoordinator.currentView
+        coordinator.currentView
     }
 }

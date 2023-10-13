@@ -6,36 +6,23 @@
 //
 
 import Combine
-import SwiftUI
-import Firebase
 import LoremSwiftum
+import Swinject
 
 class HomeViewModel: ObservableObject {
-    @Published var authManager: AuthManager
-    @Published var webSocketManager: WebSocketManager
-    @Published var isSignedIn: Bool = false
-    @Published var isConnected: Bool = false
-    @Published var displayName: String = "there"
-    var appCoordinator: AppCoordinator
+    @Published var authService: AuthServiceProtocol
+    @Published var sessionService: SessionServiceProtocol
+    @Published var errorService: ErrorServiceProtocol
+    @Published var coordinator: AppCoordinator
     
-    private var cancellables = Set<AnyCancellable>()
+    private let resolver: Resolver
     
-    init(authManager: AuthManager, webSocketManager: WebSocketManager, appCoordinator: AppCoordinator) {
-        self.authManager = authManager
-        self.webSocketManager = webSocketManager
-        self.appCoordinator = appCoordinator
-                
-        self.webSocketManager.$isConnected
-            .assign(to: \.isConnected, on: self)
-            .store(in: &cancellables)
-        
-        self.authManager.$isSignedIn
-            .assign(to: \.isSignedIn, on: self)
-            .store(in: &cancellables)
-        
-        Auth.auth().addStateDidChangeListener { auth, user in
-            self.displayName = user?.displayName ?? "there"
-        }
+    init(resolver: Resolver) {
+        self.resolver = resolver
+        self.authService = resolver.resolve(AuthServiceProtocol.self)!
+        self.sessionService = resolver.resolve(SessionServiceProtocol.self)!
+        self.errorService = resolver.resolve(ErrorServiceProtocol.self)!
+        self.coordinator = resolver.resolve(AppCoordinator.self)!
     }
     
     func generateSlug() -> String {
@@ -44,29 +31,18 @@ class HomeViewModel: ObservableObject {
         return slug
     }
     
-    func createSession(sessionName: String) {
-        if !self.webSocketManager.hasJoinedSession {
-            self.webSocketManager.joinSessionLobby()
-        }
+    func createSession(sessionName: String, userIds: [String]) {
+        let session = Session(id: "_", name: sessionName, userIds: userIds)
+        self.sessionService.createSession(session)
         
-        let payload: [String: Any] = ["name": sessionName, "users": [self.authManager.currentUser!.id]]
-        let message = Message(
-            topic: "coworking_session:lobby",
-            event: "create_session",
-            payload: payload
-        )
-        self.webSocketManager.sendMessage(message: message)
-        print("Created session: \(sessionName)")
-        self.webSocketManager.currentSession = Session(id: "1", name: sessionName, users: [self.authManager.currentUser!.id])
-        
-        self.appCoordinator.showSessionView()
+        self.coordinator.showSessionView()
     }
     
-    func joinSession() {
-        self.appCoordinator.showJoinSessionView()
+    func goToLobby() {
+        self.coordinator.showLobbyView()
     }
     
     func signOut() {
-        self.authManager.signOut()
+        self.authService.signOut()
     }
 }

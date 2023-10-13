@@ -6,66 +6,71 @@
 //
 
 import Foundation
-import SwiftUI
 import Combine
-import Firebase
+import Swinject
+import SwiftUI
 
 class AppCoordinator: ObservableObject {
     @Published var currentView: AnyView
-    @Published var authManager: AuthManager
-    @Published var webSocketManager: WebSocketManager
-    @Published var errorPublisher: ErrorPublisher
+    
+    @Published var authService: AuthServiceProtocol
+    @Published var sessionService: SessionServiceProtocol
+    @Published var storeService: StoreServiceProtocol
+    @Published var errorService: ErrorServiceProtocol
+    
+    @Published var loginViewModel: LoginViewModel
+    @Published var homeViewModel: HomeViewModel
+    @Published var sessionViewModel: SessionViewModel
+    @Published var lobbyViewModel: LobbyViewModel
+    
+    private let resolver: Resolver
     
     private var cancellables = Set<AnyCancellable>()
     
-    init() {
-        let webSocketManager = WebSocketManager()
-        let authManager = AuthManager(webSocketManager: webSocketManager)
-        let errorPublisher = ErrorPublisher()
-        let loginViewModel = LoginViewModel(authManager: authManager)
+    init(resolver: Resolver) {
+        self.resolver = resolver
         
-        self.authManager = authManager
-        self.webSocketManager = webSocketManager
-        self.errorPublisher = errorPublisher
-        self.currentView = AnyView(LoginView(viewModel: loginViewModel, errorPublisher: errorPublisher))
+        self.authService = resolver.resolve(AuthServiceProtocol.self)!
+        self.sessionService = resolver.resolve(SessionServiceProtocol.self)!
+        self.storeService = resolver.resolve(StoreServiceProtocol.self)!
+        self.errorService = resolver.resolve(ErrorServiceProtocol.self)!
         
-        authManager.$isSignedIn
-            .sink { [weak self] isSignedIn in
-                if isSignedIn {
-                    self?.showHomeView()
-                } else {
-                    self?.showLoginView()
-                }
-            }
-            .store(in: &cancellables)
+        self.loginViewModel = resolver.resolve(LoginViewModel.self)!
+        self.homeViewModel = resolver.resolve(HomeViewModel.self)!
+        self.sessionViewModel = resolver.resolve(SessionViewModel.self)!
+        self.lobbyViewModel = resolver.resolve(LobbyViewModel.self)!
+        
+        self.currentView = AnyView(EmptyView())
     }
     
     func showHomeView() {
-        let homeViewModel = HomeViewModel(authManager: authManager, webSocketManager: webSocketManager, appCoordinator: self)
-        let homeView = HomeView(viewModel: homeViewModel, errorPublisher: errorPublisher)
+        let homeView = HomeView(viewModel: homeViewModel)
         currentView = AnyView(homeView)
     }
     
     func showLoginView() {
-        let loginViewModel = LoginViewModel(authManager: authManager)
-        let loginView = LoginView(viewModel: loginViewModel, errorPublisher: errorPublisher)
+        let loginView = LoginView(viewModel: loginViewModel)
         currentView = AnyView(loginView)
     }
     
-    func showJoinSessionView() {
-        let joinSessionViewModel = JoinSessionViewModel(webSocketManager: webSocketManager, errorPublisher: errorPublisher, appCoordinator: self)
-        let joinSessionView = JoinSessionView(viewModel: joinSessionViewModel, errorPublisher: errorPublisher)
-        currentView = AnyView(joinSessionView)
+    func showLobbyView() {
+        let lobbyView = LobbyView(viewModel: lobbyViewModel)
+        currentView = AnyView(lobbyView)
     }
     
     func showSessionView() {
-        let sessionViewModel = SessionViewModel(authManager: authManager, webSocketManager: webSocketManager, appCoordinator: self)
-        let sessionView = SessionView(viewModel: sessionViewModel, errorPublisher: errorPublisher)
+        let sessionView = SessionView(viewModel: sessionViewModel)
         currentView = AnyView(sessionView)
     }
-    
-    func isSignedIn() -> Bool {
-        return authManager.isSignedIn
+}
+
+extension AppCoordinator: AuthServiceDelegate {
+    func didSignIn() {
+        showHomeView()
     }
     
+    func didSignOut() {
+        showLoginView()
+    }
 }
+

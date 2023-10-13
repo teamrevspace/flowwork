@@ -5,12 +5,10 @@
 //  Created by Allen Lin on 10/6/23.
 //
 
-import Foundation
 import SwiftUI
 
 struct LoginView: View {
     @ObservedObject var viewModel: LoginViewModel
-    @ObservedObject var errorPublisher: ErrorPublisher
     
     var body: some View {
         VStack{
@@ -20,6 +18,6 @@ struct LoginView: View {
                 Text("Sign in with Google")
             }
         }.standardFrame()
-            .errorOverlay(errorPublisher: errorPublisher)
+            .errorOverlay(errorService: viewModel.errorService)
     }
 }
