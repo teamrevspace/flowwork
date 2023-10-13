@@ -12,8 +12,8 @@ struct SessionView: View {
     
     var body: some View {
         VStack{
-            if viewModel.sessionService.currentSession == nil {
-                VStack {
+            if viewModel.sessionState.currentSession == nil {
+                VStack(spacing: 10) {
                     ProgressView()
                     Button(action: {
                         viewModel.leaveSession()
@@ -26,17 +26,19 @@ struct SessionView: View {
             } else {
                 Group {
                     HStack{
-                        Text("https://flowwork.xyz/s/\(viewModel.sessionService.currentSession!.id)")
+                        Text("\(viewModel.sessionState.currentSession!.name)")
                         Spacer()
                         Button(action: {
-                            viewModel.copyToClipboard(textToCopy: "https://flowwork.xyz/s/\(viewModel.sessionService.currentSession!.id)")
+                            viewModel.copyToClipboard(textToCopy: "https://flowwork.xyz/s/\(viewModel.sessionState.currentSession!.id)")
                         }) {
                             Image(systemName: "doc.on.doc")
+                            Text("Copy Invite Link")
                         }
                         
                     }
-                    Text("\(viewModel.sessionService.currentSession!.name)")
+                    Spacer()
                     HStack {
+                        
                         ForEach(viewModel.sessionUsers) { user in
                             AvatarView(avatarURL: user.avatarURL)
                         }
@@ -44,7 +46,7 @@ struct SessionView: View {
                         Button(action: {
                             viewModel.leaveSession()
                         }) {
-                            Text("Leave")
+                            Text("Leave Session")
                         }
                     }
                 }
@@ -53,5 +55,8 @@ struct SessionView: View {
         .padding(10)
         .standardFrame()
         .errorOverlay(errorService: viewModel.errorService)
+        .onAppear() {
+            viewModel.fetchData()
+        }
     }
 }

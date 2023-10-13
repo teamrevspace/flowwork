@@ -56,6 +56,18 @@ struct SessionResponseFields: Decodable {
     var userIds: ArrayValue
 }
 
+struct SocketResponse: Decodable {
+    var ref: String?
+    var payload: SocketResponsePayload
+    var topic: String
+    var event: String
+}
+
+struct SocketResponsePayload: Decodable {
+    var status: String
+    var response: [String: String]?
+}
+
 struct StringValue: Decodable {
     let stringValue: String
 }

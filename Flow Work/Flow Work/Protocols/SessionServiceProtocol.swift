@@ -6,11 +6,17 @@
 //
 
 import Foundation
+import Combine
+
+protocol SessionServiceDelegate: AnyObject {
+    func didJoinSession(_ sessionId: String)
+    func sessionNotFound()
+}
 
 protocol SessionServiceProtocol {
-    var isConnected: Bool { get set }
-    var hasJoinedSession: Bool { get set }
-    var currentSession: Session? { get set }
+    var delegate: SessionServiceDelegate? { get set }
+    
+    var statePublisher: AnyPublisher<SessionState, Never> { get }
     
     func connect(_ userId: String)
     func disconnect()

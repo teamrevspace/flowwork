@@ -17,7 +17,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             let screenFrame = NSScreen.main?.frame ?? NSRect()
             
             let windowWidth: CGFloat = 360
-            let windowHeight: CGFloat = 120
+            let windowHeight: CGFloat = 60
             
             let x = screenFrame.width - windowWidth - 48
             let y = screenFrame.height - windowHeight - 64

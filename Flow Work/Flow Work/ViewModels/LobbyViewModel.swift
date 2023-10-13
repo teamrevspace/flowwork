@@ -9,17 +9,25 @@ import Foundation
 import Combine
 import Swinject
 
+protocol LobbyViewModelDelegate: AnyObject {
+    func showSessionView()
+    func showHomeView()
+}
+
 class LobbyViewModel: ObservableObject {
+    weak var delegate: LobbyViewModelDelegate?
+    
     @Published var sessionService: SessionServiceProtocol
     @Published var authService: AuthServiceProtocol
     @Published var storeService: StoreServiceProtocol
     @Published var errorService: ErrorServiceProtocol
-    @Published var coordinator: AppCoordinator
     
+    @Published var authState = AuthState()
     @Published var inputText: String = ""
     @Published var availableSessions: [Session] = []
     
     private let resolver: Resolver
+    private var cancellables = Set<AnyCancellable>()
     
     init(resolver: Resolver) {
         self.resolver = resolver
@@ -27,15 +35,16 @@ class LobbyViewModel: ObservableObject {
         self.authService = resolver.resolve(AuthServiceProtocol.self)!
         self.storeService = resolver.resolve(StoreServiceProtocol.self)!
         self.errorService = resolver.resolve(ErrorServiceProtocol.self)!
-        self.coordinator = resolver.resolve(AppCoordinator.self)!
         
-        self.fetchData()
+        authService.statePublisher
+            .assign(to: \.authState, on: self)
+            .store(in: &cancellables)
     }
     
     func fetchData() {
-        guard let currentUserId = self.authService.currentUser?.id else { return }
-        self.storeService.findSessionsByUserId(currentUserId) { sessions in
-            self.availableSessions = sessions ?? []
+        guard let currentUserId = self.authState.currentUser?.id else { return }
+        self.storeService.findSessionsByUserId(userId: currentUserId) { sessions in
+            self.availableSessions = sessions
         }
     }
     
@@ -60,9 +69,10 @@ class LobbyViewModel: ObservableObject {
         }
         
         self.sessionService.joinSession(sessionId)
+        self.delegate?.showSessionView()
     }
     
     func returnToHome() {
-        self.coordinator.showHomeView()
+        self.delegate?.showHomeView()
     }
 }

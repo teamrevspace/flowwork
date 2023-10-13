@@ -43,5 +43,9 @@ struct LobbyView: View {
         .padding(10)
         .standardFrame()
         .errorOverlay(errorService: viewModel.errorService)
+        .onAppear() {
+            viewModel.inputText = ""
+            viewModel.fetchData()
+        }
     }
 }

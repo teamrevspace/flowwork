@@ -14,13 +14,13 @@ struct HomeView: View {
         VStack {
             VStack {
                 HStack {
-                    Text("Hi \(viewModel.authService.currentUser!.name)!")
+                    Text("Hi \(viewModel.authState.currentUser?.name ?? "there")!")
                     Spacer()
                     HStack(spacing: 10) {
                         Circle()
                             .frame(width: 10, height: 10)
-                            .foregroundColor(viewModel.sessionService.isConnected ? .green : .red)
-                        Text(viewModel.sessionService.isConnected ? "connected" : "not connected")
+                            .foregroundColor(viewModel.sessionState.isConnected ? .green : .red)
+                        Text(viewModel.sessionState.isConnected ? "connected" : "not connected")
                     }
                 }
                 Spacer()
@@ -28,7 +28,7 @@ struct HomeView: View {
             VStack{
                 Button("Create a session") {
                     let sessionName = self.viewModel.generateSlug()
-                    let userIds = [self.viewModel.authService.currentUser!.id]
+                    let userIds = [self.viewModel.authState.currentUser!.id]
                     viewModel.createSession(sessionName: sessionName, userIds: userIds)
                 }
                 Button("Join a session") {
@@ -42,5 +42,8 @@ struct HomeView: View {
         .padding(10)
         .standardFrame()
         .errorOverlay(errorService: viewModel.errorService)
+        .onDisappear() {
+            viewModel.storeService.stopLobbyListener()
+        }
     }
 }

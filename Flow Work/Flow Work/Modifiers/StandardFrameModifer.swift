@@ -10,7 +10,7 @@ import SwiftUI
 
 struct StandardFrameModifier: ViewModifier {
     private let minWidth: CGFloat = 360
-    private let minHeight: CGFloat = 120
+    private let minHeight: CGFloat = 60
     private let maxHeight: CGFloat = 480
     
     func body(content: Content) -> some View {

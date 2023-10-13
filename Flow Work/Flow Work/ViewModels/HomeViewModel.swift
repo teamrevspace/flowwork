@@ -9,20 +9,38 @@ import Combine
 import LoremSwiftum
 import Swinject
 
+protocol HomeViewModelDelegate: AnyObject {
+    func showSessionView()
+    func showLobbyView()
+}
+
 class HomeViewModel: ObservableObject {
+    weak var delegate: HomeViewModelDelegate?
+    
     @Published var authService: AuthServiceProtocol
     @Published var sessionService: SessionServiceProtocol
+    @Published var storeService: StoreServiceProtocol
     @Published var errorService: ErrorServiceProtocol
-    @Published var coordinator: AppCoordinator
     
+    @Published var sessionState = SessionState()
+    @Published var authState = AuthState()
+    
+    private var cancellables = Set<AnyCancellable>()
     private let resolver: Resolver
     
     init(resolver: Resolver) {
         self.resolver = resolver
         self.authService = resolver.resolve(AuthServiceProtocol.self)!
         self.sessionService = resolver.resolve(SessionServiceProtocol.self)!
+        self.storeService = resolver.resolve(StoreServiceProtocol.self)!
         self.errorService = resolver.resolve(ErrorServiceProtocol.self)!
-        self.coordinator = resolver.resolve(AppCoordinator.self)!
+        
+        sessionService.statePublisher
+            .assign(to: \.sessionState, on: self)
+            .store(in: &cancellables)
+        authService.statePublisher
+            .assign(to: \.authState, on: self)
+            .store(in: &cancellables)
     }
     
     func generateSlug() -> String {
@@ -35,11 +53,11 @@ class HomeViewModel: ObservableObject {
         let session = Session(id: "_", name: sessionName, userIds: userIds)
         self.sessionService.createSession(session)
         
-        self.coordinator.showSessionView()
+        self.delegate?.showSessionView()
     }
     
     func goToLobby() {
-        self.coordinator.showLobbyView()
+        self.delegate?.showLobbyView()
     }
     
     func signOut() {

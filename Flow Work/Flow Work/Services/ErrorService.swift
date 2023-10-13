@@ -19,14 +19,18 @@ class ErrorService: ErrorServiceProtocol, ObservableObject {
     }
     
     func clearError() {
-        self.hasError = false
+        DispatchQueue.main.async {
+            self.hasError = false
+            self.errorMessage = nil
+        }
     }
     
     func publish(_ error: LocalizedError) {
-        let errorMessage = error.localizedDescription
-        
-        self.hasError = true
-        self.errorMessage = errorMessage
-        errorSubject.send(errorMessage)
+        DispatchQueue.main.async {
+            let errorMessage = error.localizedDescription
+            self.hasError = true
+            self.errorMessage = errorMessage
+            self.errorSubject.send(errorMessage)
+        }
     }
 }

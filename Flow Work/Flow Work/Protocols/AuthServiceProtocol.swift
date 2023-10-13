@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import Combine
 
 protocol AuthServiceDelegate: AnyObject {
     func didSignIn()
@@ -13,8 +14,9 @@ protocol AuthServiceDelegate: AnyObject {
 }
 
 protocol AuthServiceProtocol {
-    var isSignedIn: Bool { get set }
-    var currentUser: User? { get set }
+    var delegate: AuthServiceDelegate? { get set }
+    
+    var statePublisher: AnyPublisher<AuthState, Never> { get }
     
     func signInWithGoogle()
     func signOut()

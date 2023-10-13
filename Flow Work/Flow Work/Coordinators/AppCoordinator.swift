@@ -10,6 +10,13 @@ import Combine
 import Swinject
 import SwiftUI
 
+enum NavigationEvent {
+    case Home
+    case Login
+    case Lobby
+    case Session
+}
+
 class AppCoordinator: ObservableObject {
     @Published var currentView: AnyView
     
@@ -25,6 +32,7 @@ class AppCoordinator: ObservableObject {
     
     private let resolver: Resolver
     
+    private let navigationSubject = PassthroughSubject<NavigationEvent, Never>()
     private var cancellables = Set<AnyCancellable>()
     
     init(resolver: Resolver) {
@@ -41,36 +49,71 @@ class AppCoordinator: ObservableObject {
         self.lobbyViewModel = resolver.resolve(LobbyViewModel.self)!
         
         self.currentView = AnyView(EmptyView())
+        
+        self.setupNavigation()
+        self.setupDelegates()
     }
     
-    func showHomeView() {
-        let homeView = HomeView(viewModel: homeViewModel)
-        currentView = AnyView(homeView)
+    func navigate(to event: NavigationEvent) {
+        navigationSubject.send(event)
     }
     
-    func showLoginView() {
-        let loginView = LoginView(viewModel: loginViewModel)
-        currentView = AnyView(loginView)
+    private func setupNavigation() {
+        self.currentView = AnyView(LoginView(viewModel: self.loginViewModel))
+        
+        navigationSubject
+            .sink { event in
+                switch event {
+                case .Home:
+                    self.currentView = AnyView(HomeView(viewModel: self.homeViewModel))
+                case .Login:
+                    self.currentView = AnyView(LoginView(viewModel: self.loginViewModel))
+                case .Lobby:
+                    self.currentView = AnyView(LobbyView(viewModel: self.lobbyViewModel))
+                case .Session:
+                    self.currentView = AnyView(SessionView(viewModel: self.sessionViewModel))
+                }
+            }
+            .store(in: &cancellables)
     }
     
-    func showLobbyView() {
-        let lobbyView = LobbyView(viewModel: lobbyViewModel)
-        currentView = AnyView(lobbyView)
-    }
-    
-    func showSessionView() {
-        let sessionView = SessionView(viewModel: sessionViewModel)
-        currentView = AnyView(sessionView)
+    private func setupDelegates() {
+        authService.delegate = self
+        sessionService.delegate = self
+        homeViewModel.delegate = self
+        sessionViewModel.delegate = self
+        lobbyViewModel.delegate = self
     }
 }
 
 extension AppCoordinator: AuthServiceDelegate {
     func didSignIn() {
-        showHomeView()
+        navigate(to: .Home)
     }
     
     func didSignOut() {
-        showLoginView()
+        navigate(to: .Login)
     }
 }
 
+extension AppCoordinator: SessionServiceDelegate {
+    func didJoinSession(_ sessionId: String) {}
+    
+    func sessionNotFound() {
+        navigate(to: .Lobby)
+    }
+}
+
+extension AppCoordinator: HomeViewModelDelegate, LobbyViewModelDelegate, SessionViewModelDelegate {
+    func showSessionView() {
+        navigate(to: .Session)
+    }
+    
+    func showLobbyView() {
+        navigate(to: .Lobby)
+    }
+    
+    func showHomeView() {
+        navigate(to: .Home)
+    }
+}

@@ -12,18 +12,36 @@ import NIOHTTP1
 import NIOWebSocket
 import Swinject
 
+enum MessageType {
+    case socketResponse(SocketResponse)
+    case sessionResponse(SessionResponse)
+    case lobbyResponse(LobbyResponse)
+    case errorResponse(ErrorResponse)
+    case unknown(Any)
+}
+
+struct SessionState {
+    var isConnected: Bool = false
+    var hasJoinedSession: Bool = false
+    var currentSession: Session? = nil
+}
+
 class SessionService: SessionServiceProtocol, ObservableObject {
+    weak var delegate: SessionServiceDelegate?
+    
     @Published var errorService: ErrorServiceProtocol
     
-    @Published var isConnected: Bool = false
-    @Published var hasJoinedSession: Bool = false
-    @Published var currentSession: Session? = nil
+    @Published private var state = SessionState()
     
     private let resolver: Swinject.Resolver
     
     private var webSocketTask: URLSessionWebSocketTask?
     private var webSocketSession: URLSession
     private var pingTimer: Timer?
+    
+    var statePublisher: AnyPublisher<SessionState, Never> {
+        $state.eraseToAnyPublisher()
+    }
     
     init(resolver: Swinject.Resolver) {
         self.resolver = resolver
@@ -54,16 +72,13 @@ class SessionService: SessionServiceProtocol, ObservableObject {
         
         webSocketTask = webSocketSession.webSocketTask(with: request)
         webSocketTask?.resume()
-        self.isConnected = true
-        print("Connected to websocket")
         
+        sendPing()
         receiveMessage()
     }
     
     func disconnect() {
         webSocketTask?.cancel(with: .goingAway, reason: nil)
-        self.isConnected = false
-        print("Disconnected from websocket")
     }
     
     func createSession(_ session: Session) {
@@ -91,7 +106,6 @@ class SessionService: SessionServiceProtocol, ObservableObject {
             payload: createSessionPayload
         )
         self.sendMessage(message: createSessionMessage)
-        print("Created session: \(session.name)")
     }
     
     func joinSession(_ sessionId: String) {
@@ -108,8 +122,7 @@ class SessionService: SessionServiceProtocol, ObservableObject {
             payload: [:] as [String: Any]
         )
         self.sendMessage(message: joinSessionMessage)
-        self.hasJoinedSession = true
-        print("Joined session: \(sessionId)")
+        self.delegate?.didJoinSession(sessionId)
     }
     
     func leaveSession(_ sessionId: String) {
@@ -119,8 +132,6 @@ class SessionService: SessionServiceProtocol, ObservableObject {
             payload: [:] as [String: Any]
         )
         self.sendMessage(message: leaveSessionMessage)
-        self.hasJoinedSession = false
-        print("Left session: \(sessionId)")
     }
     
     func sendMessage(message: Message) {
@@ -146,12 +157,34 @@ class SessionService: SessionServiceProtocol, ObservableObject {
         webSocketTask?.receive(completionHandler: { [weak self] result in
             switch result {
             case .failure(let error):
+                DispatchQueue.main.async {
+                    self?.state.isConnected = false
+                }
                 self?.handleError(error)
+                
             case .success(let message):
+                DispatchQueue.main.async {
+                    self?.state.isConnected = true
+                }
                 self?.handleMessage(message)
             }
             self?.receiveMessage()
         })
+    }
+    
+    private func updateSessionUsers(_ userIds: [String]) {
+        DispatchQueue.main.async {
+            if let currentSession = self.state.currentSession {
+                let updatedSession = Session(
+                    id: currentSession.id,
+                    name: currentSession.name,
+                    description: currentSession.description,
+                    joinCode: currentSession.joinCode,
+                    userIds: userIds
+                )
+                self.state.currentSession = updatedSession
+            }
+        }
     }
     
     private func handleError(_ error: Error) {
@@ -166,38 +199,39 @@ class SessionService: SessionServiceProtocol, ObservableObject {
         case .data(let data):
             print("Received data: \(data)")
         @unknown default:
-            print("Unknown message type")
+            print("Unknown message type: \(message)")
         }
     }
     
     private func handleDecodedMessage(_ messageType: MessageType) {
         switch messageType {
+        case .socketResponse(let messageObject):
+            handleSocketResponse(messageObject)
         case .sessionResponse(let messageObject):
             handleSessionResponse(messageObject)
         case .lobbyResponse(let messageObject):
             handleLobbyResponse(messageObject)
         case .errorResponse(let messageObject):
             handleErrorResponse(messageObject)
-        case .unknown:
-            print("Unknown message type")
+        case .unknown(let messageObject):
+            handleUnknownResponse(messageObject)
         }
     }
     
     
     private func schedulePing() {
         pingTimer = Timer.scheduledTimer(withTimeInterval: 10, repeats: true) { [weak self] _ in
-            self?.sendPing()
-        }
+            self?.sendPing()}
     }
     
     private func sendPing() {
         webSocketTask?.sendPing { (error) in
-            if let error = error {
-                self.isConnected = false
-                print("Failed to send ping: \(error)")
-            } else {
-                self.isConnected = true
-                print("Ping sent")
+            DispatchQueue.main.async {
+                if error != nil {
+                    self.state.isConnected = false
+                } else {
+                    self.state.isConnected = true
+                }
             }
         }
     }
@@ -206,47 +240,61 @@ class SessionService: SessionServiceProtocol, ObservableObject {
 
 extension SessionService {
     
+    private func handleSocketResponse(_ response: SocketResponse) {
+        DispatchQueue.main.async {
+            if response.topic.starts(with: "coworking_session:") && response.event == "phx_join" && response.payload.status == "ok" {
+                self.state.hasJoinedSession = true
+            } else if response.topic.starts(with: "coworking_session:") && response.event == "phx_close" && response.payload.status == "ok"{
+                self.state.hasJoinedSession = false
+                self.state.currentSession = nil
+            }
+        }
+    }
+    
     private func handleSessionResponse(_ response: SessionResponse) {
-        if response.topic.starts(with: "coworking_session:") && response.event == "phx_reply" && response.payload.status == "ok"  {
-            let id = response.payload.response.name.components(separatedBy: "/").last!
-            let sessionFields = response.payload.response.fields
-            let name = sessionFields.name.stringValue
-            let description = sessionFields.description?.stringValue
-            let joinCode = sessionFields.joinCode?.stringValue
-            let userIds = sessionFields.userIds.arrayValue.values.map { $0.stringValue }
-            
-            let session = Session(
-                id: id,
-                name: name,
-                description: description,
-                joinCode: joinCode,
-                userIds: userIds
-            )
-            self.currentSession = session
-            print("Received session: \(session)")
+        DispatchQueue.main.async {
+            if response.topic.starts(with: "coworking_session:") && response.event == "phx_reply" && response.payload.status == "ok"  {
+                let id = response.payload.response.name.components(separatedBy: "/").last!
+                let sessionFields = response.payload.response.fields
+                let name = sessionFields.name.stringValue
+                let description = sessionFields.description?.stringValue
+                let joinCode = sessionFields.joinCode?.stringValue
+                // MARK: change this to user history
+                let userIds = sessionFields.userIds.arrayValue.values.map { $0.stringValue }
+                
+                let session = Session(
+                    id: id,
+                    name: name,
+                    description: description,
+                    joinCode: joinCode,
+                    userIds: userIds
+                )
+                self.state.currentSession = session
+                self.state.hasJoinedSession = true
+            }
         }
     }
     
     private func handleLobbyResponse(_ response: LobbyResponse) {
         if response.topic.starts(with: "coworking_session:") && response.event == "lobby_update" {
-            self.currentSession?.userIds = response.payload.userIds
-            print("Received session user ids: \(response.payload.userIds)")
+            self.updateSessionUsers(response.payload.userIds)
         }
     }
     
     private func handleErrorResponse(_ response: ErrorResponse) {
-        if response.payload.status == "error" {
-            self.currentSession = nil
-            print("Received error: \(response.payload.response)")
+        DispatchQueue.main.async {
+            if response.payload.status == "error" {
+                self.state.currentSession = nil
+                self.errorService.publish(AppError.sessionNotFound)
+                self.delegate?.sessionNotFound()
+            }
         }
     }
-}
-
-enum MessageType {
-    case sessionResponse(SessionResponse)
-    case lobbyResponse(LobbyResponse)
-    case errorResponse(ErrorResponse)
-    case unknown
+    
+    private func handleUnknownResponse(_ response: Any) {
+        print("Received unknown response: \(response)")
+    }
+    
 }
 
 extension MessageType {
@@ -259,7 +307,7 @@ extension MessageType {
         } else if let messageObject = try? decoder.decode(ErrorResponse.self, from: data) {
             self = .errorResponse(messageObject)
         } else {
-            self = .unknown
+            self = .unknown(data)
         }
     }
 }

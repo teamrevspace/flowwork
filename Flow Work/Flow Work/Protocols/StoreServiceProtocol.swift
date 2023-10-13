@@ -9,8 +9,10 @@ import Foundation
 import Firebase
 
 protocol StoreServiceProtocol {
-    func addUser(_ user: Firebase.User) -> Void
-    func findUsersByUserIds(_ userIds: [String], completion: @escaping ([User]?) -> Void)
-    func findSessionBySessionId(_ sessionId: String, completion: @escaping (Session?) -> Void)
-    func findSessionsByUserId(_ userId: String, completion: @escaping ([Session]?) -> Void)
+    func addUser(user: Firebase.User) -> Void
+    func findUsersByUserIds(userIds: [String], completion: @escaping ([User]) -> Void)
+    func findSessionBySessionId(sessionId: String, completion: @escaping (Session?) -> Void)
+    func findSessionsByUserId(userId: String, completion: @escaping ([Session]) -> Void)
+    func addUserToSession(userId: String, sessionId: String) -> Void
+    func stopLobbyListener()
 }

@@ -9,6 +9,12 @@ import Foundation
 import Firebase
 import GoogleSignIn
 import Swinject
+import Combine
+
+struct AuthState {
+    var isSignedIn: Bool = false
+    var currentUser: User? = nil
+}
 
 class AuthService: AuthServiceProtocol, ObservableObject {
     weak var delegate: AuthServiceDelegate?
@@ -16,11 +22,14 @@ class AuthService: AuthServiceProtocol, ObservableObject {
     @Published var sessionService: SessionServiceProtocol
     @Published var storeService: StoreServiceProtocol
     
-    @Published var isSignedIn: Bool = false
-    @Published var currentUser: User? = nil
+    @Published private var state = AuthState()
     
-    private let authRef = Auth.auth()
     private let resolver: Resolver
+    private let authRef = Auth.auth()
+    
+    var statePublisher: AnyPublisher<AuthState, Never> {
+        $state.eraseToAnyPublisher()
+    }
     
     var handle: AuthStateDidChangeListenerHandle?
     
@@ -29,14 +38,20 @@ class AuthService: AuthServiceProtocol, ObservableObject {
         self.sessionService = resolver.resolve(SessionServiceProtocol.self)!
         self.storeService = resolver.resolve(StoreServiceProtocol.self)!
         
+        sessionService.delegate = self
+        
         handle = authRef.addStateDidChangeListener({(auth, user) in
-            if let user = user {
-                self.isSignedIn = true
-                self.currentUser = User(id: user.uid, name: user.displayName!, emailAddress: user.email!, avatarURL: user.photoURL!)
-                self.connectWebSocketIfSignedIn()
-            } else {
-                self.isSignedIn = false
-                self.currentUser = nil
+            DispatchQueue.main.async {
+                if let user = user {
+                    self.state.isSignedIn = true
+                    self.delegate?.didSignIn()
+                    self.state.currentUser = User(id: user.uid, name: user.displayName!, emailAddress: user.email!, avatarURL: user.photoURL!)
+                    self.connectWebSocketIfSignedIn()
+                } else {
+                    self.state.isSignedIn = false
+                    self.delegate?.didSignOut()
+                    self.state.currentUser = nil
+                }
             }
         })
     }
@@ -82,12 +97,10 @@ class AuthService: AuthServiceProtocol, ObservableObject {
                 }
                 
                 print("Signed in to Firebase as: \(authResult.user.email!)")
-                self.isSignedIn = true
-                self.delegate?.didSignIn()
                 
                 let isNewUser = authResult.additionalUserInfo?.isNewUser ?? false
                 if (isNewUser) {
-                    self.storeService.addUser(authResult.user)
+                    self.storeService.addUser(user: authResult.user)
                 }
             }
         }
@@ -97,9 +110,6 @@ class AuthService: AuthServiceProtocol, ObservableObject {
         do {
             try authRef.signOut()
             self.signOutWithGoogle()
-            self.currentUser = nil
-            self.isSignedIn = false
-            self.delegate?.didSignOut()
         } catch let signOutError as NSError {
             print("Error signing out: %@", signOutError)
         }
@@ -120,4 +130,12 @@ class AuthService: AuthServiceProtocol, ObservableObject {
             }
         }
     }
+}
+
+extension AuthService: SessionServiceDelegate {
+    func didJoinSession(_ sessionId: String) {
+        guard let userId = self.state.currentUser?.id else { return }
+        self.storeService.addUserToSession(userId: userId, sessionId: sessionId)
+    }
+    func sessionNotFound() {}
 }

@@ -13,9 +13,9 @@ class StoreService: StoreServiceProtocol, ObservableObject {
     @Published var sessionService: SessionServiceProtocol
     @Published var errorService: ErrorServiceProtocol
     
-    private let db = Firestore.firestore()
-    
     private let resolver: Resolver
+    private let db = Firestore.firestore()
+    private var lobbyListener: ListenerRegistration?
     
     init(resolver: Resolver) {
         self.resolver = resolver
@@ -23,7 +23,7 @@ class StoreService: StoreServiceProtocol, ObservableObject {
         self.errorService = resolver.resolve(ErrorServiceProtocol.self)!
     }
     
-    func addUser(_ user: Firebase.User) -> Void {
+    func addUser(user: Firebase.User) -> Void {
         db.collection("users").document(user.uid).setData([
             "id": user.uid,
             "name": user.displayName ?? "",
@@ -38,11 +38,11 @@ class StoreService: StoreServiceProtocol, ObservableObject {
         }
     }
     
-    func findUsersByUserIds(_ userIds: [String], completion: @escaping ([User]?) -> Void) {
+    func findUsersByUserIds(userIds: [String], completion: @escaping ([User]) -> Void) {
         db.collection("users").whereField("id", in: userIds).getDocuments {
             (snapshot, error) in
             guard let documents = snapshot?.documents else {
-                completion(nil)
+                completion([])
                 return
             }
             
@@ -59,7 +59,7 @@ class StoreService: StoreServiceProtocol, ObservableObject {
         }
     }
     
-    func findSessionBySessionId(_ sessionId: String, completion: @escaping (Session?) -> Void) {
+    func findSessionBySessionId(sessionId: String, completion: @escaping (Session?) -> Void) {
         db.collection("sessions").document(sessionId).getDocument { (document, error) in
             guard let document = document, document.exists else {
                 completion(nil)
@@ -78,11 +78,13 @@ class StoreService: StoreServiceProtocol, ObservableObject {
         }
     }
     
-    func findSessionsByUserId(_ userId: String, completion: @escaping ([Session]?) -> Void) {
-        db.collection("sessions").whereField("users", arrayContains: userId)
+    func findSessionsByUserId(userId: String, completion: @escaping ([Session]) -> Void) {
+        lobbyListener?.remove()
+        
+        lobbyListener = db.collection("sessions").whereField("userIds", arrayContains: userId)
             .addSnapshotListener({(snapshot, error) in
                 guard let documents = snapshot?.documents else {
-                    completion(nil)
+                    completion([])
                     return
                 }
                 
@@ -91,11 +93,22 @@ class StoreService: StoreServiceProtocol, ObservableObject {
                     let docId = docSnapshot.documentID
                     let name = data["name"] as? String ?? ""
                     let description = data["description"] as? String
-                    let users = data["users"] as? [String]
+                    let userIds = data["userIds"] as? [String]
                     let joinCode = data["joinCode"] as? String
-                    return Session(id: docId, name: name, description: description, joinCode: joinCode, userIds: users)
+                    return Session(id: docId, name: name, description: description, joinCode: joinCode, userIds: userIds)
                 })
                 completion(sessions)
             })
+    }
+    
+    func addUserToSession(userId: String, sessionId: String) -> Void {
+        db.collection("sessions").document(sessionId).updateData([
+            "userIds": FieldValue.arrayUnion([userId])
+        ])
+    }
+    
+    func stopLobbyListener() {
+        lobbyListener?.remove()
+        lobbyListener = nil
     }
 }
