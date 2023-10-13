@@ -6,13 +6,18 @@ defmodule FlowStreamWeb.CoworkingSessionChannel do
   def join("coworking_session:" <> session_id, payload, socket) do
     if authorized?(payload) do
       current_user = socket.assigns.current_user
-
-      users =
-        ChannelMonitor.user_joined("coworking_session:#{session_id}", current_user)
-
       socket = assign(socket, :session_id, session_id)
-      Process.send(self(), {:after_join, users}, [])
-      {:ok, socket}
+
+      cond do
+        session_id == "lobby" ->
+          {:ok, socket}
+
+        true ->
+          users = ChannelMonitor.user_joined("coworking_session:#{session_id}", current_user)
+
+          Process.send(self(), {:after_join, users}, [])
+          {:ok, socket}
+      end
     else
       {:error, :unauthorized}
     end
@@ -37,11 +42,7 @@ defmodule FlowStreamWeb.CoworkingSessionChannel do
   end
 
   defp lobby_update(socket, users) do
-    session_id = socket.assigns.session_id
-
-    broadcast!(socket, "coworking_session:#{session_id}:lobby_update", %{
-      users: get_userids(users)
-    })
+    broadcast!(socket, "lobby_update", %{userIds: get_userids(users)})
   end
 
   defp get_userids(nil), do: []

@@ -5,13 +5,13 @@ defmodule Firestore do
 
   plug(Tesla.Middleware.Retry, delay: 100, max_retries: 5, should_retry: &should_retry/1)
 
-  def create_session(%{"name" => name, "users" => users} = payload) do
-    users = Enum.map(users, fn user ->
-      %{"stringValue" => user}
+  def create_session(%{"name" => name, "userIds" => userIds} = payload) do
+    userIds = Enum.map(userIds, fn userId ->
+      %{"stringValue" => userId}
     end)
     fields = %{
       "name" => %{"stringValue" => name},
-      "users" => %{"arrayValue" => %{"values" => users}}
+      "userIds" => %{"arrayValue" => %{"values" => userIds}}
     }
 
     description = Map.get(payload, "description", "")
