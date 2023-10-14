@@ -9,6 +9,7 @@ import Image from 'next/image';
 import Airtable from 'airtable';
 import { ResponseStatus } from '@/types';
 import Link from 'next/link';
+import { redirect } from 'next/navigation';
 
 // Airtable API
 Airtable.configure({
@@ -89,6 +90,7 @@ export default function Home() {
       if (!exists) {
         insertEmail(email).finally(() => {
           captureSignupMailingList(email);
+          downloadApp();
           setLoading(false);
         });
       } else {
@@ -103,7 +105,12 @@ export default function Home() {
 
   const signup = async (e: any) => {
     e.preventDefault()
-    addEmail(email);
+    addEmail(email)
+  }
+
+  const downloadApp = () => {
+    captureClick('download');
+    window.location.href = 'https://flowwork.xyz/download/Flow_Work.dmg';
   }
 
   return (
@@ -117,15 +124,17 @@ export default function Home() {
       <div id="nav" className="flex flex-row justify-between w-full py-8 px-12">
       </div>
       <div id="main" className="flex flex-col lg:flex-row justify-center items-center w-full h-full gap-12 mx-auto sm:px-8">
-        <div id="hero" className='flex flex-col gap-y-5 min-w-[24rem] px-8 sm:px-0'>
+        <div id="hero" className='flex flex-col gap-y-5 sm:min-w-[24rem] px-6 sm:px-0'>
           <img className="h-24 w-24 sm:h-32 sm:w-32" src="/logo.png" />
           <h1 className='text-6xl sm:text-7xl font-bold text-[#001122]'>Flow Work</h1>
           <h2 className='text-[#999999] text-xl font-medium'>Cowork with friends in real time,<br />find your flow, and get sh*t done.</h2>
           <div className="flex flex-row gap-x-3">
             {(status === ResponseStatus.SuccessfullyAdded || status === ResponseStatus.AlreadyExists) ? (
               <p className="flex items-center justify-center text-[#3a3a3a] h-[52px]">
-                {/* Download will start shortly. If it doesn&apos;t,&nbsp; <Link href="/download" className="text-electric-blue">{`click here`}</Link>. */}
-                Jk - we&apos;ll send you an email when we&apos;re launching 👀
+                Download will start shortly. If it doesn&apos;t,&nbsp;<button onClick={(e) => {
+                  e.preventDefault()
+                  downloadApp()
+                }} className="text-electric-blue">{`click here`}</button>.
               </p>
             ) : (
               <>
