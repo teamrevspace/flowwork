@@ -1,6 +1,8 @@
 defmodule Firestore do
   use Tesla
 
+  adapter Tesla.Adapter.Hackney
+
   @firestore_url "https://firestore.googleapis.com/v1/projects/rev-flow-space/databases/(default)/documents"
 
   plug(Tesla.Middleware.Retry, delay: 100, max_retries: 5, should_retry: &should_retry/1)

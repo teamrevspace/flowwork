@@ -45,7 +45,8 @@ defmodule FlowStream.MixProject do
       {:uuid, "~> 1.1"},
       {:tesla, "~> 1.7.0"},
       {:jose, "~> 1.11.6"},
-      {:joken, "~> 2.6.0"}
+      {:joken, "~> 2.6.0"},
+      {:hackney, "~> 1.20"}
     ]
   end
 
