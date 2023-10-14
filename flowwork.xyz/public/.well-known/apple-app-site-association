@@ -1,0 +1,22 @@
+{
+  "applinks": {
+    "details": [
+      {
+        "appIDs": [
+          "7574Y67WJ7.school.rev.flowwork"
+        ],
+        "components": [
+          {
+            "/": "/download",
+            "exclude": true,
+            "comment": "Matches any URL whose path starts with /download"
+          },
+          {
+            "/": "/s/*",
+            "comment": "Matches any URL whose path starts with /s/"
+          }
+        ]
+      }
+    ]
+  }
+}
