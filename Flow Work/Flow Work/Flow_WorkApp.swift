@@ -64,6 +64,35 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             _ = GIDSignIn.sharedInstance.handle(url)
         }
     }
+    
+//    func application(_ application: NSApplication,
+//                     continue userActivity: NSUserActivity,
+//                     restorationHandler: @escaping ([NSUserActivityRestoring]) -> Void) -> Bool
+//    {
+//        print(userActivity.activityType)
+//        // Get URL components from the incoming user activity.
+//        guard userActivity.activityType == NSUserActivityTypeBrowsingWeb,
+//              let incomingURL = userActivity.webpageURL,
+//              let components = NSURLComponents(url: incomingURL, resolvingAgainstBaseURL: true) else {
+//            return false
+//        }
+//
+//        // Check for specific URL components that you need.
+//        guard let path = components.path,
+//              let queryItems = components.queryItems else {
+//            return false
+//        }
+//        print("path = \(path)")
+//
+//        guard let navAction = path.split(separator: "/").first,
+//              let sessionId = queryItems.first(where: { $0.name == "sessionId" })?.value,
+//              navAction == "join" else {
+//            return false
+//        }
+//        print(sessionId)
+//        return true
+//    }
+        
 }
 
 @main
@@ -75,8 +104,14 @@ struct Flow_WorkApp: App {
     }
     
     var body: some Scene {
-        WindowGroup {
+        Window("Flow Work", id: "main") {
             AppView(coordinator: appAssembler.resolver.resolve(AppCoordinator.self)!)
+//                .onOpenURL(perform: { url in
+//                    print(url)
+//                    if url.scheme == "flowwork" {
+//                        // todo
+//                    }
+//                })
         }
     }
 }
