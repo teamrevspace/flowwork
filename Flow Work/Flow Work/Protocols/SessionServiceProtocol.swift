@@ -11,6 +11,7 @@ import Combine
 protocol SessionServiceDelegate: AnyObject {
     func didJoinSession(_ sessionId: String)
     func sessionNotFound()
+    func newUserJoined()
 }
 
 protocol SessionServiceProtocol {

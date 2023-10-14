@@ -147,4 +147,5 @@ extension AuthService: SessionServiceDelegate {
         self.storeService.addUserToSession(userId: userId, sessionId: sessionId)
     }
     func sessionNotFound() {}
+    func newUserJoined() {}
 }

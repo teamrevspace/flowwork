@@ -102,6 +102,7 @@ extension AppCoordinator: SessionServiceDelegate {
     func sessionNotFound() {
         navigate(to: .Lobby)
     }
+    func newUserJoined() {}
 }
 
 extension AppCoordinator: HomeViewModelDelegate, LobbyViewModelDelegate, SessionViewModelDelegate {

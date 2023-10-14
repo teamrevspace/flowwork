@@ -192,6 +192,7 @@ class SessionService: SessionServiceProtocol, ObservableObject {
                     userIds: userIds
                 )
                 self.state.currentSession = updatedSession
+                self.delegate?.newUserJoined()
             }
         }
     }

@@ -38,7 +38,6 @@ struct SessionView: View {
                     }
                     Spacer()
                     HStack {
-                        
                         ForEach(viewModel.sessionUsers) { user in
                             AvatarView(avatarURL: user.avatarURL)
                         }
