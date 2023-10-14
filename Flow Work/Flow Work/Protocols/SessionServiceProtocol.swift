@@ -18,6 +18,7 @@ protocol SessionServiceProtocol {
     
     var statePublisher: AnyPublisher<SessionState, Never> { get }
     
+    func updateAuthToken(_ token: String?)
     func connect(_ userId: String)
     func disconnect()
     func createSession(_ session: Session)

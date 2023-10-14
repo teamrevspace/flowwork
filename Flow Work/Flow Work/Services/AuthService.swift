@@ -46,11 +46,20 @@ class AuthService: AuthServiceProtocol, ObservableObject {
                     self.state.isSignedIn = true
                     self.delegate?.didSignIn()
                     self.state.currentUser = User(id: user.uid, name: user.displayName!, emailAddress: user.email!, avatarURL: user.photoURL!)
+                    user.getIDToken() { token, error in
+                        if let error = error {
+                            print("Error getting token: \(error.localizedDescription)")
+                            return
+                        }
+                        
+                        self.sessionService.updateAuthToken(token)
+                    }
                     self.connectWebSocketIfSignedIn()
                 } else {
                     self.state.isSignedIn = false
                     self.delegate?.didSignOut()
                     self.state.currentUser = nil
+                    self.sessionService.updateAuthToken(nil)
                 }
             }
         })

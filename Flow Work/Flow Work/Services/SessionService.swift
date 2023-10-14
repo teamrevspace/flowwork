@@ -11,6 +11,7 @@ import NIO
 import NIOHTTP1
 import NIOWebSocket
 import Swinject
+import Firebase
 
 enum MessageType {
     case socketResponse(SocketResponse)
@@ -38,6 +39,7 @@ class SessionService: SessionServiceProtocol, ObservableObject {
     private var webSocketTask: URLSessionWebSocketTask?
     private var webSocketSession: URLSession
     private var pingTimer: Timer?
+    private var authToken: String?
     
     var statePublisher: AnyPublisher<SessionState, Never> {
         $state.eraseToAnyPublisher()
@@ -56,11 +58,15 @@ class SessionService: SessionServiceProtocol, ObservableObject {
         self.disconnect()
     }
     
+    func updateAuthToken(_ authToken: String?) {
+        self.authToken = authToken
+    }
+    
     func connect(_ userId: String) {
         var urlComponents = URLComponents()
-        urlComponents.scheme = "ws"
-        urlComponents.host = "localhost"
-        urlComponents.port = 4000
+        urlComponents.scheme = "wss"
+        urlComponents.host = "api.flowwork.xyz"
+        //urlComponents.port = 4000
         urlComponents.path = "/session/websocket"
         urlComponents.queryItems = [
             URLQueryItem(name: "user_id", value: userId),
@@ -68,7 +74,10 @@ class SessionService: SessionServiceProtocol, ObservableObject {
         
         guard let url = urlComponents.url else { return }
         
-        let request = URLRequest(url: url)
+        var request = URLRequest(url: url)
+        if let token = self.authToken {
+            request.addValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+        }
         
         webSocketTask = webSocketSession.webSocketTask(with: request)
         webSocketTask?.resume()
