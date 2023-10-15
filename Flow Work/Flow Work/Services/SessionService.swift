@@ -252,7 +252,11 @@ extension SessionService {
     
     private func handleSessionResponse(_ response: SessionResponse) {
         DispatchQueue.main.async {
-            if response.topic.starts(with: "coworking_session:") && response.event == "phx_reply" && response.payload.status == "ok"  {
+            if response.topic.starts(with: "coworking_session:lobby") && response.event == "phx_reply" && response.payload.status == "ok" {
+                let id = response.payload.response.name.components(separatedBy: "/").last!
+                self.leaveSession("lobby")
+                self.joinSession(id)
+            } else if response.topic.starts(with: "coworking_session:") && response.event == "phx_reply" && response.payload.status == "ok"  {
                 let id = response.payload.response.name.components(separatedBy: "/").last!
                 let sessionFields = response.payload.response.fields
                 let name = sessionFields.name.stringValue

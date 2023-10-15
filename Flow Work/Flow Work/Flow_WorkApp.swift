@@ -62,9 +62,9 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     func application(_ app: NSApplication, open urls: [URL]) {
         for url in urls {
             if (url.absoluteString.starts(with: "flowwork://")) {
-                let pathComponents = url.host()?.split(separator: "/")
-                let queryItems = url.query()?.split(separator: "&")
-                let sessionId = queryItems?.first?.split(separator: "=").last
+                let pathComponents = url.host()?.components(separatedBy: "/")
+                let queryItems = url.query()?.components(separatedBy: "&")
+                let sessionId = queryItems?.first?.components(separatedBy: "=").last
                 let coordinator = appAssembler.resolver.resolve(AppCoordinator.self)
                 let lobbyViewModel = appAssembler.resolver.resolve(LobbyViewModel.self)
                 if let navAction = pathComponents?.first, String(navAction) == "join", sessionId != nil {
@@ -79,6 +79,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 @main
 struct Flow_WorkApp: App {
     @NSApplicationDelegateAdaptor(AppDelegate.self) var delegate
+    @State var currentNumber: String = "1"
     
     init() {
         FirebaseApp.configure()
@@ -87,6 +88,18 @@ struct Flow_WorkApp: App {
     var body: some Scene {
         Window("Flow Work", id: "main") {
             AppView(coordinator: appAssembler.resolver.resolve(AppCoordinator.self)!)
+        }
+        MenuBarExtra(currentNumber, systemImage: "\(currentNumber).circle") {
+            // 3
+            Button("One") {
+                currentNumber = "1"
+            }
+            Button("Two") {
+                currentNumber = "2"
+            }
+            Button("Three") {
+                currentNumber = "3"
+            }
         }
     }
 }
