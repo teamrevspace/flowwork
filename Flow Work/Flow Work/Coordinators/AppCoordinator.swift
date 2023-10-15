@@ -104,7 +104,10 @@ extension AppCoordinator: AuthServiceDelegate {
 
 extension AppCoordinator: SessionServiceDelegate {
     func didJoinSession(_ sessionId: String) {
-        guard let userId = self.authState.currentUser?.id else { return }
+        guard let userId = self.authState.currentUser?.id else {
+            navigate(to: .Login)
+            return
+        }
         self.storeService.addUserToSession(userId: userId, sessionId: sessionId)
     }
     

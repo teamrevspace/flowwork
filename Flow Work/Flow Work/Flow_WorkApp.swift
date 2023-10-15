@@ -61,7 +61,17 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     
     func application(_ app: NSApplication, open urls: [URL]) {
         for url in urls {
-            _ = GIDSignIn.sharedInstance.handle(url)
+            if (url.absoluteString.starts(with: "flowwork://")) {
+                let pathComponents = url.host()?.split(separator: "/")
+                let queryItems = url.query()?.split(separator: "&")
+                let sessionId = queryItems?.first?.split(separator: "=").last
+                let coordinator = appAssembler.resolver.resolve(AppCoordinator.self)
+                let lobbyViewModel = appAssembler.resolver.resolve(LobbyViewModel.self)
+                if let navAction = pathComponents?.first, String(navAction) == "join", sessionId != nil {
+                    lobbyViewModel?.joinSession(String(sessionId!))
+                    coordinator?.navigate(to: .Session)
+                }
+            }
         }
     }
     
@@ -69,6 +79,9 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 //                     continue userActivity: NSUserActivity,
 //                     restorationHandler: @escaping ([NSUserActivityRestoring]) -> Void) -> Bool
 //    {
+//        print(userActivity.activityType)
+//        return true
+//    }
 //        print(userActivity.activityType)
 //        // Get URL components from the incoming user activity.
 //        guard userActivity.activityType == NSUserActivityTypeBrowsingWeb,
@@ -106,12 +119,6 @@ struct Flow_WorkApp: App {
     var body: some Scene {
         Window("Flow Work", id: "main") {
             AppView(coordinator: appAssembler.resolver.resolve(AppCoordinator.self)!)
-//                .onOpenURL(perform: { url in
-//                    print(url)
-//                    if url.scheme == "flowwork" {
-//                        // todo
-//                    }
-//                })
         }
     }
 }

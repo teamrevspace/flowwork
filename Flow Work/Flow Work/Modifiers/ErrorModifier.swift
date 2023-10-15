@@ -34,6 +34,8 @@ struct ErrorOverlayModifier: ViewModifier {
 
 extension View {
     func errorOverlay(errorService: ErrorServiceProtocol) -> some View {
-        self.modifier(ErrorOverlayModifier(errorService: errorService))
+        self.modifier(ErrorOverlayModifier(errorService: errorService)).onTapGesture {
+            errorService.clearError()
+        }
     }
 }

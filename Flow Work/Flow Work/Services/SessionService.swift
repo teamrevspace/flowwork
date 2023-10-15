@@ -258,7 +258,7 @@ extension SessionService {
                 let name = sessionFields.name.stringValue
                 let description = sessionFields.description?.stringValue
                 let joinCode = sessionFields.joinCode?.stringValue
-                // MARK: change this to user history
+                // MARK: userIds are ignored in view
                 let userIds = sessionFields.userIds.arrayValue.values.map { $0.stringValue }
                 
                 let session = Session(
@@ -277,6 +277,7 @@ extension SessionService {
     private func handleLobbyResponse(_ response: LobbyResponse) {
         DispatchQueue.main.async {
             if response.topic.starts(with: "coworking_session:") && response.event == "lobby_update" {
+                if (response.payload.userIds.isEmpty) { return }
                 self.delegate?.didUpdateLobby(response.payload.userIds, completion: { users in
                     self.state.currentSessionUsers = users
                 })
