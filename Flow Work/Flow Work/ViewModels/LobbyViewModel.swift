@@ -41,7 +41,7 @@ class LobbyViewModel: ObservableObject {
             .store(in: &cancellables)
     }
     
-    func fetchData() {
+    func fetchSessionList() {
         guard let currentUserId = self.authState.currentUser?.id else { return }
         self.storeService.findSessionsByUserId(userId: currentUserId) { sessions in
             self.availableSessions = sessions

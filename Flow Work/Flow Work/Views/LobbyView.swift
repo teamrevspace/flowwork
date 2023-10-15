@@ -9,6 +9,7 @@ import SwiftUI
 
 struct LobbyView: View {
     @ObservedObject var viewModel: LobbyViewModel
+    @State private var selectedSessionId: String?
     
     var body: some View {
         VStack() {
@@ -20,13 +21,19 @@ struct LobbyView: View {
                 List(viewModel.availableSessions) { session in
                     HStack {
                         Text(session.name)
+                            .foregroundColor(selectedSessionId == session.id ? Color.white : Color.black)
                         Spacer()
-                    }.onTapGesture {
-                        viewModel.joinSession(session.id)
+                    }
+                    .padding(.init(top: 5, leading: 10, bottom: 5, trailing: 10))
+                    .contentShape(Rectangle())
+                    .background(selectedSessionId == session.id ? Color.blue : Color.clear)
+                    .onTapGesture {
+                        selectedSessionId = session.id
                     }
                 }
                 .frame(height: 240)
                 .cornerRadius(5)
+                .listStyle(.plain)
             HStack(spacing: 10) {
                 Button(action: {
                     viewModel.returnToHome()
@@ -34,7 +41,7 @@ struct LobbyView: View {
                     Text("Back")
                 }
                 Button(action: {
-                    viewModel.joinSession()
+                    viewModel.joinSession(selectedSessionId)
                 }) {
                     Text("Join")
                 }
@@ -45,7 +52,7 @@ struct LobbyView: View {
         .errorOverlay(errorService: viewModel.errorService)
         .onAppear() {
             viewModel.inputText = ""
-            viewModel.fetchData()
+            viewModel.fetchSessionList()
         }
     }
 }

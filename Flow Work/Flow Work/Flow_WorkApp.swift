@@ -37,7 +37,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             window.styleMask.remove(.titled)
             window.backgroundColor = .clear
             window.isMovableByWindowBackground = true
-            window.level = .screenSaver
+            window.level = .floating
             
             window.contentView = visualEffectView
             
