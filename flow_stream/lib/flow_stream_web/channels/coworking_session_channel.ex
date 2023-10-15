@@ -66,6 +66,13 @@ defmodule FlowStreamWeb.CoworkingSessionChannel do
   def handle_in("create_session", payload, socket) do
     case Firestore.create_session(payload) do
       {:ok, session} ->
+        session_path = Map.get(session, "name")
+        session_id = List.last(String.split(session_path, "/"))
+        # Update the session_id in socket assigns
+        socket = assign(socket, :session_id, session_id)
+
+        # Join the user to the new session
+        join("coworking_session:" <> session_id, %{}, socket)
         {:reply, {:ok, session}, socket}
 
       {:error, error} ->
