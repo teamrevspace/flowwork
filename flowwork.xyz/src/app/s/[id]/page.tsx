@@ -1,20 +1,20 @@
 "use client"
 
 import Link from "next/link";
-import { useEffect } from "react";
+import { useCallback, useEffect } from "react";
 
 export default function JoinSessionPage({ params }: { params: { id: string } }) {
   const downloadApp = async () => {
-    window.location.href = 'https://flowwork.xyz/download/Flow_Work.dmg'
+    window.location.href = 'https://flowwork.xyz/download/Flow%20Work.dmg'
   }
 
-  const joinSession = async () => {
+  const joinSession = useCallback(async () => {
     window.location.href = `flowwork://join?sessionId=${params.id}`
-  }
+  }, [params.id])
 
   useEffect(() => {
     joinSession()
-  }, [ joinSession ])
+  }, [joinSession])
 
   return (
     <div className="h-screen w-full flex flex-col bg-white px-6">
