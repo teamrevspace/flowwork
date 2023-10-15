@@ -23,12 +23,7 @@ class SessionViewModel: ObservableObject {
     @Published var errorService: ErrorServiceProtocol
     
     @Published var authState = AuthState()
-    @Published var sessionState = SessionState() {
-        didSet {
-            fetchData()
-        }
-    }
-    @Published var sessionUsers: [User] = []
+    @Published var sessionState = SessionState()
     
     private let resolver: Resolver
     private var cancellables = Set<AnyCancellable>()
@@ -40,23 +35,12 @@ class SessionViewModel: ObservableObject {
         self.storeService = resolver.resolve(StoreServiceProtocol.self)!
         self.errorService = resolver.resolve(ErrorServiceProtocol.self)!
         
-        sessionService.delegate = self
-        
         authService.statePublisher
             .assign(to: \.authState, on: self)
             .store(in: &cancellables)
         sessionService.statePublisher
             .assign(to: \.sessionState, on: self)
             .store(in: &cancellables)
-    }
-    
-    func fetchData() {
-        guard let currentUserId = self.authState.currentUser?.id else {
-            return
-        }
-        self.storeService.findUsersByUserIds(userIds: self.sessionState.currentSession?.userIds ?? [currentUserId]) { users in
-            self.sessionUsers = users
-        }
     }
     
     func copyToClipboard(textToCopy: String) {
@@ -70,13 +54,5 @@ class SessionViewModel: ObservableObject {
             self.sessionService.leaveSession(currentSessionId)
         }
         self.delegate?.showHomeView()
-    }
-}
-
-extension SessionViewModel: SessionServiceDelegate {
-    func didJoinSession(_ sessionId: String) {}
-    func sessionNotFound() {}
-    func newUserJoined() {
-        self.fetchData()
     }
 }

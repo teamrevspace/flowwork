@@ -38,7 +38,7 @@ struct SessionView: View {
                     }
                     Spacer()
                     HStack {
-                        ForEach(viewModel.sessionUsers) { user in
+                        ForEach(viewModel.sessionState.currentSessionUsers ?? []) { user in
                             AvatarView(avatarURL: user.avatarURL)
                         }
                         Spacer()
@@ -54,8 +54,5 @@ struct SessionView: View {
         .padding(10)
         .standardFrame()
         .errorOverlay(errorService: viewModel.errorService)
-        .onAppear() {
-            viewModel.fetchData()
-        }
     }
 }

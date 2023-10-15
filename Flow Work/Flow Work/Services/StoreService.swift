@@ -10,7 +10,6 @@ import Firebase
 import Swinject
 
 class StoreService: StoreServiceProtocol, ObservableObject {
-    @Published var sessionService: SessionServiceProtocol
     @Published var errorService: ErrorServiceProtocol
     
     private let resolver: Resolver
@@ -19,7 +18,6 @@ class StoreService: StoreServiceProtocol, ObservableObject {
     
     init(resolver: Resolver) {
         self.resolver = resolver
-        self.sessionService = resolver.resolve(SessionServiceProtocol.self)!
         self.errorService = resolver.resolve(ErrorServiceProtocol.self)!
     }
     

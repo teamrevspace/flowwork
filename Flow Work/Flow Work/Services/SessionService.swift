@@ -25,6 +25,7 @@ struct SessionState {
     var isConnected: Bool = false
     var hasJoinedSession: Bool = false
     var currentSession: Session? = nil
+    var currentSessionUsers: [User]? = nil
 }
 
 class SessionService: SessionServiceProtocol, ObservableObject {
@@ -141,6 +142,9 @@ class SessionService: SessionServiceProtocol, ObservableObject {
             payload: [:] as [String: Any]
         )
         self.sendMessage(message: leaveSessionMessage)
+        self.state.currentSession = nil
+        self.state.currentSessionUsers = nil
+        self.state.hasJoinedSession = false
     }
     
     func sendMessage(message: Message) {
@@ -179,22 +183,6 @@ class SessionService: SessionServiceProtocol, ObservableObject {
             }
             self?.receiveMessage()
         })
-    }
-    
-    private func updateSessionUsers(_ userIds: [String]) {
-        DispatchQueue.main.async {
-            if let currentSession = self.state.currentSession {
-                let updatedSession = Session(
-                    id: currentSession.id,
-                    name: currentSession.name,
-                    description: currentSession.description,
-                    joinCode: currentSession.joinCode,
-                    userIds: userIds
-                )
-                self.state.currentSession = updatedSession
-                self.delegate?.newUserJoined()
-            }
-        }
     }
     
     private func handleError(_ error: Error) {
@@ -256,6 +244,7 @@ extension SessionService {
                 self.state.hasJoinedSession = true
             } else if response.topic.starts(with: "coworking_session:") && response.event == "phx_close" && response.payload.status == "ok"{
                 self.state.hasJoinedSession = false
+                self.state.currentSessionUsers = nil
                 self.state.currentSession = nil
             }
         }
@@ -286,8 +275,12 @@ extension SessionService {
     }
     
     private func handleLobbyResponse(_ response: LobbyResponse) {
-        if response.topic.starts(with: "coworking_session:") && response.event == "lobby_update" {
-            self.updateSessionUsers(response.payload.userIds)
+        DispatchQueue.main.async {
+            if response.topic.starts(with: "coworking_session:") && response.event == "lobby_update" {
+                self.delegate?.didUpdateLobby(response.payload.userIds, completion: { users in
+                    self.state.currentSessionUsers = users
+                })
+            }
         }
     }
     
@@ -302,9 +295,12 @@ extension SessionService {
     }
     
     private func handleUnknownResponse(_ response: Any) {
-        print("Received unknown response: \(response)")
+        if let data = response as? Data, let string = String(data: data, encoding: .utf8) {
+            print("Received unknown response: \(string)")
+        } else {
+            print("Received unknown response: \(response)")
+        }
     }
-    
 }
 
 extension MessageType {

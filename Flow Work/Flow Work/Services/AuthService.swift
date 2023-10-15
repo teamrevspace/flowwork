@@ -38,8 +38,6 @@ class AuthService: AuthServiceProtocol, ObservableObject {
         self.sessionService = resolver.resolve(SessionServiceProtocol.self)!
         self.storeService = resolver.resolve(StoreServiceProtocol.self)!
         
-        sessionService.delegate = self
-        
         handle = authRef.addStateDidChangeListener({(auth, user) in
             DispatchQueue.main.async {
                 if let user = user {
@@ -139,13 +137,4 @@ class AuthService: AuthServiceProtocol, ObservableObject {
             }
         }
     }
-}
-
-extension AuthService: SessionServiceDelegate {
-    func didJoinSession(_ sessionId: String) {
-        guard let userId = self.state.currentUser?.id else { return }
-        self.storeService.addUserToSession(userId: userId, sessionId: sessionId)
-    }
-    func sessionNotFound() {}
-    func newUserJoined() {}
 }

@@ -30,6 +30,8 @@ class AppCoordinator: ObservableObject {
     @Published var sessionViewModel: SessionViewModel
     @Published var lobbyViewModel: LobbyViewModel
     
+    @Published var authState = AuthState()
+    
     private let resolver: Resolver
     
     private let navigationSubject = PassthroughSubject<NavigationEvent, Never>()
@@ -52,6 +54,10 @@ class AppCoordinator: ObservableObject {
         
         self.setupNavigation()
         self.setupDelegates()
+        
+        authService.statePublisher
+            .assign(to: \.authState, on: self)
+            .store(in: &cancellables)
     }
     
     func navigate(to event: NavigationEvent) {
@@ -97,12 +103,20 @@ extension AppCoordinator: AuthServiceDelegate {
 }
 
 extension AppCoordinator: SessionServiceDelegate {
-    func didJoinSession(_ sessionId: String) {}
+    func didJoinSession(_ sessionId: String) {
+        guard let userId = self.authState.currentUser?.id else { return }
+        self.storeService.addUserToSession(userId: userId, sessionId: sessionId)
+    }
     
     func sessionNotFound() {
         navigate(to: .Lobby)
     }
-    func newUserJoined() {}
+    
+    func didUpdateLobby(_ userIds: [String], completion: @escaping ([User]) -> Void) {
+        self.storeService.findUsersByUserIds(userIds: userIds) { users in
+            completion(users)
+        }
+    }
 }
 
 extension AppCoordinator: HomeViewModelDelegate, LobbyViewModelDelegate, SessionViewModelDelegate {
