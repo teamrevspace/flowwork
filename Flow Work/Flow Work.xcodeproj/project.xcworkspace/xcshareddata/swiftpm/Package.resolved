@@ -109,15 +109,6 @@
       }
     },
     {
-      "identity" : "loremswiftum",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/lukaskubanek/LoremSwiftum.git",
-      "state" : {
-        "branch" : "master",
-        "revision" : "8942e732e50458cde5dccf9996afa16f29372853"
-      }
-    },
-    {
       "identity" : "nanopb",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/firebase/nanopb.git",
@@ -133,24 +124,6 @@
       "state" : {
         "revision" : "e70e889c0196c76d22759eb50d6a0270ca9f1d9e",
         "version" : "2.3.1"
-      }
-    },
-    {
-      "identity" : "socket.io-client-swift",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/socketio/socket.io-client-swift",
-      "state" : {
-        "branch" : "master",
-        "revision" : "175da8b5156f6b132436f0676cc84c2f6a766b6e"
-      }
-    },
-    {
-      "identity" : "starscream",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/daltoniam/Starscream",
-      "state" : {
-        "revision" : "ac6c0fc9da221873e01bd1a0d4818498a71eef33",
-        "version" : "4.0.6"
       }
     },
     {
@@ -196,15 +169,6 @@
       "state" : {
         "revision" : "8bc503e60965298984fb58cf47b71c541449fe2a",
         "version" : "2.8.3"
-      }
-    },
-    {
-      "identity" : "url-image",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/dmytro-anokhin/url-image",
-      "state" : {
-        "revision" : "4042f955f1fdff00ced85545e1eecdbf969b5cd0",
-        "version" : "3.1.1"
       }
     }
   ],

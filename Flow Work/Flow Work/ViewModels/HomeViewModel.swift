@@ -6,7 +6,6 @@
 //
 
 import Combine
-import LoremSwiftum
 import Swinject
 
 protocol HomeViewModelDelegate: AnyObject {
@@ -48,11 +47,24 @@ class HomeViewModel: ObservableObject {
             .store(in: &cancellables)
     }
     
+    func sanitizeTodoItems() {
+        if (self.todoItems.count > 1) {
+            self.todoItems = self.todoItems.enumerated().filter { (index, item) in
+                return !item.isEmpty
+            }.map { $0.element }
+        }
+    }
+    
     func goToLobby() {
         self.delegate?.showLobbyView()
     }
     
+    func signInWithGoogle() {
+        self.authService.signInWithGoogle()
+    }
+    
     func signOut() {
+        self.showProfilePopover.toggle()
         self.authService.signOut()
     }
 }

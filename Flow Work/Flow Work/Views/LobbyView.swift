@@ -75,7 +75,7 @@ struct CreateSessionView: View {
                 Button(action: {
                     let userIds = [self.viewModel.authState.currentUser!.id]
                     if (!viewModel.newSessionName.isEmpty) {
-                        viewModel.createSession(sessionName: viewModel.newSessionName, userIds: userIds)
+                        viewModel.createSession(userIds: userIds)
                     }
                 }) {
                     Text("Create")

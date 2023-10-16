@@ -10,6 +10,7 @@ import SwiftUI
 struct HomeView: View {
     @ObservedObject var viewModel: HomeViewModel
     @FocusState private var focusedField: Int?
+    @State private var shakeTrigger: Bool = false
     
     var body: some View {
         VStack {
@@ -47,13 +48,14 @@ struct HomeView: View {
                         TextField("New to-do", text: $viewModel.todoItems[index])
                             .textFieldStyle(PlainTextFieldStyle())
                             .focused($focusedField, equals: index)
+                            .frame(maxWidth: .infinity)
                         
-                        if (index != 0) {
+                        if (viewModel.todoItems.count > 1 && !viewModel.todoItems[index].isEmpty) {
                             Button(action: {
                                 viewModel.todoItems.remove(at: index)
                             }) {
                                 Image(systemName: "xmark")
-                                    .padding(2.5)
+                                    .padding(2)
                             }
                             .buttonStyle(.borderless)
                             .foregroundColor(viewModel.isHoveringDeleteButtons[index] ? Color.secondary : Color.secondary.opacity(0.5))
@@ -102,9 +104,14 @@ struct HomeView: View {
             
             HStack{
                 Button(action: {
-                    viewModel.goToLobby()
+                    if viewModel.authState.isSignedIn {
+                        viewModel.sanitizeTodoItems()
+                        viewModel.goToLobby()
+                    } else {
+                        viewModel.showProfilePopover.toggle()
+                    }
                 }) {
-                    Text("Start Your Flow")
+                    FText("Start Your Flow")
                 }
             }
         }
@@ -119,9 +126,18 @@ struct ProfilePopover: View {
     
     var body: some View {
         VStack {
-            Text("Hi \(viewModel.authState.currentUser?.name ?? "there")!")
-            Button("Log out") {
-                viewModel.signOut()
+            if viewModel.authState.currentUser != nil {
+                Text("Hi \(viewModel.authState.currentUser!.name)!")
+                Button("Log out") {
+                    viewModel.signOut()
+                }
+            } else {
+                Text("Hi there!")
+                Button(action: {
+                    viewModel.signInWithGoogle()
+                }) {
+                    Text("Sign in with Google")
+                }
             }
         }
         .padding(15)

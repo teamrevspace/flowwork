@@ -13,9 +13,7 @@
 		1106E6E02AD8CD8C0026600A /* AuthServiceProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1106E6DF2AD8CD8C0026600A /* AuthServiceProtocol.swift */; };
 		110C430E2AD052FF00201CD5 /* SessionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 110C430D2AD052FF00201CD5 /* SessionView.swift */; };
 		110C43122AD0997A00201CD5 /* SessionViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 110C43112AD0997A00201CD5 /* SessionViewModel.swift */; };
-		110C43152AD0B20200201CD5 /* SocketIO in Frameworks */ = {isa = PBXBuildFile; productRef = 110C43142AD0B20200201CD5 /* SocketIO */; };
 		110C43182AD20BC500201CD5 /* NIOWebSocket in Frameworks */ = {isa = PBXBuildFile; productRef = 110C43172AD20BC500201CD5 /* NIOWebSocket */; };
-		110C431B2AD2E1AD00201CD5 /* LoremSwiftum in Frameworks */ = {isa = PBXBuildFile; productRef = 110C431A2AD2E1AD00201CD5 /* LoremSwiftum */; };
 		1147A0CF2AD8D0B900D6C615 /* ViewModelAssembly.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1147A0CE2AD8D0B900D6C615 /* ViewModelAssembly.swift */; };
 		1147A0D12AD8D48E00D6C615 /* SessionServiceProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1147A0D02AD8D48E00D6C615 /* SessionServiceProtocol.swift */; };
 		1147A0D32AD8DC4500D6C615 /* StoreService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1147A0D22AD8DC4500D6C615 /* StoreService.swift */; };
@@ -47,9 +45,9 @@
 		116D191D2ACFE4FA00CB4F1D /* HomeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 116D191C2ACFE4FA00CB4F1D /* HomeViewModel.swift */; };
 		116D191F2AD04F0100CB4F1D /* ErrorModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 116D191E2AD04F0100CB4F1D /* ErrorModifier.swift */; };
 		117FDB6F2AD6569E00E39E3F /* Response.swift in Sources */ = {isa = PBXBuildFile; fileRef = 117FDB6E2AD6569E00E39E3F /* Response.swift */; };
-		117FDB722AD6727B00E39E3F /* URLImage in Frameworks */ = {isa = PBXBuildFile; productRef = 117FDB712AD6727B00E39E3F /* URLImage */; };
 		11C839ED2AD7AC9300DE62D2 /* AvatarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11C839EC2AD7AC9300DE62D2 /* AvatarView.swift */; };
 		11D7C1A72AD5E73E00AF1EEE /* Message.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11D7C1A62AD5E73E00AF1EEE /* Message.swift */; };
+		11E5AD2B2ADD84C7004670F0 /* FText.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11E5AD2A2ADD84C7004670F0 /* FText.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -90,6 +88,7 @@
 		117FDB6E2AD6569E00E39E3F /* Response.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Response.swift; sourceTree = "<group>"; };
 		11C839EC2AD7AC9300DE62D2 /* AvatarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AvatarView.swift; sourceTree = "<group>"; };
 		11D7C1A62AD5E73E00AF1EEE /* Message.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Message.swift; sourceTree = "<group>"; };
+		11E5AD2A2ADD84C7004670F0 /* FText.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FText.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -98,13 +97,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				114AFDFB2AC76F4E00AB9A8B /* FirebaseAnalytics in Frameworks */,
-				110C431B2AD2E1AD00201CD5 /* LoremSwiftum in Frameworks */,
 				114AFE022AC7714100AB9A8B /* GoogleSignIn in Frameworks */,
 				114AFDFD2AC76F4E00AB9A8B /* FirebaseAuth in Frameworks */,
-				110C43152AD0B20200201CD5 /* SocketIO in Frameworks */,
 				1147A0DA2AD983E100D6C615 /* Swinject in Frameworks */,
 				114AFDFF2AC76F4E00AB9A8B /* FirebaseFirestore in Frameworks */,
-				117FDB722AD6727B00E39E3F /* URLImage in Frameworks */,
 				110C43182AD20BC500201CD5 /* NIOWebSocket in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -247,6 +243,7 @@
 			isa = PBXGroup;
 			children = (
 				11C839EC2AD7AC9300DE62D2 /* AvatarView.swift */,
+				11E5AD2A2ADD84C7004670F0 /* FText.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -272,10 +269,7 @@
 				114AFDFC2AC76F4E00AB9A8B /* FirebaseAuth */,
 				114AFDFE2AC76F4E00AB9A8B /* FirebaseFirestore */,
 				114AFE012AC7714100AB9A8B /* GoogleSignIn */,
-				110C43142AD0B20200201CD5 /* SocketIO */,
 				110C43172AD20BC500201CD5 /* NIOWebSocket */,
-				110C431A2AD2E1AD00201CD5 /* LoremSwiftum */,
-				117FDB712AD6727B00E39E3F /* URLImage */,
 				1147A0D92AD983E100D6C615 /* Swinject */,
 			);
 			productName = "Flow Work";
@@ -309,10 +303,7 @@
 			packageReferences = (
 				114AFDF92AC76F4E00AB9A8B /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
 				114AFE002AC7714100AB9A8B /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */,
-				110C43132AD0B20200201CD5 /* XCRemoteSwiftPackageReference "socket" */,
 				110C43162AD20BC500201CD5 /* XCRemoteSwiftPackageReference "swift-nio" */,
-				110C43192AD2E1AD00201CD5 /* XCRemoteSwiftPackageReference "LoremSwiftum" */,
-				117FDB702AD6727A00E39E3F /* XCRemoteSwiftPackageReference "url-image" */,
 				1147A0D82AD983E100D6C615 /* XCRemoteSwiftPackageReference "Swinject" */,
 			);
 			productRefGroup = 114AFDE12AC765B700AB9A8B /* Products */;
@@ -359,6 +350,7 @@
 				114AFDE62AC765B700AB9A8B /* AppView.swift in Sources */,
 				116D19192ACFDEF800CB4F1D /* HomeView.swift in Sources */,
 				1106E6E02AD8CD8C0026600A /* AuthServiceProtocol.swift in Sources */,
+				11E5AD2B2ADD84C7004670F0 /* FText.swift in Sources */,
 				116D19032ACFD3C400CB4F1D /* LoginViewModel.swift in Sources */,
 				116D19012ACFD34B00CB4F1D /* User.swift in Sources */,
 				1147A0D52AD8DC6C00D6C615 /* StoreServiceProtocol.swift in Sources */,
@@ -576,28 +568,12 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		110C43132AD0B20200201CD5 /* XCRemoteSwiftPackageReference "socket" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/socketio/socket.io-client-swift";
-			requirement = {
-				branch = master;
-				kind = branch;
-			};
-		};
 		110C43162AD20BC500201CD5 /* XCRemoteSwiftPackageReference "swift-nio" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/apple/swift-nio.git";
 			requirement = {
 				kind = upToNextMajorVersion;
 				minimumVersion = 2.0.0;
-			};
-		};
-		110C43192AD2E1AD00201CD5 /* XCRemoteSwiftPackageReference "LoremSwiftum" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/lukaskubanek/LoremSwiftum.git";
-			requirement = {
-				branch = master;
-				kind = branch;
 			};
 		};
 		1147A0D82AD983E100D6C615 /* XCRemoteSwiftPackageReference "Swinject" */ = {
@@ -624,31 +600,13 @@
 				minimumVersion = 7.0.0;
 			};
 		};
-		117FDB702AD6727A00E39E3F /* XCRemoteSwiftPackageReference "url-image" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/dmytro-anokhin/url-image";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 3.0.0;
-			};
-		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		110C43142AD0B20200201CD5 /* SocketIO */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 110C43132AD0B20200201CD5 /* XCRemoteSwiftPackageReference "socket" */;
-			productName = SocketIO;
-		};
 		110C43172AD20BC500201CD5 /* NIOWebSocket */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 110C43162AD20BC500201CD5 /* XCRemoteSwiftPackageReference "swift-nio" */;
 			productName = NIOWebSocket;
-		};
-		110C431A2AD2E1AD00201CD5 /* LoremSwiftum */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 110C43192AD2E1AD00201CD5 /* XCRemoteSwiftPackageReference "LoremSwiftum" */;
-			productName = LoremSwiftum;
 		};
 		1147A0D92AD983E100D6C615 /* Swinject */ = {
 			isa = XCSwiftPackageProductDependency;
@@ -674,11 +632,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 114AFE002AC7714100AB9A8B /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */;
 			productName = GoogleSignIn;
-		};
-		117FDB712AD6727B00E39E3F /* URLImage */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 117FDB702AD6727A00E39E3F /* XCRemoteSwiftPackageReference "url-image" */;
-			productName = URLImage;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

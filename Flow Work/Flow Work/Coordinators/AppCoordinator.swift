@@ -65,7 +65,7 @@ class AppCoordinator: ObservableObject {
     }
     
     private func setupNavigation() {
-        self.currentView = AnyView(LoginView(viewModel: self.loginViewModel))
+        self.currentView = AnyView(HomeView(viewModel: self.homeViewModel))
         
         navigationSubject
             .sink { event in
@@ -98,14 +98,14 @@ extension AppCoordinator: AuthServiceDelegate {
     }
     
     func didSignOut() {
-        navigate(to: .Login)
+        navigate(to: .Home)
     }
 }
 
 extension AppCoordinator: SessionServiceDelegate {
     func didJoinSession(_ sessionId: String) {
         guard let userId = self.authState.currentUser?.id else {
-            navigate(to: .Login)
+            navigate(to: .Home)
             return
         }
         self.storeService.addUserToSession(userId: userId, sessionId: sessionId)

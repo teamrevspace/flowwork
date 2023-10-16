@@ -15,7 +15,7 @@ struct StandardFrameModifier: ViewModifier {
     
     func body(content: Content) -> some View {
         content
-            .frame(minWidth: minWidth, minHeight: minHeight, maxHeight: maxHeight)
+            .frame(minWidth: minWidth, maxWidth: minWidth, minHeight: minHeight, maxHeight: maxHeight)
             .fixedSize()
             .background(Color(NSColor.windowBackgroundColor))
     }

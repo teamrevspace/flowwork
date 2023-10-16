@@ -52,9 +52,14 @@ class LobbyViewModel: ObservableObject {
         }
     }
     
-    func createSession(sessionName: String, userIds: [String]) {
-        let session = Session(id: "_", name: sessionName, userIds: userIds)
-        self.sessionService.createSession(session)
+    func createSession(userIds: [String]) {
+        let newSession = Session(
+            id: "_",
+            name: self.newSessionName,
+            password: self.newSessionPassword,
+            userIds: userIds
+        )
+        self.sessionService.createSession(newSession)
         
         self.delegate?.showSessionView()
     }
