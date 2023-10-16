@@ -17,7 +17,9 @@ struct LoginView: View {
             }) {
                 Text("Sign in with Google")
             }
-        }.standardFrame()
-            .errorOverlay(errorService: viewModel.errorService)
+        }
+        .padding()
+        .standardFrame()
+        .errorOverlay(errorService: viewModel.errorService)
     }
 }

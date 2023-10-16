@@ -25,6 +25,11 @@ class HomeViewModel: ObservableObject {
     @Published var sessionState = SessionState()
     @Published var authState = AuthState()
     
+    @Published var showProfilePopover: Bool = false
+    @Published var todoItems: [String] = [""]
+    @Published var isHoveringAddButton: Bool = false
+    @Published var isHoveringDeleteButtons: [Bool] = [false, false, false]
+    
     private var cancellables = Set<AnyCancellable>()
     private let resolver: Resolver
     
@@ -41,19 +46,6 @@ class HomeViewModel: ObservableObject {
         authService.statePublisher
             .assign(to: \.authState, on: self)
             .store(in: &cancellables)
-    }
-    
-    func generateSlug() -> String {
-        let words = Lorem.words(3)
-        let slug = words.replacingOccurrences(of: " ", with: "-").lowercased()
-        return slug
-    }
-    
-    func createSession(sessionName: String, userIds: [String]) {
-        let session = Session(id: "_", name: sessionName, userIds: userIds)
-        self.sessionService.createSession(session)
-        
-        self.delegate?.showSessionView()
     }
     
     func goToLobby() {

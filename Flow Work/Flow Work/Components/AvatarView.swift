@@ -18,6 +18,7 @@ struct AvatarView: View {
                 image
                     .resizable()
                     .frame(width: 30, height: 30)
+                    .background(Color.secondary.opacity(0.5))
                     .cornerRadius(.infinity)
                     .aspectRatio(contentMode: .fit)
             }
@@ -25,6 +26,7 @@ struct AvatarView: View {
             Image(systemName: "person.circle")
                 .resizable()
                 .frame(width: 30, height: 30)
+                .background(Color.secondary.opacity(0.5))
                 .cornerRadius(.infinity)
                 .aspectRatio(contentMode: .fit)
         }

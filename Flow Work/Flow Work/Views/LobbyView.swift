@@ -9,68 +9,80 @@ import SwiftUI
 
 struct LobbyView: View {
     @ObservedObject var viewModel: LobbyViewModel
+    @State private var tabSelection: Int = 2
     
     var body: some View {
-        TabView {
+        TabView(selection: $tabSelection) {
             CreateSessionView(viewModel: viewModel)
                 .tabItem {
-                    Text("Create")
+                    Text("Host")
                 }
+                .tag(1)
             JoinSessionView(viewModel: viewModel)
                 .tabItem {
-                    Text("Join")
+                    Text("Lobby")
                 }
+                .tag(2)
         }
-        .padding(10)
+        .padding()
         .standardFrame()
+        .errorOverlay(errorService: viewModel.errorService)
         .onAppear() {
             viewModel.fetchSessionList()
         }
         .onDisappear() {
-            viewModel.inputText = ""
+            viewModel.joinSessionCode = ""
+            viewModel.newSessionName = ""
+            viewModel.newSessionPassword = ""
+            viewModel.storeService.stopLobbyListener()
         }
     }
 }
 
 struct CreateSessionView: View {
     @ObservedObject var viewModel: LobbyViewModel
-    @State private var newSessionName: String = ""
-    @State private var newSessionPassword: String = ""
-    @State private var showPassword: Bool = false
-    @FocusState var focus1: Bool
-    @FocusState var focus2: Bool
     
     var body: some View {
         VStack{
-            TextField("Enter session name", text:  $newSessionName)
+            TextField("Session name", text:  $viewModel.newSessionName)
                 .textFieldStyle(RoundedBorderTextFieldStyle())
-            ZStack {
-                HStack{
-                    Group {
-                        if showPassword {
-                            TextField("Set password (optional)", text:  $newSessionPassword)
-                                .textFieldStyle(RoundedBorderTextFieldStyle())
-                                .disableAutocorrection(true)
-                                .focused($focus1)
-                        }else {
-                            SecureField("Set password (optional)", text:  $newSessionPassword)
-                                .textFieldStyle(RoundedBorderTextFieldStyle())
-                                .disableAutocorrection(true)
-                                .focused($focus2)
-                        }
+            HStack{
+                Group {
+                    if viewModel.showPassword {
+                        TextField("Set password (optional)", text:  $viewModel.newSessionPassword)
+                            .textFieldStyle(RoundedBorderTextFieldStyle())
+                            .disableAutocorrection(true)
+                    } else {
+                        SecureField("Set password (optional)", text:  $viewModel.newSessionPassword)
+                            .textFieldStyle(RoundedBorderTextFieldStyle())
+                            .disableAutocorrection(true)
                     }
-                    Button(action: {
-                        showPassword.toggle()
-                    }) {
-                        Image(systemName: self.showPassword ? "eye.slash" : "eye")
-                            .accentColor(.gray)
-                    }
+                }
+                Button(action: {
+                    viewModel.showPassword.toggle()
+                }) {
+                    Image(systemName: viewModel.showPassword ? "eye.slash" : "eye")
+                        .accentColor(.gray)
                 }
             }
             
+            HStack(spacing: 10) {
+                Button(action: {
+                    viewModel.returnToHome()
+                }) {
+                    Text("Back")
+                }
+                Button(action: {
+                    let userIds = [self.viewModel.authState.currentUser!.id]
+                    if (!viewModel.newSessionName.isEmpty) {
+                        viewModel.createSession(sessionName: viewModel.newSessionName, userIds: userIds)
+                    }
+                }) {
+                    Text("Create")
+                }
+            }
         }
         .padding(10)
-        .errorOverlay(errorService: viewModel.errorService)
     }
 }
 
@@ -80,7 +92,7 @@ struct JoinSessionView: View {
     
     var body: some View {
         VStack() {
-            TextField("Enter session code or URL", text:  $viewModel.inputText)
+            TextField("Enter session code or URL", text:  $viewModel.joinSessionCode)
                 .textFieldStyle(RoundedBorderTextFieldStyle())
             List(viewModel.availableSessions) { session in
                 HStack {
@@ -116,6 +128,5 @@ struct JoinSessionView: View {
             }
         }
         .padding(10)
-        .errorOverlay(errorService: viewModel.errorService)
     }
 }

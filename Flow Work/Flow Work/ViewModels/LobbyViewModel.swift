@@ -23,8 +23,12 @@ class LobbyViewModel: ObservableObject {
     @Published var errorService: ErrorServiceProtocol
     
     @Published var authState = AuthState()
-    @Published var inputText: String = ""
+    @Published var joinSessionCode: String = ""
     @Published var availableSessions: [Session] = []
+    
+    @Published var newSessionName: String = ""
+    @Published var newSessionPassword: String = ""
+    @Published var showPassword: Bool = false
     
     private let resolver: Resolver
     private var cancellables = Set<AnyCancellable>()
@@ -48,10 +52,17 @@ class LobbyViewModel: ObservableObject {
         }
     }
     
+    func createSession(sessionName: String, userIds: [String]) {
+        let session = Session(id: "_", name: sessionName, userIds: userIds)
+        self.sessionService.createSession(session)
+        
+        self.delegate?.showSessionView()
+    }
+    
     func joinSession(_ id: String? = nil) {
         var sessionId: String
         
-        if let url = URL(string: inputText), let host = url.host, host == "flowwork.xyz" {
+        if let url = URL(string: joinSessionCode), let host = url.host, host == "flowwork.xyz" {
             let pathComponents = url.pathComponents
             if pathComponents.count > 2 && pathComponents[1] == "s" {
                 // parsed URL is of the form flowwork.xyz/s/<sessionId>
@@ -61,7 +72,7 @@ class LobbyViewModel: ObservableObject {
                 return
             }
         } else {
-            guard let id = id ?? (inputText.isEmpty ? nil : inputText) else {
+            guard let id = id ?? (joinSessionCode.isEmpty ? nil : joinSessionCode) else {
                 self.errorService.publish(AppError.invalidURLFormat)
                 return
             }
