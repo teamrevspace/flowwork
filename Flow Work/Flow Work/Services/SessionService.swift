@@ -106,8 +106,8 @@ class SessionService: SessionServiceProtocol, ObservableObject {
         if session.description != nil {
             createSessionPayload.updateValue(session.description!, forKey: "description")
         }
-        if session.joinCode != nil {
-            createSessionPayload.updateValue(session.joinCode!, forKey: "joinCode")
+        if session.password != nil {
+            createSessionPayload.updateValue(session.password!, forKey: "password")
         }
         
         let createSessionMessage = Message(
@@ -261,7 +261,7 @@ extension SessionService {
                 let sessionFields = response.payload.response.fields
                 let name = sessionFields.name.stringValue
                 let description = sessionFields.description?.stringValue
-                let joinCode = sessionFields.joinCode?.stringValue
+                let password = sessionFields.password?.stringValue
                 // MARK: userIds are ignored in view
                 let userIds = sessionFields.userIds.arrayValue.values.map { $0.stringValue }
                 
@@ -269,7 +269,7 @@ extension SessionService {
                     id: id,
                     name: name,
                     description: description,
-                    joinCode: joinCode,
+                    password: password,
                     userIds: userIds
                 )
                 self.state.currentSession = session

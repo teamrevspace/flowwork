@@ -31,7 +31,7 @@ struct HomeView: View {
                     let userIds = [self.viewModel.authState.currentUser!.id]
                     viewModel.createSession(sessionName: sessionName, userIds: userIds)
                 }
-                Button("Join a session") {
+                Button("Enter Flow") {
                     viewModel.goToLobby()
                 }
                 Button("Log out") {

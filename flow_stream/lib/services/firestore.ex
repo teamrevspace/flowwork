@@ -19,8 +19,8 @@ defmodule Firestore do
     description = Map.get(payload, "description", "")
     fields = Map.put(fields, "description", %{"stringValue" => description})
 
-    joinCode = Map.get(payload, "joinCode", "")
-    fields = Map.put(fields, "joinCode", %{"stringValue" => joinCode})
+    password = Map.get(payload, "password", "")
+    fields = Map.put(fields, "password", %{"stringValue" => password})
 
     session_data = %{"fields" => fields}
     firestore_post("/sessions", session_data)

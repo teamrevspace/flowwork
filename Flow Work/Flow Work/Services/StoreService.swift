@@ -69,8 +69,8 @@ class StoreService: StoreServiceProtocol, ObservableObject {
             let name = data?["name"] as! String
             let userIds = data?["userIds"] as? [String]
             let description = data?["description"] as? String
-            let joinCode = data?["joinCode"] as? String
-            let session = Session(id: docId, name: name, description: description, joinCode: joinCode, userIds: userIds)
+            let password = data?["password"] as? String
+            let session = Session(id: docId, name: name, description: description, password: password, userIds: userIds)
             completion(session)
             
         }
@@ -92,8 +92,8 @@ class StoreService: StoreServiceProtocol, ObservableObject {
                     let name = data["name"] as? String ?? ""
                     let description = data["description"] as? String
                     let userIds = data["userIds"] as? [String]
-                    let joinCode = data["joinCode"] as? String
-                    return Session(id: docId, name: name, description: description, joinCode: joinCode, userIds: userIds)
+                    let password = data["password"] as? String
+                    return Session(id: docId, name: name, description: description, password: password, userIds: userIds)
                 })
                 completion(sessions)
             })

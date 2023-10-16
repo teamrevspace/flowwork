@@ -51,7 +51,7 @@ struct SessionResponseBody: Decodable {
 
 struct SessionResponseFields: Decodable {
     var description: StringValue?
-    var joinCode: StringValue?
+    var password: StringValue?
     var name: StringValue
     var userIds: ArrayValue
 }
