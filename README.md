@@ -1,3 +1,5 @@
+<img src="logo.png" height="100" />
+
 # Flow Work
 
 Goal: make a super minimalistic productivity app that will be in the menu bar/corner and allow people to do coworking sessions in real time.
