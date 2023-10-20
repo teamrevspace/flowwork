@@ -19,6 +19,11 @@ final class ServiceAssembly: Assembly {
         }
         .inObjectScope(.container)
         
+        container.register(TodoServiceProtocol.self) { r in
+            TodoService(resolver: r)
+        }
+        .inObjectScope(.container)
+        
         container.register(StoreServiceProtocol.self) { r in
             StoreService(resolver: r)
         }

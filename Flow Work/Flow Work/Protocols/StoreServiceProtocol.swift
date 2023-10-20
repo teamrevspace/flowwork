@@ -14,5 +14,9 @@ protocol StoreServiceProtocol {
     func findSessionBySessionId(sessionId: String, completion: @escaping (Session?) -> Void)
     func findSessionsByUserId(userId: String, completion: @escaping ([Session]) -> Void)
     func addUserToSession(userId: String, sessionId: String) -> Void
+    func findTodosByUserId(userId: String, completion: @escaping ([Todo]) -> Void)
+    func addTodo(todo: Todo) -> Void
+    func removeTodo(todoId: String) -> Void
+    func updateTodoByTodoId(todoId: String, updatedTodo: Todo) -> Void
     func stopLobbyListener()
 }

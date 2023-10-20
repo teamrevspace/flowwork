@@ -10,17 +10,10 @@ import SwiftUI
 struct HomeView: View {
     @ObservedObject var viewModel: HomeViewModel
     @FocusState private var focusedField: Int?
-    @State private var shakeTrigger: Bool = false
     
     var body: some View {
         VStack {
             HStack {
-                //                HStack(spacing: 5) {
-                //                    Circle()
-                //                        .frame(width: 10, height: 10)
-                //                        .foregroundColor(viewModel.sessionState.isConnected ? .green : .red)
-                //                    Text(viewModel.sessionState.isConnected ? "connected" : "not connected")
-                //                }
                 HStack {
                     Image("FlowWorkLogo")
                         .resizable()
@@ -29,6 +22,12 @@ struct HomeView: View {
                     Text("Flow Work")
                         .font(.title)
                         .fontWeight(.bold)
+                }
+                HStack(spacing: 5) {
+                    Circle()
+                        .frame(width: 10, height: 10)
+                        .foregroundColor(viewModel.sessionState.isConnected ? .green : .yellow)
+                    Text(viewModel.sessionState.isConnected ? "connected" : "connecting")
                 }
                 Spacer()
                 AvatarView(avatarURL: viewModel.authState.currentUser?.avatarURL)
@@ -39,73 +38,127 @@ struct HomeView: View {
                         ProfilePopover(viewModel: viewModel)
                     }
             }
-            VStack(alignment: .leading) {
-                ForEach(0..<viewModel.todoItems.count, id: \.self) { index in
+            if (viewModel.todoState.isTodoListInitialized) {
+                VStack(alignment: .leading) {
+                    let todoListCount = viewModel.todoState.todoItems.count
+                    ForEach(0..<viewModel.todoState.todoItems.count, id: \.self) { index in
+                        HStack {
+                            Toggle("", isOn: $viewModel.todoState.todoItems[index].completed)
+                                .onChange(of: viewModel.todoState.todoItems[index].completed) { value in
+                                    print(value)
+                                    // TODO: mark item as completed
+                                }
+                                .labelsHidden()
+                            
+                            TextField("Add new to-do here", text: $viewModel.todoState.todoItems[index].title)
+                                .textFieldStyle(PlainTextFieldStyle())
+                                .focused($focusedField, equals: index)
+                                .frame(maxWidth: .infinity)
+                            
+                            if (!viewModel.todoState.todoItems[index].title.isEmpty) {
+                                Button(action: {
+                                    viewModel.storeService.removeTodo(todoId: viewModel.todoState.todoItems[index].id!)
+                                }) {
+                                    Image(systemName: "xmark")
+                                        .padding(2)
+                                }
+                                .buttonStyle(.borderless)
+                                .foregroundColor(viewModel.todoState.isHoveringDeleteButtons[index] ? Color.secondary : Color.secondary.opacity(0.5))
+                                .background(viewModel.todoState.isHoveringDeleteButtons[index] ? Color.secondary.opacity(0.25) : Color.clear)
+                                .cornerRadius(5)
+                                .onHover { isHovering in
+                                    viewModel.todoState.isHoveringDeleteButtons[index] = isHovering
+                                }
+                                
+                            }
+                        }
+                        .padding(.vertical, 2.5)
+                    }
                     HStack {
-                        Toggle("", isOn: .constant(false))
+                        Toggle("", isOn: $viewModel.todoState.draftTodo.completed)
+                            .onChange(of: viewModel.todoState.draftTodo.completed) { value in
+                                print(value)
+                                // TODO: mark item as completed
+                                focusedField = todoListCount + 1
+                            }
                             .labelsHidden()
                         
-                        TextField("New to-do", text: $viewModel.todoItems[index])
+                        TextField("Add new to-do here", text: $viewModel.todoState.draftTodo.title)
                             .textFieldStyle(PlainTextFieldStyle())
-                            .focused($focusedField, equals: index)
+                            .focused($focusedField, equals: todoListCount + 1)
                             .frame(maxWidth: .infinity)
                         
-                        if (viewModel.todoItems.count > 1 && !viewModel.todoItems[index].isEmpty) {
+                        if (!viewModel.todoState.draftTodo.title.isEmpty) {
                             Button(action: {
-                                viewModel.todoItems.remove(at: index)
+                                if (!viewModel.todoState.draftTodo.title.isEmpty) {
+                                    guard let currentUserId = self.viewModel.authState.currentUser?.id else { return }
+                                    let draftTodo = Todo(title: viewModel.todoState.draftTodo.title, completed: viewModel.todoState.draftTodo.completed, userIds: [currentUserId])
+                                    self.viewModel.storeService.addTodo(todo: draftTodo)
+                                    let emptyTodo = Todo(title: "", completed: false)
+                                    self.viewModel.todoService.updateDraftTodo(todo: emptyTodo)
+                                    self.viewModel.todoState.isHoveringDeleteButtons.append(false)
+                                }
+                                focusedField = todoListCount + 1
                             }) {
-                                Image(systemName: "xmark")
-                                    .padding(2)
+                                HStack {
+                                    Image(systemName: "plus")
+                                        .padding(2)
+                                }
+                                .background(Color.clear)
                             }
                             .buttonStyle(.borderless)
-                            .foregroundColor(viewModel.isHoveringDeleteButtons[index] ? Color.secondary : Color.secondary.opacity(0.5))
-                            .background(viewModel.isHoveringDeleteButtons[index] ? Color.secondary.opacity(0.25) : Color.clear)
+                            .contentShape(Rectangle())
+                            .foregroundColor(viewModel.todoState.isHoveringAddButton ? Color.secondary : Color.secondary.opacity(0.75))
+                            .background(viewModel.todoState.isHoveringAddButton ? Color.secondary.opacity(0.4) : Color.secondary.opacity(0.25))
                             .cornerRadius(5)
+                            .disabled(viewModel.todoState.draftTodo.title.isEmpty)
                             .onHover { isHovering in
-                                viewModel.isHoveringDeleteButtons[index] = isHovering
+                                if (!viewModel.todoState.draftTodo.title.isEmpty) {
+                                    viewModel.todoState.isHoveringAddButton = isHovering
+                                }
                             }
-                            
                         }
                     }
                     .padding(.vertical, 2.5)
+                    
+//                    Button(action: {
+//                        if (!viewModel.todoState.draftTodo.title.isEmpty) {
+//                            guard let currentUserId = self.viewModel.authState.currentUser?.id else { return }
+//                            let draftTodo = Todo(title: viewModel.todoState.draftTodo.title, completed: viewModel.todoState.draftTodo.completed, userIds: [currentUserId])
+//                            self.viewModel.storeService.addTodo(todo: draftTodo)
+//                            let emptyTodo = Todo(title: "", completed: false)
+//                            self.viewModel.todoService.updateDraftTodo(todo: emptyTodo)
+//                            self.viewModel.todoState.isHoveringDeleteButtons.append(false)
+//                        }
+//                        focusedField = todoListCount + 1
+//                    }) {
+//                        HStack {
+//                            Spacer()
+//                            Image(systemName: "plus")
+//                            Spacer()
+//                        }
+//                        .background(Color.clear)
+//                        .padding(.vertical, 5)
+//                    }
+//                    .buttonStyle(.borderless)
+//                    .contentShape(Rectangle())
+//                    .background(viewModel.todoState.draftTodo.title.isEmpty ? Color.secondary.opacity(0.1) : !viewModel.todoState.isHoveringAddButton ? Color.secondary.opacity(0.25) : Color.secondary.opacity(0.4))
+//                    .cornerRadius(5)
+//                    .disabled(viewModel.todoState.draftTodo.title.isEmpty)
+//                    .onHover { isHovering in
+//                        if (!viewModel.todoState.draftTodo.title.isEmpty) {
+//                            viewModel.todoState.isHoveringAddButton = isHovering
+//                        }
+//                    }
+                    Spacer()
                 }
-                
-                if viewModel.todoItems.count < 3 {
-                    Button(action: {
-                        if !(viewModel.todoItems.last?.isEmpty ?? true) {
-                            viewModel.todoItems.append("")
-                            focusedField = viewModel.todoItems.count - 1
-                        } else {
-                            focusedField = viewModel.todoItems.count - 1
-                        }
-                    }) {
-                        HStack {
-                            Spacer()
-                            Image(systemName: "plus")
-                            Spacer()
-                        }
-                        .background(Color.clear)
-                        .padding(.vertical, 5)
-                    }
-                    .buttonStyle(.borderless)
-                    .contentShape(Rectangle())
-                    .background((viewModel.todoItems.last?.isEmpty ?? false) ? Color.secondary.opacity(0.1) : !viewModel.isHoveringAddButton ? Color.secondary.opacity(0.25) : Color.secondary.opacity(0.4))
-                    .cornerRadius(5)
-                    .disabled(viewModel.todoItems.last?.isEmpty ?? false)
-                    .onHover { isHovering in
-                        if (!(viewModel.todoItems.last?.isEmpty ?? true)) {
-                            viewModel.isHoveringAddButton = isHovering
-                        }
-                    }
-                }
-                Spacer()
+                .padding(.bottom, 10)
             }
-            .padding(.bottom, 10)
             
             HStack{
                 Button(action: {
                     if viewModel.authState.isSignedIn {
-                        viewModel.sanitizeTodoItems()
+                        viewModel.todoService.sanitizeTodoItems()
                         viewModel.goToLobby()
                     } else {
                         viewModel.showProfilePopover.toggle()
@@ -118,6 +171,15 @@ struct HomeView: View {
         .padding()
         .standardFrame()
         .errorOverlay(errorService: viewModel.errorService)
+        .onChange(of: viewModel.authState.currentUser?.id) { value in
+            viewModel.fetchTodoList()
+        }
+        .onAppear() {
+            viewModel.fetchTodoList()
+        }
+        .onDisappear() {
+            viewModel.todoState.isTodoListInitialized = false
+        }
     }
 }
 

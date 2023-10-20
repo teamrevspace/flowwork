@@ -105,6 +105,54 @@ class StoreService: StoreServiceProtocol, ObservableObject {
         ])
     }
     
+    func findTodosByUserId(userId: String, completion: @escaping ([Todo]) -> Void) {
+        db.collection("todos").whereField("userIds", arrayContains: userId)
+            .addSnapshotListener({(snapshot, error) in
+                guard let documents = snapshot?.documents else {
+                    completion([])
+                    return
+                }
+                
+                let todos = documents.map({docSnapshot -> Todo in
+                    let data = docSnapshot.data()
+                    let docId = docSnapshot.documentID
+                    let title = data["title"] as? String ?? ""
+                    let completed = data["completed"] as? Bool ?? false
+                    let userIds = data["userIds"] as? [String]
+                    return Todo(id: docId, title: title, completed: completed, userIds: userIds)
+                })
+                completion(todos)
+            })
+    }
+    
+    func addTodo(todo: Todo) -> Void {
+        let data: [String: Any] = [
+            "title": todo.title,
+            "completed": todo.completed,
+            "userIds": todo.userIds ?? []
+        ]
+        
+        db.collection("todos").addDocument(data: data)
+    }
+    
+    func updateTodoByTodoId(todoId: String, updatedTodo: Todo) -> Void {
+        db.collection("todos").document(todoId).updateData([
+            "title": updatedTodo.title,
+            "completed": updatedTodo.completed,
+            "userIds": updatedTodo.userIds ?? []
+        ]) { err in
+            if let err = err {
+                print("Error updating todo: \(err)")
+            } else {
+                print("Todo updated successfully!")
+            }
+        }
+    }
+    
+    func removeTodo(todoId: String) {
+        db.collection("todos").document(todoId).delete()
+    }
+    
     func stopLobbyListener() {
         lobbyListener?.remove()
         lobbyListener = nil

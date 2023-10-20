@@ -21,6 +21,7 @@ class AppCoordinator: ObservableObject {
     @Published var currentView: AnyView
     
     @Published var authService: AuthServiceProtocol
+    @Published var todoService: TodoServiceProtocol
     @Published var sessionService: SessionServiceProtocol
     @Published var storeService: StoreServiceProtocol
     @Published var errorService: ErrorServiceProtocol
@@ -42,6 +43,7 @@ class AppCoordinator: ObservableObject {
         
         self.authService = resolver.resolve(AuthServiceProtocol.self)!
         self.sessionService = resolver.resolve(SessionServiceProtocol.self)!
+        self.todoService = resolver.resolve(TodoServiceProtocol.self)!
         self.storeService = resolver.resolve(StoreServiceProtocol.self)!
         self.errorService = resolver.resolve(ErrorServiceProtocol.self)!
         

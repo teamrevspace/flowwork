@@ -18,16 +18,15 @@ class HomeViewModel: ObservableObject {
     
     @Published var authService: AuthServiceProtocol
     @Published var sessionService: SessionServiceProtocol
+    @Published var todoService: TodoServiceProtocol
     @Published var storeService: StoreServiceProtocol
     @Published var errorService: ErrorServiceProtocol
     
     @Published var sessionState = SessionState()
     @Published var authState = AuthState()
+    @Published var todoState = TodoState()
     
     @Published var showProfilePopover: Bool = false
-    @Published var todoItems: [String] = [""]
-    @Published var isHoveringAddButton: Bool = false
-    @Published var isHoveringDeleteButtons: [Bool] = [false, false, false]
     
     private var cancellables = Set<AnyCancellable>()
     private let resolver: Resolver
@@ -36,6 +35,7 @@ class HomeViewModel: ObservableObject {
         self.resolver = resolver
         self.authService = resolver.resolve(AuthServiceProtocol.self)!
         self.sessionService = resolver.resolve(SessionServiceProtocol.self)!
+        self.todoService = resolver.resolve(TodoServiceProtocol.self)!
         self.storeService = resolver.resolve(StoreServiceProtocol.self)!
         self.errorService = resolver.resolve(ErrorServiceProtocol.self)!
         
@@ -45,13 +45,18 @@ class HomeViewModel: ObservableObject {
         authService.statePublisher
             .assign(to: \.authState, on: self)
             .store(in: &cancellables)
+        todoService.statePublisher
+            .assign(to: \.todoState, on: self)
+            .store(in: &cancellables)
     }
     
-    func sanitizeTodoItems() {
-        if (self.todoItems.count > 1) {
-            self.todoItems = self.todoItems.enumerated().filter { (index, item) in
-                return !item.isEmpty
-            }.map { $0.element }
+    func fetchTodoList() {
+        guard let currentUserId = self.authState.currentUser?.id else { return }
+        self.storeService.findTodosByUserId(userId: currentUserId) { todos in
+            self.todoState.todoItems = todos.filter({!$0.completed}).sorted(by: {$0.title > $1.title})
+            self.todoState.isTodoListInitialized = true
+            self.todoState.isHoveringDeleteButtons = todos.map({_ in false})
+            self.todoState.isHoveringDeleteButtons.append(false)
         }
     }
     
