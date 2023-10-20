@@ -5,7 +5,7 @@ import { useCallback, useEffect } from "react";
 
 export default function JoinSessionPage({ params }: { params: { id: string } }) {
   const downloadApp = async () => {
-    window.location.href = 'https://flowwork.xyz/download/Flow%20Work.dmg'
+    window.location.href = 'https://flowwork.xyz/download'
   }
 
   const joinSession = useCallback(async () => {

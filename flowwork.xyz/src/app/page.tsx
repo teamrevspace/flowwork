@@ -110,7 +110,7 @@ export default function Home() {
 
   const downloadApp = () => {
     captureClick('download');
-    window.location.href = 'https://flowwork.xyz/download/Flow%20Work.dmg';
+    window.location.href = 'https://flowwork.xyz/download';
   }
 
   return (
