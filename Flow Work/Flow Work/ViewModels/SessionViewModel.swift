@@ -19,6 +19,7 @@ class SessionViewModel: ObservableObject {
     
     @Published var authService: AuthServiceProtocol
     @Published var sessionService: SessionServiceProtocol
+    @Published var roomService: RoomServiceProtocol
     @Published var storeService: StoreServiceProtocol
     @Published var todoService: TodoServiceProtocol
     
@@ -33,6 +34,7 @@ class SessionViewModel: ObservableObject {
         self.resolver = resolver
         self.authService = resolver.resolve(AuthServiceProtocol.self)!
         self.sessionService = resolver.resolve(SessionServiceProtocol.self)!
+        self.roomService = resolver.resolve(RoomServiceProtocol.self)!
         self.todoService = resolver.resolve(TodoServiceProtocol.self)!
         self.storeService = resolver.resolve(StoreServiceProtocol.self)!
         
@@ -76,5 +78,23 @@ class SessionViewModel: ObservableObject {
             self.sessionService.leaveSession(currentSessionId)
         }
         self.delegate?.showLobbyView()
+    }
+    
+    func createAudioRoom() {
+        guard let roomId = self.sessionState.currentSession?.id else {
+            print("No room Id available.")
+            return
+        }
+        
+        roomService.createRoom(roomId: roomId)
+    }
+    
+    func joinAudioRoom() {
+        guard let roomId = self.sessionState.currentSession?.id else {
+            print("No room Id available.")
+            return
+        }
+        
+        roomService.joinRoom(roomId: roomId)
     }
 }

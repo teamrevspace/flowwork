@@ -19,8 +19,8 @@ final class ServiceAssembly: Assembly {
         }
         .inObjectScope(.container)
         
-        container.register(RTCServiceProtocol.self) { r in
-            RTCService(resolver: r)
+        container.register(RoomServiceProtocol.self) { r in
+            RoomService(resolver: r)
         }
         .inObjectScope(.container)
         

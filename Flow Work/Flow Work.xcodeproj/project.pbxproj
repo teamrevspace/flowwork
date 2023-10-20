@@ -49,8 +49,10 @@
 		11E5AD2F2AE1E52D004670F0 /* TodoServiceProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11E5AD2E2AE1E52D004670F0 /* TodoServiceProtocol.swift */; };
 		11E5AD312AE1E70B004670F0 /* Todo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11E5AD302AE1E70B004670F0 /* Todo.swift */; };
 		11E5AD332AE21F28004670F0 /* MarqueeText.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11E5AD322AE21F28004670F0 /* MarqueeText.swift */; };
-		11E5AD352AE2561A004670F0 /* RTCService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11E5AD342AE2561A004670F0 /* RTCService.swift */; };
-		11E5AD372AE2563B004670F0 /* RTCServiceProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11E5AD362AE2563B004670F0 /* RTCServiceProtocol.swift */; };
+		11E5AD352AE2561A004670F0 /* RoomService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11E5AD342AE2561A004670F0 /* RoomService.swift */; };
+		11E5AD372AE2563B004670F0 /* RoomServiceProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11E5AD362AE2563B004670F0 /* RoomServiceProtocol.swift */; };
+		11E5AD3A2AE2580C004670F0 /* WebRTC in Frameworks */ = {isa = PBXBuildFile; productRef = 11E5AD392AE2580C004670F0 /* WebRTC */; };
+		11E5AD3C2AE268B2004670F0 /* RTC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11E5AD3B2AE268B2004670F0 /* RTC.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -93,8 +95,9 @@
 		11E5AD2E2AE1E52D004670F0 /* TodoServiceProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodoServiceProtocol.swift; sourceTree = "<group>"; };
 		11E5AD302AE1E70B004670F0 /* Todo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Todo.swift; sourceTree = "<group>"; };
 		11E5AD322AE21F28004670F0 /* MarqueeText.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarqueeText.swift; sourceTree = "<group>"; };
-		11E5AD342AE2561A004670F0 /* RTCService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RTCService.swift; sourceTree = "<group>"; };
-		11E5AD362AE2563B004670F0 /* RTCServiceProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RTCServiceProtocol.swift; sourceTree = "<group>"; };
+		11E5AD342AE2561A004670F0 /* RoomService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomService.swift; sourceTree = "<group>"; };
+		11E5AD362AE2563B004670F0 /* RoomServiceProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomServiceProtocol.swift; sourceTree = "<group>"; };
+		11E5AD3B2AE268B2004670F0 /* RTC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RTC.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -105,6 +108,7 @@
 				114AFDFB2AC76F4E00AB9A8B /* FirebaseAnalytics in Frameworks */,
 				114AFE022AC7714100AB9A8B /* GoogleSignIn in Frameworks */,
 				114AFDFD2AC76F4E00AB9A8B /* FirebaseAuth in Frameworks */,
+				11E5AD3A2AE2580C004670F0 /* WebRTC in Frameworks */,
 				1147A0DA2AD983E100D6C615 /* Swinject in Frameworks */,
 				114AFDFF2AC76F4E00AB9A8B /* FirebaseFirestore in Frameworks */,
 				110C43182AD20BC500201CD5 /* NIOWebSocket in Frameworks */,
@@ -130,7 +134,7 @@
 			children = (
 				1106E6DF2AD8CD8C0026600A /* AuthServiceProtocol.swift */,
 				1147A0D02AD8D48E00D6C615 /* SessionServiceProtocol.swift */,
-				11E5AD362AE2563B004670F0 /* RTCServiceProtocol.swift */,
+				11E5AD362AE2563B004670F0 /* RoomServiceProtocol.swift */,
 				1147A0D42AD8DC6C00D6C615 /* StoreServiceProtocol.swift */,
 				11E5AD2E2AE1E52D004670F0 /* TodoServiceProtocol.swift */,
 			);
@@ -190,7 +194,7 @@
 				11E5AD2C2ADECB9B004670F0 /* TodoService.swift */,
 				116D18F82ACFB07400CB4F1D /* AuthService.swift */,
 				1147A0D22AD8DC4500D6C615 /* StoreService.swift */,
-				11E5AD342AE2561A004670F0 /* RTCService.swift */,
+				11E5AD342AE2561A004670F0 /* RoomService.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -202,6 +206,7 @@
 				116D19002ACFD34B00CB4F1D /* User.swift */,
 				116D190A2ACFDA8F00CB4F1D /* AppError.swift */,
 				11D7C1A62AD5E73E00AF1EEE /* Message.swift */,
+				11E5AD3B2AE268B2004670F0 /* RTC.swift */,
 				117FDB6E2AD6569E00E39E3F /* Response.swift */,
 				11E5AD302AE1E70B004670F0 /* Todo.swift */,
 			);
@@ -280,6 +285,7 @@
 				114AFE012AC7714100AB9A8B /* GoogleSignIn */,
 				110C43172AD20BC500201CD5 /* NIOWebSocket */,
 				1147A0D92AD983E100D6C615 /* Swinject */,
+				11E5AD392AE2580C004670F0 /* WebRTC */,
 			);
 			productName = "Flow Work";
 			productReference = 114AFDE02AC765B700AB9A8B /* Flow Work.app */;
@@ -314,6 +320,7 @@
 				114AFE002AC7714100AB9A8B /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */,
 				110C43162AD20BC500201CD5 /* XCRemoteSwiftPackageReference "swift-nio" */,
 				1147A0D82AD983E100D6C615 /* XCRemoteSwiftPackageReference "Swinject" */,
+				11E5AD382AE2580C004670F0 /* XCRemoteSwiftPackageReference "WebRTC" */,
 			);
 			productRefGroup = 114AFDE12AC765B700AB9A8B /* Products */;
 			projectDirPath = "";
@@ -344,9 +351,9 @@
 			files = (
 				1147A0D12AD8D48E00D6C615 /* SessionServiceProtocol.swift in Sources */,
 				11E5AD332AE21F28004670F0 /* MarqueeText.swift in Sources */,
-				11E5AD352AE2561A004670F0 /* RTCService.swift in Sources */,
+				11E5AD352AE2561A004670F0 /* RoomService.swift in Sources */,
 				1147A0D32AD8DC4500D6C615 /* StoreService.swift in Sources */,
-				11E5AD372AE2563B004670F0 /* RTCServiceProtocol.swift in Sources */,
+				11E5AD372AE2563B004670F0 /* RoomServiceProtocol.swift in Sources */,
 				11E5AD2F2AE1E52D004670F0 /* TodoServiceProtocol.swift in Sources */,
 				116D191D2ACFE4FA00CB4F1D /* HomeViewModel.swift in Sources */,
 				1106E6DD2AD8CC830026600A /* ServiceAssembly.swift in Sources */,
@@ -366,6 +373,7 @@
 				1106E6E02AD8CD8C0026600A /* AuthServiceProtocol.swift in Sources */,
 				11E5AD2B2ADD84C7004670F0 /* FText.swift in Sources */,
 				116D19032ACFD3C400CB4F1D /* LoginViewModel.swift in Sources */,
+				11E5AD3C2AE268B2004670F0 /* RTC.swift in Sources */,
 				116D19012ACFD34B00CB4F1D /* User.swift in Sources */,
 				1147A0D52AD8DC6C00D6C615 /* StoreServiceProtocol.swift in Sources */,
 				116D19122ACFDD1D00CB4F1D /* AppCoordinator.swift in Sources */,
@@ -612,6 +620,14 @@
 				minimumVersion = 7.0.0;
 			};
 		};
+		11E5AD382AE2580C004670F0 /* XCRemoteSwiftPackageReference "WebRTC" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/stasel/WebRTC";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 118.0.0;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -644,6 +660,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 114AFE002AC7714100AB9A8B /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */;
 			productName = GoogleSignIn;
+		};
+		11E5AD392AE2580C004670F0 /* WebRTC */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 11E5AD382AE2580C004670F0 /* XCRemoteSwiftPackageReference "WebRTC" */;
+			productName = WebRTC;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

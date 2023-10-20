@@ -8,11 +8,14 @@
 import Foundation
 import Firebase
 import Swinject
+import WebRTC
 
 class StoreService: StoreServiceProtocol, ObservableObject {
-    private let resolver: Resolver
     private let db = Firestore.firestore()
+    private let settings = FirestoreSettings()
     private var lobbyListener: ListenerRegistration?
+    
+    private let resolver: Resolver
     
     init(resolver: Resolver) {
         self.resolver = resolver
@@ -154,5 +157,99 @@ class StoreService: StoreServiceProtocol, ObservableObject {
     func stopLobbyListener() {
         lobbyListener?.remove()
         lobbyListener = nil
+    }
+    
+    func addRTCOfferToRoom(rtcOffer: RTCOffer, roomId: String) {
+        let data: [String: Any] = [
+            "sdp": rtcOffer.sdp,
+            "type": rtcOffer.type
+        ]
+        
+        db.collection("rooms").document(roomId).collection("offers").addDocument(data: data)
+    }
+    
+    func addRTCAnswerToRoom(rtcAnswer: RTCAnswer, roomId: String) {
+        let data: [String: Any] = [
+            "sdp": rtcAnswer.sdp,
+            "type": rtcAnswer.type
+        ]
+        
+        db.collection("rooms").document(roomId).collection("answers").document("answer").setData(data)
+    }
+    
+    private func sdpType(from string: String) -> RTCSdpType? {
+        switch string {
+        case "offer":
+            return .offer
+        case "pranswer":
+            return .prAnswer
+        case "answer":
+            return .answer
+        default:
+            return nil
+        }
+    }
+    
+    func findRTCOfferByRoomId(roomId: String, completion: @escaping (RTCSessionDescription?) -> Void) {
+        db.collection("rooms").document(roomId).collection("offers")
+            .addSnapshotListener { querySnapshot, error in
+                guard let documents = querySnapshot?.documents else {
+                    print("No offers")
+                    completion(nil)
+                    return
+                }
+                for document in documents {
+                    let data = document.data()
+                    guard let sdp = data["sdp"] as? String,
+                          let typeRawValue = data["type"] as? String,
+                          let type = self.sdpType(from: typeRawValue) else {
+                        continue
+                    }
+                    let offer = RTCSessionDescription(type: type, sdp: sdp)
+                    completion(offer)
+                }
+            }
+    }
+    
+    func findRTCAnswerByRoomId(roomId: String, completion: @escaping (RTCSessionDescription?) -> Void) {
+        self.db.collection("rooms").document(roomId).collection("answers")
+            .addSnapshotListener { querySnapshot, error in
+                guard let documents = querySnapshot?.documents else {
+                    print("No answers")
+                    completion(nil)
+                    return
+                }
+                for document in documents {
+                    let data = document.data()
+                    guard let sdp = data["sdp"] as? String,
+                          let typeRawValue = data["type"] as? String,
+                          let type = self.sdpType(from: typeRawValue) else {
+                        continue
+                    }
+                    let answer = RTCSessionDescription(type: type, sdp: sdp)
+                    completion(answer)
+                }
+            }
+    }
+    
+    func findRTCIceCandidateByRoomId(roomId: String, completion: @escaping (RTCIceCandidate?) -> Void) {
+        db.collection("rooms").document(roomId).collection("iceCandidates")
+            .addSnapshotListener { querySnapshot, error in
+                guard let documents = querySnapshot?.documents else {
+                    print("No ICE candidates")
+                    completion(nil)
+                    return
+                }
+                for document in documents {
+                    let candidateData = document.data()
+                    guard let sdp = candidateData["candidate"] as? String,
+                          let sdpMid = candidateData["sdpMid"] as? String,
+                          let sdpMLineIndex = candidateData["sdpMLineIndex"] as? Int32 else {
+                        continue
+                    }
+                    let candidate = RTCIceCandidate(sdp: sdp, sdpMLineIndex: sdpMLineIndex, sdpMid: sdpMid)
+                    completion(candidate)
+                }
+            }
     }
 }

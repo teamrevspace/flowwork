@@ -6,6 +6,7 @@
 //
 
 import Firebase
+import WebRTC
 
 protocol StoreServiceProtocol {
     func addUser(user: Firebase.User) -> Void
@@ -18,4 +19,9 @@ protocol StoreServiceProtocol {
     func removeTodo(todoId: String) -> Void
     func updateTodoByTodoId(updatedTodo: Todo) -> Void
     func stopLobbyListener()
+    func addRTCOfferToRoom(rtcOffer: RTCOffer, roomId: String)
+    func addRTCAnswerToRoom(rtcAnswer: RTCAnswer, roomId: String)
+    func findRTCAnswerByRoomId(roomId: String, completion: @escaping (RTCSessionDescription?) -> Void)
+    func findRTCIceCandidateByRoomId(roomId: String, completion: @escaping (RTCIceCandidate?) -> Void)
+    func findRTCOfferByRoomId(roomId: String, completion: @escaping (RTCSessionDescription?) -> Void)
 }
