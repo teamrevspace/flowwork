@@ -120,36 +120,7 @@ struct HomeView: View {
                         }
                     }
                     .padding(.vertical, 2.5)
-                    
-//                    Button(action: {
-//                        if (!viewModel.todoState.draftTodo.title.isEmpty) {
-//                            guard let currentUserId = self.viewModel.authState.currentUser?.id else { return }
-//                            let draftTodo = Todo(title: viewModel.todoState.draftTodo.title, completed: viewModel.todoState.draftTodo.completed, userIds: [currentUserId])
-//                            self.viewModel.storeService.addTodo(todo: draftTodo)
-//                            let emptyTodo = Todo(title: "", completed: false)
-//                            self.viewModel.todoService.updateDraftTodo(todo: emptyTodo)
-//                            self.viewModel.todoState.isHoveringDeleteButtons.append(false)
-//                        }
-//                        focusedField = todoListCount + 1
-//                    }) {
-//                        HStack {
-//                            Spacer()
-//                            Image(systemName: "plus")
-//                            Spacer()
-//                        }
-//                        .background(Color.clear)
-//                        .padding(.vertical, 5)
-//                    }
-//                    .buttonStyle(.borderless)
-//                    .contentShape(Rectangle())
-//                    .background(viewModel.todoState.draftTodo.title.isEmpty ? Color.secondary.opacity(0.1) : !viewModel.todoState.isHoveringAddButton ? Color.secondary.opacity(0.25) : Color.secondary.opacity(0.4))
-//                    .cornerRadius(5)
-//                    .disabled(viewModel.todoState.draftTodo.title.isEmpty)
-//                    .onHover { isHovering in
-//                        if (!viewModel.todoState.draftTodo.title.isEmpty) {
-//                            viewModel.todoState.isHoveringAddButton = isHovering
-//                        }
-//                    }
+
                     Spacer()
                 }
                 .padding(.bottom, 10)

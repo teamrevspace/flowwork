@@ -95,20 +95,17 @@ struct JoinSessionView: View {
             TextField("Enter session code or URL", text:  $viewModel.joinSessionCode)
                 .textFieldStyle(RoundedBorderTextFieldStyle())
             List(viewModel.availableSessions) { session in
-                HStack {
-                    Text(session.name)
-                        .foregroundColor(selectedSessionId == session.id ? Color.white : Color.primary)
-                    Spacer()
-                }
-                .padding(.init(top: 5, leading: 10, bottom: 5, trailing: 10))
-                .contentShape(Rectangle())
-                .background(selectedSessionId == session.id ? Color.blue : Color.clear)
-                .gesture(TapGesture(count: 2).onEnded {
-                    viewModel.joinSession(session.id)
-                })
-                .simultaneousGesture(TapGesture().onEnded {
-                    selectedSessionId = session.id
-                })
+                MarqueeText(text: session.name)
+                    .foregroundColor(selectedSessionId == session.id ? Color.white : Color.primary)
+                    .padding(.init(top: 5, leading: 10, bottom: 5, trailing: 10))
+                    .contentShape(Rectangle())
+                    .background(selectedSessionId == session.id ? Color.blue : Color.clear)
+                    .gesture(TapGesture(count: 2).onEnded {
+                        viewModel.joinSession(session.id)
+                    })
+                    .simultaneousGesture(TapGesture().onEnded {
+                        selectedSessionId = session.id
+                    })
             }
             .frame(minHeight: 240)
             .cornerRadius(5)
