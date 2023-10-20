@@ -45,36 +45,43 @@ struct HomeView: View {
                         HStack {
                             Toggle("", isOn: $viewModel.todoState.todoItems[index].completed)
                                 .onChange(of: viewModel.todoState.todoItems[index].completed) { value in
-                                    viewModel.todoService.delayedTasks[index]?.cancel()
-                                    if value {
-                                        let task = DispatchWorkItem {
-                                            var updatedTodo = viewModel.todoState.todoItems[index]
-                                            updatedTodo.completed = value
-                                            viewModel.todoService.updateDraftTodo(todo: updatedTodo)
-                                        }
-                                        viewModel.todoService.delayedTasks[index] = task
-                                        
-                                        DispatchQueue.main.asyncAfter(deadline: .now() + 3, execute: task)
-                                    }
-                                    focusedField = index
+                                    viewModel.todoService.checkTodoCompleted(index: index, completed: value)
                                 }
                                 .labelsHidden()
                             
                             TextField("Add new to-do here", text: $viewModel.todoState.todoItems[index].title)
                                 .textFieldStyle(PlainTextFieldStyle())
+                                .lineLimit(1)
+                                .truncationMode(.tail)
+                                .foregroundColor(viewModel.todoState.todoItems[index].completed ? Color.primary.opacity(0.5) : Color.primary)
                                 .focused($focusedField, equals: index)
                                 .frame(maxWidth: .infinity)
+                                .onChange(of: viewModel.todoState.todoItems[index].title) { newValue in
+                                    viewModel.todoState.isEditingTextField[index] = !newValue.isEmpty
+                                }
+                                .onSubmit {
+                                    if (viewModel.todoState.isEditingTextField[index]) {
+                                        viewModel.storeService.updateTodoByTodoId(updatedTodo: viewModel.todoState.todoItems[index])
+                                        viewModel.todoState.isEditingTextField[index] = false
+                                    }
+                                    focusedField = index + 1
+                                }
                             
-                            if (!viewModel.todoState.todoItems[index].title.isEmpty) {
+                            if (!viewModel.todoState.todoItems[index].completed) {
                                 Button(action: {
-                                    viewModel.storeService.removeTodo(todoId: viewModel.todoState.todoItems[index].id!)
+                                    if (viewModel.todoState.isEditingTextField[index]) {
+                                        viewModel.storeService.updateTodoByTodoId(updatedTodo: viewModel.todoState.todoItems[index])
+                                        viewModel.todoState.isEditingTextField[index] = false
+                                    } else {
+                                        viewModel.storeService.removeTodo(todoId: viewModel.todoState.todoItems[index].id!)
+                                    }
                                 }) {
-                                    Image(systemName: "xmark")
-                                        .padding(2)
+                                    Image(systemName: viewModel.todoState.isEditingTextField[index] ? "checkmark" : "xmark")
+                                        .padding(1.5)
                                 }
                                 .buttonStyle(.borderless)
-                                .foregroundColor(viewModel.todoState.isHoveringDeleteButtons[index] ? Color.secondary : Color.secondary.opacity(0.5))
-                                .background(viewModel.todoState.isHoveringDeleteButtons[index] ? Color.secondary.opacity(0.25) : Color.clear)
+                                .foregroundColor(viewModel.todoState.isHoveringDeleteButtons[index] ? Color.secondary : viewModel.todoState.isEditingTextField[index] ? Color.secondary.opacity(0.75) : Color.secondary.opacity(0.5))
+                                .background(viewModel.todoState.isHoveringDeleteButtons[index] ? Color.secondary.opacity(0.4) : viewModel.todoState.isEditingTextField[index] ? Color.secondary.opacity(0.25) : Color.clear)
                                 .cornerRadius(5)
                                 .onHover { isHovering in
                                     viewModel.todoState.isHoveringDeleteButtons[index] = isHovering
@@ -84,44 +91,32 @@ struct HomeView: View {
                         .padding(.vertical, 2.5)
                     }
                     HStack {
-                        let newTodoIndex = todoListCount + 1
                         Toggle("", isOn: $viewModel.todoState.draftTodo.completed)
                             .onChange(of: viewModel.todoState.draftTodo.completed) { value in
-                                viewModel.todoService.delayedTasks[newTodoIndex]?.cancel()
-                                if value {
-                                    let task = DispatchWorkItem {
-                                        var updatedTodo = viewModel.todoState.draftTodo
-                                        updatedTodo.completed = value
-                                        viewModel.todoService.updateDraftTodo(todo: updatedTodo)
-                                    }
-                                    viewModel.todoService.delayedTasks[newTodoIndex] = task
-                                    
-                                    DispatchQueue.main.asyncAfter(deadline: .now() + 3, execute: task)
-                                }
-                                focusedField = newTodoIndex
+                                viewModel.todoService.checkTodoCompleted(index: todoListCount, completed: value)
                             }
                             .labelsHidden()
                         
                         TextField("Add new to-do here", text: $viewModel.todoState.draftTodo.title)
                             .textFieldStyle(PlainTextFieldStyle())
-                            .focused($focusedField, equals: newTodoIndex)
+                            .lineLimit(1)
+                            .truncationMode(.tail)
+                            .foregroundColor(viewModel.todoState.draftTodo.completed ? Color.primary.opacity(0.5) : Color.primary)
+                            .focused($focusedField, equals: todoListCount)
                             .frame(maxWidth: .infinity)
+                            .onSubmit {
+                                viewModel.addDraftTodo()
+                                focusedField = todoListCount
+                            }
                         
-                        if (!viewModel.todoState.draftTodo.title.isEmpty) {
+                        if (!viewModel.todoState.draftTodo.title.isEmpty && !viewModel.todoState.draftTodo.completed) {
                             Button(action: {
-                                if (!viewModel.todoState.draftTodo.title.isEmpty) {
-                                    guard let currentUserId = self.viewModel.authState.currentUser?.id else { return }
-                                    var draftTodo = viewModel.todoState.draftTodo
-                                    draftTodo.userIds = [currentUserId]
-                                    self.viewModel.storeService.addTodo(todo: draftTodo)
-                                    self.viewModel.todoService.updateDraftTodo(todo: Todo())
-                                    self.viewModel.todoState.isHoveringDeleteButtons.append(false)
-                                }
-                                focusedField = newTodoIndex
+                                viewModel.addDraftTodo()
+                                focusedField = todoListCount
                             }) {
                                 HStack {
                                     Image(systemName: "plus")
-                                        .padding(2)
+                                        .padding(1.5)
                                 }
                                 .background(Color.clear)
                             }
@@ -139,10 +134,15 @@ struct HomeView: View {
                         }
                     }
                     .padding(.vertical, 2.5)
-
+                    
                     Spacer()
                 }
                 .padding(.bottom, 10)
+            } else {
+                VStack {
+                    ProgressView()
+                }
+                .padding(.vertical, 10)
             }
             
             HStack{

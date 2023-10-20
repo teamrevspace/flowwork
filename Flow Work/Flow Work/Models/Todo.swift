@@ -12,4 +12,5 @@ struct Todo: Identifiable {
     var title: String = ""
     var completed: Bool = false
     var userIds: [String]?
+    var updatedAt: Date = Date()
 }

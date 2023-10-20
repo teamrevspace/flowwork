@@ -57,6 +57,17 @@ class HomeViewModel: ObservableObject {
         }
     }
     
+    func addDraftTodo() {
+        if (!self.todoState.draftTodo.title.isEmpty) {
+            guard let currentUserId = self.authState.currentUser?.id else { return }
+            var newTodo = self.todoState.draftTodo
+            newTodo.userIds = [currentUserId]
+            self.storeService.addTodo(todo: newTodo)
+            self.todoService.updateDraftTodo(todo: Todo())
+            self.todoState.isHoveringDeleteButtons.append(false)
+        }
+    }
+    
     func goToLobby() {
         self.delegate?.showLobbyView()
     }

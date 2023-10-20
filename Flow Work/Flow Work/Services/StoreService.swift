@@ -119,7 +119,8 @@ class StoreService: StoreServiceProtocol, ObservableObject {
                     let title = data["title"] as? String ?? ""
                     let completed = data["completed"] as? Bool ?? false
                     let userIds = data["userIds"] as? [String]
-                    return Todo(id: docId, title: title, completed: completed, userIds: userIds)
+                    let updatedAt = data["updatedAt"] as? Date ?? Date()
+                    return Todo(id: docId, title: title, completed: completed, userIds: userIds, updatedAt: updatedAt)
                 })
                 completion(todos)
             })
@@ -129,24 +130,24 @@ class StoreService: StoreServiceProtocol, ObservableObject {
         let data: [String: Any] = [
             "title": todo.title,
             "completed": todo.completed,
-            "userIds": todo.userIds ?? []
+            "userIds": todo.userIds ?? [],
+            "updatedAt": FieldValue.serverTimestamp()
         ]
         
         db.collection("todos").addDocument(data: data)
     }
     
-    func updateTodoByTodoId(todoId: String, updatedTodo: Todo) -> Void {
-        db.collection("todos").document(todoId).updateData([
+    func updateTodoByTodoId(updatedTodo: Todo) -> Void {
+        guard let todoId = updatedTodo.id else { return }
+        var newData: [String: Any] = [
             "title": updatedTodo.title,
             "completed": updatedTodo.completed,
-            "userIds": updatedTodo.userIds ?? []
-        ]) { err in
-            if let err = err {
-                print("Error updating todo: \(err)")
-            } else {
-                print("Todo updated successfully!")
-            }
+            "updatedAt": FieldValue.serverTimestamp()
+        ]
+        if (updatedTodo.userIds != nil) {
+            newData.updateValue(updatedTodo.userIds!, forKey: "userIds")
         }
+        db.collection("todos").document(todoId).updateData(newData)
     }
     
     func removeTodo(todoId: String) {

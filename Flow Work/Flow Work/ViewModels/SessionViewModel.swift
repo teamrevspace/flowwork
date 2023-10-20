@@ -62,6 +62,17 @@ class SessionViewModel: ObservableObject {
         pasteBoard.setString(textToCopy, forType: .string)
     }
     
+    func addDraftTodo() {
+        if (!self.todoState.draftTodo.title.isEmpty) {
+            guard let currentUserId = self.authState.currentUser?.id else { return }
+            var newTodo = self.todoState.draftTodo
+            newTodo.userIds = [currentUserId]
+            self.storeService.addTodo(todo: newTodo)
+            self.todoService.updateDraftTodo(todo: Todo())
+            self.todoState.isHoveringDeleteButtons.append(false)
+        }
+    }
+    
     func leaveSession() {
         if let currentSessionId = self.sessionState.currentSession?.id {
             self.sessionService.leaveSession(currentSessionId)

@@ -15,6 +15,7 @@ struct TodoState {
     var isTodoListInitialized: Bool = false
     var isHoveringAddButton: Bool = false
     var isHoveringDeleteButtons: [Bool] = []
+    var isEditingTextField: [Bool] = []
 }
 
 class TodoService: TodoServiceProtocol, ObservableObject {
@@ -39,10 +40,12 @@ class TodoService: TodoServiceProtocol, ObservableObject {
     }
     
     func initTodoList(todos: [Todo]) {
-        self.state.todoItems = todos.filter({!$0.completed}).sorted(by: {$0.title > $1.title})
+        self.state.todoItems = todos.filter({!$0.completed}).sorted(by: {$0.updatedAt.timeIntervalSince1970 < $1.updatedAt.timeIntervalSince1970})
         
         self.state.isHoveringDeleteButtons = todos.map({_ in false})
         self.state.isHoveringDeleteButtons.append(false)
+        
+        self.state.isEditingTextField = todos.map({_ in false})
         
         self.delayedTasks = todos.map({_ in nil})
         self.delayedTasks.append(nil)
@@ -60,6 +63,24 @@ class TodoService: TodoServiceProtocol, ObservableObject {
     
     func updateDraftTodo(todo: Todo) {
         self.state.draftTodo = todo
+    }
+    
+    func checkTodoCompleted(index: Int, completed: Bool) {
+        self.delayedTasks[index]?.cancel()
+        if completed {
+            let task = DispatchWorkItem {
+                if (index >= self.state.todoItems.count) {
+                    self.state.draftTodo.completed = completed
+                    return
+                }
+                var updatedTodo = self.state.todoItems[index]
+                updatedTodo.completed = completed
+                self.storeService.updateTodoByTodoId(updatedTodo: updatedTodo)
+            }
+            self.delayedTasks[index] = task
+            
+            DispatchQueue.main.asyncAfter(deadline: .now() + 2, execute: task)
+        }
     }
     
 }
