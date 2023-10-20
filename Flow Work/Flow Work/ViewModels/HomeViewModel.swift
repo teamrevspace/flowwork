@@ -25,7 +25,7 @@ class HomeViewModel: ObservableObject {
     @Published var authState = AuthState()
     @Published var todoState = TodoState()
     
-    @Published var showProfilePopover: Bool = false
+    @Published var showAccountPopover: Bool = false
     
     private var cancellables = Set<AnyCancellable>()
     private let resolver: Resolver
@@ -75,7 +75,7 @@ class HomeViewModel: ObservableObject {
     }
     
     func signOut() {
-        self.showProfilePopover.toggle()
+        self.showAccountPopover.toggle()
         self.authService.signOut()
     }
 }

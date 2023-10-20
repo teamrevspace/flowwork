@@ -32,9 +32,9 @@ struct HomeView: View {
                 Spacer()
                 AvatarView(avatarURL: viewModel.authState.currentUser?.avatarURL)
                     .onTapGesture {
-                        viewModel.showProfilePopover.toggle()
+                        viewModel.showAccountPopover.toggle()
                     }
-                    .popover(isPresented: self.$viewModel.showProfilePopover) {
+                    .popover(isPresented: self.$viewModel.showAccountPopover) {
                         ProfilePopover(viewModel: viewModel)
                     }
             }
@@ -153,7 +153,7 @@ struct HomeView: View {
                         viewModel.todoService.sanitizeTodoItems()
                         viewModel.goToLobby()
                     } else {
-                        viewModel.showProfilePopover.toggle()
+                        viewModel.showAccountPopover.toggle()
                     }
                 }) {
                     FText("Start Your Flow")

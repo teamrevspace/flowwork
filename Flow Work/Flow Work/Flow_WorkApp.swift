@@ -12,26 +12,26 @@ import GoogleSignIn
 private let appAssembler = AppAssembler()
 
 class AppDelegate: NSObject, NSApplicationDelegate {
+    var statusItem: NSStatusItem?
+    var windowController: NSWindowController?
+    
     func applicationDidFinishLaunching(_ notification: Notification) {
-        if let window = NSApplication.shared.windows.first {
-            let screenFrame = NSScreen.main?.frame ?? NSRect()
-            
+        let appView = AppView(coordinator: appAssembler.resolver.resolve(AppCoordinator.self)!)
+        
+        statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
+        
+        guard let menuButton = statusItem?.button else { return }
+        menuButton.image = NSImage(systemSymbolName: "water.waves", accessibilityDescription: nil)
+        menuButton.action = #selector(showPopover)
+        
+        if let window = NSApplication.shared.windows.first, let screenFrame = NSScreen.main?.frame {
             let windowWidth: CGFloat = 360
             let windowHeight: CGFloat = 60
-            
             let x = screenFrame.width - windowWidth - 48
             let y = screenFrame.height - windowHeight - 64
-            
             window.setFrame(NSRect(x: x, y: y, width: windowWidth, height: windowHeight), display: true)
+            
             window.styleMask = [.closable, .resizable, .fullSizeContentView]
-            
-            let visualEffectView = NSVisualEffectView()
-            visualEffectView.translatesAutoresizingMaskIntoConstraints = false
-            visualEffectView.material = .underWindowBackground
-            visualEffectView.state = .active
-            visualEffectView.wantsLayer = true
-            visualEffectView.layer?.cornerRadius = 16.0
-            
             window.titleVisibility = .hidden
             window.titlebarAppearsTransparent = true
             window.styleMask.remove(.titled)
@@ -39,24 +39,23 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             window.isMovableByWindowBackground = true
             window.level = .floating
             
-            window.contentView = visualEffectView
-            
-            guard let constraints = window.contentView else {
-                return
-            }
-            
-            visualEffectView.leadingAnchor.constraint(equalTo: constraints.leadingAnchor).isActive = true
-            visualEffectView.trailingAnchor.constraint(equalTo: constraints.trailingAnchor).isActive = true
-            visualEffectView.topAnchor.constraint(equalTo: constraints.topAnchor).isActive = true
-            visualEffectView.bottomAnchor.constraint(equalTo: constraints.bottomAnchor).isActive = true
-            
-            window.orderFrontRegardless()
-            
             let appView = AppView(coordinator: appAssembler.resolver.resolve(AppCoordinator.self)!)
             window.contentView = NSHostingView(rootView: appView)
             let controller = NSWindowController(window: window)
+            windowController = controller
             controller.showWindow(self)
         }
+    }
+    
+        func applicationWillTerminate(_ aNotification: Notification) {
+            // Insert code here to tear down your application
+        }
+    
+    @objc func showPopover() {
+        guard let menuButton = statusItem?.button else { return }
+                
+        windowController?.window?.makeKeyAndOrderFront(nil)
+        NSApp.activate(ignoringOtherApps: true)
     }
     
     func application(_ app: NSApplication, open urls: [URL]) {
@@ -79,27 +78,14 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 @main
 struct Flow_WorkApp: App {
     @NSApplicationDelegateAdaptor(AppDelegate.self) var delegate
-    @State var currentNumber: String = "1"
     
     init() {
         FirebaseApp.configure()
     }
     
     var body: some Scene {
-        Window("Flow Work", id: "main") {
+        WindowGroup {
             AppView(coordinator: appAssembler.resolver.resolve(AppCoordinator.self)!)
-        }
-        MenuBarExtra(currentNumber, systemImage: "\(currentNumber).circle") {
-            // 3
-            Button("One") {
-                currentNumber = "1"
-            }
-            Button("Two") {
-                currentNumber = "2"
-            }
-            Button("Three") {
-                currentNumber = "3"
-            }
         }
     }
 }
