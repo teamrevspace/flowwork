@@ -32,8 +32,6 @@ struct SessionState {
 class SessionService: SessionServiceProtocol, ObservableObject {
     weak var delegate: SessionServiceDelegate?
     
-    @Published var errorService: ErrorServiceProtocol
-    
     @Published private var state = SessionState()
     
     private let resolver: Swinject.Resolver
@@ -49,7 +47,6 @@ class SessionService: SessionServiceProtocol, ObservableObject {
     
     init(resolver: Swinject.Resolver) {
         self.resolver = resolver
-        self.errorService = resolver.resolve(ErrorServiceProtocol.self)!
         
         webSocketSession = URLSession(configuration: .default)
         self.schedulePing()
@@ -191,7 +188,7 @@ class SessionService: SessionServiceProtocol, ObservableObject {
     }
     
     private func handleError(_ error: Error) {
-        self.errorService.publish(AppError.networkError(error.localizedDescription))
+        print(AppError.networkError(error.localizedDescription))
     }
     
     private func handleMessage(_ message: URLSessionWebSocketTask.Message) {
@@ -298,7 +295,7 @@ extension SessionService {
         DispatchQueue.main.async {
             if response.payload.status == "error" {
                 self.state.currentSession = nil
-                self.errorService.publish(AppError.sessionNotFound)
+                print(AppError.sessionNotFound)
                 self.delegate?.sessionNotFound()
             }
         }

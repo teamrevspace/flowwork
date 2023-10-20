@@ -20,7 +20,6 @@ class LobbyViewModel: ObservableObject {
     @Published var sessionService: SessionServiceProtocol
     @Published var authService: AuthServiceProtocol
     @Published var storeService: StoreServiceProtocol
-    @Published var errorService: ErrorServiceProtocol
     
     @Published var authState = AuthState()
     @Published var sessionState = SessionState()
@@ -38,7 +37,6 @@ class LobbyViewModel: ObservableObject {
         self.sessionService = resolver.resolve(SessionServiceProtocol.self)!
         self.authService = resolver.resolve(AuthServiceProtocol.self)!
         self.storeService = resolver.resolve(StoreServiceProtocol.self)!
-        self.errorService = resolver.resolve(ErrorServiceProtocol.self)!
         
         authService.statePublisher
             .assign(to: \.authState, on: self)
@@ -76,12 +74,12 @@ class LobbyViewModel: ObservableObject {
                 // parsed URL is of the form flowwork.xyz/s/<sessionId>
                 sessionId = pathComponents[2]
             } else {
-                self.errorService.publish(AppError.invalidURLFormat)
+                print(AppError.invalidURLFormat)
                 return
             }
         } else {
             guard let id = id ?? (joinSessionCode.isEmpty ? nil : joinSessionCode) else {
-                self.errorService.publish(AppError.invalidURLFormat)
+                print(AppError.invalidURLFormat)
                 return
             }
             sessionId = id

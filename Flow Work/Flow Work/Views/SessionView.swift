@@ -170,6 +170,5 @@ struct SessionView: View {
         }
         .padding()
         .standardFrame()
-        .errorOverlay(errorService: viewModel.errorService)
     }
 }

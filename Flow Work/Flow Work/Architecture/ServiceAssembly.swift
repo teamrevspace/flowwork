@@ -19,6 +19,11 @@ final class ServiceAssembly: Assembly {
         }
         .inObjectScope(.container)
         
+        container.register(RTCServiceProtocol.self) { r in
+            RTCService(resolver: r)
+        }
+        .inObjectScope(.container)
+        
         container.register(TodoServiceProtocol.self) { r in
             TodoService(resolver: r)
         }
@@ -28,11 +33,5 @@ final class ServiceAssembly: Assembly {
             StoreService(resolver: r)
         }
         .inObjectScope(.container)
-
-        container.register(ErrorServiceProtocol.self) { _ in
-            ErrorService()
-        }
-        .inObjectScope(.container)
-    
     }
 }

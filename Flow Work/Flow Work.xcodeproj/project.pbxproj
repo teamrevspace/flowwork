@@ -18,7 +18,6 @@
 		1147A0D12AD8D48E00D6C615 /* SessionServiceProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1147A0D02AD8D48E00D6C615 /* SessionServiceProtocol.swift */; };
 		1147A0D32AD8DC4500D6C615 /* StoreService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1147A0D22AD8DC4500D6C615 /* StoreService.swift */; };
 		1147A0D52AD8DC6C00D6C615 /* StoreServiceProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1147A0D42AD8DC6C00D6C615 /* StoreServiceProtocol.swift */; };
-		1147A0D72AD8DF7000D6C615 /* ErrorServiceProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1147A0D62AD8DF7000D6C615 /* ErrorServiceProtocol.swift */; };
 		1147A0DA2AD983E100D6C615 /* Swinject in Frameworks */ = {isa = PBXBuildFile; productRef = 1147A0D92AD983E100D6C615 /* Swinject */; };
 		114AFDE42AC765B700AB9A8B /* Flow_WorkApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 114AFDE32AC765B700AB9A8B /* Flow_WorkApp.swift */; };
 		114AFDE62AC765B700AB9A8B /* AppView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 114AFDE52AC765B700AB9A8B /* AppView.swift */; };
@@ -37,13 +36,11 @@
 		116D19072ACFD67B00CB4F1D /* LobbyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 116D19062ACFD67B00CB4F1D /* LobbyView.swift */; };
 		116D19092ACFD75300CB4F1D /* LobbyViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 116D19082ACFD75300CB4F1D /* LobbyViewModel.swift */; };
 		116D190B2ACFDA8F00CB4F1D /* AppError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 116D190A2ACFDA8F00CB4F1D /* AppError.swift */; };
-		116D190F2ACFDB9400CB4F1D /* ErrorService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 116D190E2ACFDB9400CB4F1D /* ErrorService.swift */; };
 		116D19122ACFDD1D00CB4F1D /* AppCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 116D19112ACFDD1D00CB4F1D /* AppCoordinator.swift */; };
 		116D19142ACFDD4E00CB4F1D /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 116D19132ACFDD4E00CB4F1D /* LoginView.swift */; };
 		116D19172ACFDE4D00CB4F1D /* StandardFrameModifer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 116D19162ACFDE4D00CB4F1D /* StandardFrameModifer.swift */; };
 		116D19192ACFDEF800CB4F1D /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 116D19182ACFDEF800CB4F1D /* HomeView.swift */; };
 		116D191D2ACFE4FA00CB4F1D /* HomeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 116D191C2ACFE4FA00CB4F1D /* HomeViewModel.swift */; };
-		116D191F2AD04F0100CB4F1D /* ErrorModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 116D191E2AD04F0100CB4F1D /* ErrorModifier.swift */; };
 		117FDB6F2AD6569E00E39E3F /* Response.swift in Sources */ = {isa = PBXBuildFile; fileRef = 117FDB6E2AD6569E00E39E3F /* Response.swift */; };
 		11C839ED2AD7AC9300DE62D2 /* AvatarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11C839EC2AD7AC9300DE62D2 /* AvatarView.swift */; };
 		11D7C1A72AD5E73E00AF1EEE /* Message.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11D7C1A62AD5E73E00AF1EEE /* Message.swift */; };
@@ -52,6 +49,8 @@
 		11E5AD2F2AE1E52D004670F0 /* TodoServiceProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11E5AD2E2AE1E52D004670F0 /* TodoServiceProtocol.swift */; };
 		11E5AD312AE1E70B004670F0 /* Todo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11E5AD302AE1E70B004670F0 /* Todo.swift */; };
 		11E5AD332AE21F28004670F0 /* MarqueeText.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11E5AD322AE21F28004670F0 /* MarqueeText.swift */; };
+		11E5AD352AE2561A004670F0 /* RTCService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11E5AD342AE2561A004670F0 /* RTCService.swift */; };
+		11E5AD372AE2563B004670F0 /* RTCServiceProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11E5AD362AE2563B004670F0 /* RTCServiceProtocol.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -65,7 +64,6 @@
 		1147A0D02AD8D48E00D6C615 /* SessionServiceProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionServiceProtocol.swift; sourceTree = "<group>"; };
 		1147A0D22AD8DC4500D6C615 /* StoreService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreService.swift; sourceTree = "<group>"; };
 		1147A0D42AD8DC6C00D6C615 /* StoreServiceProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreServiceProtocol.swift; sourceTree = "<group>"; };
-		1147A0D62AD8DF7000D6C615 /* ErrorServiceProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorServiceProtocol.swift; sourceTree = "<group>"; };
 		114AFDE02AC765B700AB9A8B /* Flow Work.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Flow Work.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		114AFDE32AC765B700AB9A8B /* Flow_WorkApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Flow_WorkApp.swift; sourceTree = "<group>"; };
 		114AFDE52AC765B700AB9A8B /* AppView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppView.swift; sourceTree = "<group>"; };
@@ -82,13 +80,11 @@
 		116D19062ACFD67B00CB4F1D /* LobbyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LobbyView.swift; sourceTree = "<group>"; };
 		116D19082ACFD75300CB4F1D /* LobbyViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LobbyViewModel.swift; sourceTree = "<group>"; };
 		116D190A2ACFDA8F00CB4F1D /* AppError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppError.swift; sourceTree = "<group>"; };
-		116D190E2ACFDB9400CB4F1D /* ErrorService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorService.swift; sourceTree = "<group>"; };
 		116D19112ACFDD1D00CB4F1D /* AppCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppCoordinator.swift; sourceTree = "<group>"; };
 		116D19132ACFDD4E00CB4F1D /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
 		116D19162ACFDE4D00CB4F1D /* StandardFrameModifer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StandardFrameModifer.swift; sourceTree = "<group>"; };
 		116D19182ACFDEF800CB4F1D /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
 		116D191C2ACFE4FA00CB4F1D /* HomeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewModel.swift; sourceTree = "<group>"; };
-		116D191E2AD04F0100CB4F1D /* ErrorModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorModifier.swift; sourceTree = "<group>"; };
 		117FDB6E2AD6569E00E39E3F /* Response.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Response.swift; sourceTree = "<group>"; };
 		11C839EC2AD7AC9300DE62D2 /* AvatarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AvatarView.swift; sourceTree = "<group>"; };
 		11D7C1A62AD5E73E00AF1EEE /* Message.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Message.swift; sourceTree = "<group>"; };
@@ -97,6 +93,8 @@
 		11E5AD2E2AE1E52D004670F0 /* TodoServiceProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodoServiceProtocol.swift; sourceTree = "<group>"; };
 		11E5AD302AE1E70B004670F0 /* Todo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Todo.swift; sourceTree = "<group>"; };
 		11E5AD322AE21F28004670F0 /* MarqueeText.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarqueeText.swift; sourceTree = "<group>"; };
+		11E5AD342AE2561A004670F0 /* RTCService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RTCService.swift; sourceTree = "<group>"; };
+		11E5AD362AE2563B004670F0 /* RTCServiceProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RTCServiceProtocol.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -132,8 +130,8 @@
 			children = (
 				1106E6DF2AD8CD8C0026600A /* AuthServiceProtocol.swift */,
 				1147A0D02AD8D48E00D6C615 /* SessionServiceProtocol.swift */,
+				11E5AD362AE2563B004670F0 /* RTCServiceProtocol.swift */,
 				1147A0D42AD8DC6C00D6C615 /* StoreServiceProtocol.swift */,
-				1147A0D62AD8DF7000D6C615 /* ErrorServiceProtocol.swift */,
 				11E5AD2E2AE1E52D004670F0 /* TodoServiceProtocol.swift */,
 			);
 			path = Protocols;
@@ -188,11 +186,11 @@
 		116D18F52ACF9D8300CB4F1D /* Services */ = {
 			isa = PBXGroup;
 			children = (
-				116D190E2ACFDB9400CB4F1D /* ErrorService.swift */,
 				116D18F22ACF8A7700CB4F1D /* SessionService.swift */,
 				11E5AD2C2ADECB9B004670F0 /* TodoService.swift */,
 				116D18F82ACFB07400CB4F1D /* AuthService.swift */,
 				1147A0D22AD8DC4500D6C615 /* StoreService.swift */,
+				11E5AD342AE2561A004670F0 /* RTCService.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -245,7 +243,6 @@
 			isa = PBXGroup;
 			children = (
 				116D19162ACFDE4D00CB4F1D /* StandardFrameModifer.swift */,
-				116D191E2AD04F0100CB4F1D /* ErrorModifier.swift */,
 			);
 			path = Modifiers;
 			sourceTree = "<group>";
@@ -347,8 +344,9 @@
 			files = (
 				1147A0D12AD8D48E00D6C615 /* SessionServiceProtocol.swift in Sources */,
 				11E5AD332AE21F28004670F0 /* MarqueeText.swift in Sources */,
+				11E5AD352AE2561A004670F0 /* RTCService.swift in Sources */,
 				1147A0D32AD8DC4500D6C615 /* StoreService.swift in Sources */,
-				1147A0D72AD8DF7000D6C615 /* ErrorServiceProtocol.swift in Sources */,
+				11E5AD372AE2563B004670F0 /* RTCServiceProtocol.swift in Sources */,
 				11E5AD2F2AE1E52D004670F0 /* TodoServiceProtocol.swift in Sources */,
 				116D191D2ACFE4FA00CB4F1D /* HomeViewModel.swift in Sources */,
 				1106E6DD2AD8CC830026600A /* ServiceAssembly.swift in Sources */,
@@ -375,12 +373,10 @@
 				116D19172ACFDE4D00CB4F1D /* StandardFrameModifer.swift in Sources */,
 				116D190B2ACFDA8F00CB4F1D /* AppError.swift in Sources */,
 				114AFDE42AC765B700AB9A8B /* Flow_WorkApp.swift in Sources */,
-				116D190F2ACFDB9400CB4F1D /* ErrorService.swift in Sources */,
 				11C839ED2AD7AC9300DE62D2 /* AvatarView.swift in Sources */,
 				1106E6D92AD8CC100026600A /* AppAssembler.swift in Sources */,
 				110C430E2AD052FF00201CD5 /* SessionView.swift in Sources */,
 				116D18F32ACF8A7700CB4F1D /* SessionService.swift in Sources */,
-				116D191F2AD04F0100CB4F1D /* ErrorModifier.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -20,6 +20,5 @@ struct LoginView: View {
         }
         .padding()
         .standardFrame()
-        .errorOverlay(errorService: viewModel.errorService)
     }
 }

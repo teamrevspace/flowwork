@@ -20,7 +20,6 @@ class HomeViewModel: ObservableObject {
     @Published var sessionService: SessionServiceProtocol
     @Published var todoService: TodoServiceProtocol
     @Published var storeService: StoreServiceProtocol
-    @Published var errorService: ErrorServiceProtocol
     
     @Published var sessionState = SessionState()
     @Published var authState = AuthState()
@@ -37,7 +36,6 @@ class HomeViewModel: ObservableObject {
         self.sessionService = resolver.resolve(SessionServiceProtocol.self)!
         self.todoService = resolver.resolve(TodoServiceProtocol.self)!
         self.storeService = resolver.resolve(StoreServiceProtocol.self)!
-        self.errorService = resolver.resolve(ErrorServiceProtocol.self)!
         
         sessionService.statePublisher
             .assign(to: \.sessionState, on: self)

@@ -10,15 +10,12 @@ import Firebase
 import Swinject
 
 class StoreService: StoreServiceProtocol, ObservableObject {
-    @Published var errorService: ErrorServiceProtocol
-    
     private let resolver: Resolver
     private let db = Firestore.firestore()
     private var lobbyListener: ListenerRegistration?
     
     init(resolver: Resolver) {
         self.resolver = resolver
-        self.errorService = resolver.resolve(ErrorServiceProtocol.self)!
     }
     
     func addUser(user: Firebase.User) -> Void {

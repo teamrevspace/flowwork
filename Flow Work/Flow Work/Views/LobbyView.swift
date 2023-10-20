@@ -26,7 +26,6 @@ struct LobbyView: View {
         }
         .padding()
         .standardFrame()
-        .errorOverlay(errorService: viewModel.errorService)
         .onAppear() {
             viewModel.fetchSessionList()
         }

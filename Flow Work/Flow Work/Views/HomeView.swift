@@ -160,7 +160,6 @@ struct HomeView: View {
         }
         .padding()
         .standardFrame()
-        .errorOverlay(errorService: viewModel.errorService)
         .onChange(of: viewModel.authState.currentUser?.id) { value in
             viewModel.fetchTodoList()
         }
