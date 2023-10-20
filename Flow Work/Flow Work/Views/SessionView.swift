@@ -39,22 +39,22 @@ struct SessionView: View {
                             Text("Copy Invite Link")
                         }
                     }
-                    VStack {
-                        HStack {
-                            Button(action: {
-                                viewModel.createAudioRoom()
-                            }) {
-                                Text("Create Audio Room")
-                            }
-                            .padding()
-                            Button(action: {
-                                viewModel.joinAudioRoom()
-                            }) {
-                                Text("Join Audio Room")
-                            }
-                            .padding()
-                        }
-                    }
+//                    VStack {
+//                        HStack {
+//                            Button(action: {
+//                                viewModel.createAudioRoom()
+//                            }) {
+//                                Text("Create Audio Room")
+//                            }
+//                            .padding()
+//                            Button(action: {
+//                                viewModel.joinAudioRoom()
+//                            }) {
+//                                Text("Join Audio Room")
+//                            }
+//                            .padding()
+//                        }
+//                    }
                     Group {
                         if (viewModel.todoState.isTodoListInitialized) {
                             VStack(alignment: .leading) {
