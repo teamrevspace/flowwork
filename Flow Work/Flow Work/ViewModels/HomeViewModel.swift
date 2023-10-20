@@ -53,10 +53,7 @@ class HomeViewModel: ObservableObject {
     func fetchTodoList() {
         guard let currentUserId = self.authState.currentUser?.id else { return }
         self.storeService.findTodosByUserId(userId: currentUserId) { todos in
-            self.todoState.todoItems = todos.filter({!$0.completed}).sorted(by: {$0.title > $1.title})
-            self.todoState.isTodoListInitialized = true
-            self.todoState.isHoveringDeleteButtons = todos.map({_ in false})
-            self.todoState.isHoveringDeleteButtons.append(false)
+            self.todoService.initTodoList(todos: todos)
         }
     }
     

@@ -9,7 +9,7 @@ import Foundation
 
 struct Todo: Identifiable {
     var id: String?
-    var title: String
-    var completed: Bool
+    var title: String = ""
+    var completed: Bool = false
     var userIds: [String]?
 }

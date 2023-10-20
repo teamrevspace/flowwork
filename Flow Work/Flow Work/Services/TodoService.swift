@@ -11,7 +11,7 @@ import Combine
 
 struct TodoState {
     var todoItems: [Todo] = []
-    var draftTodo: Todo = Todo(title: "", completed: false)
+    var draftTodo: Todo = Todo()
     var isTodoListInitialized: Bool = false
     var isHoveringAddButton: Bool = false
     var isHoveringDeleteButtons: [Bool] = []
@@ -22,6 +22,8 @@ class TodoService: TodoServiceProtocol, ObservableObject {
     
     @Published var storeService: StoreServiceProtocol
     @Published var authService: AuthServiceProtocol
+    
+    @Published var delayedTasks: [DispatchWorkItem?] = []
     
     private let resolver: Resolver
     
@@ -34,6 +36,18 @@ class TodoService: TodoServiceProtocol, ObservableObject {
         
         self.storeService = resolver.resolve(StoreServiceProtocol.self)!
         self.authService = resolver.resolve(AuthServiceProtocol.self)!
+    }
+    
+    func initTodoList(todos: [Todo]) {
+        self.state.todoItems = todos.filter({!$0.completed}).sorted(by: {$0.title > $1.title})
+        
+        self.state.isHoveringDeleteButtons = todos.map({_ in false})
+        self.state.isHoveringDeleteButtons.append(false)
+        
+        self.delayedTasks = todos.map({_ in nil})
+        self.delayedTasks.append(nil)
+        
+        self.state.isTodoListInitialized = true
     }
     
     func sanitizeTodoItems() {

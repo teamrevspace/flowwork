@@ -23,8 +23,8 @@ class LobbyViewModel: ObservableObject {
     @Published var errorService: ErrorServiceProtocol
     
     @Published var authState = AuthState()
+    @Published var sessionState = SessionState()
     @Published var joinSessionCode: String = ""
-    @Published var availableSessions: [Session] = []
     
     @Published var newSessionName: String = ""
     @Published var newSessionPassword: String = ""
@@ -43,12 +43,15 @@ class LobbyViewModel: ObservableObject {
         authService.statePublisher
             .assign(to: \.authState, on: self)
             .store(in: &cancellables)
+        sessionService.statePublisher
+            .assign(to: \.sessionState, on: self)
+            .store(in: &cancellables)
     }
     
     func fetchSessionList() {
         guard let currentUserId = self.authState.currentUser?.id else { return }
         self.storeService.findSessionsByUserId(userId: currentUserId) { sessions in
-            self.availableSessions = sessions
+            self.sessionService.initSessionList(sessions: sessions)
         }
     }
     

@@ -26,6 +26,7 @@ struct SessionState {
     var hasJoinedSession: Bool = false
     var currentSession: Session? = nil
     var currentSessionUsers: [User]? = nil
+    var availableSessions: [Session] = []
 }
 
 class SessionService: SessionServiceProtocol, ObservableObject {
@@ -57,6 +58,10 @@ class SessionService: SessionServiceProtocol, ObservableObject {
     deinit {
         pingTimer?.invalidate()
         self.disconnect()
+    }
+    
+    func initSessionList(sessions: [Session]) {
+        self.state.availableSessions = sessions
     }
     
     func updateAuthToken(_ authToken: String?) {

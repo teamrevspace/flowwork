@@ -28,6 +28,7 @@ struct SessionView: View {
                 VStack {
                     HStack(spacing: 10) {
                         Text("\(viewModel.sessionState.currentSession!.name)")
+                            .fontWeight(.bold)
                             .lineLimit(1)
                             .truncationMode(.tail)
                         Spacer()
@@ -55,6 +56,22 @@ struct SessionView: View {
                                             .textFieldStyle(PlainTextFieldStyle())
                                             .focused($focusedField, equals: index)
                                             .frame(maxWidth: .infinity)
+                                        
+                                        if (!viewModel.todoState.todoItems[index].title.isEmpty) {
+                                            Button(action: {
+                                                viewModel.storeService.removeTodo(todoId: viewModel.todoState.todoItems[index].id!)
+                                            }) {
+                                                Image(systemName: "xmark")
+                                                    .padding(2)
+                                            }
+                                            .buttonStyle(.borderless)
+                                            .foregroundColor(viewModel.todoState.isHoveringDeleteButtons[index] ? Color.secondary : Color.secondary.opacity(0.5))
+                                            .background(viewModel.todoState.isHoveringDeleteButtons[index] ? Color.secondary.opacity(0.25) : Color.clear)
+                                            .cornerRadius(5)
+                                            .onHover { isHovering in
+                                                viewModel.todoState.isHoveringDeleteButtons[index] = isHovering
+                                            }
+                                        }
                                     }
                                     .padding(.vertical, 2.5)
                                 }
@@ -77,10 +94,10 @@ struct SessionView: View {
                                         Button(action: {
                                             if (!viewModel.todoState.draftTodo.title.isEmpty) {
                                                 guard let currentUserId = self.viewModel.authState.currentUser?.id else { return }
-                                                let draftTodo = Todo(title: viewModel.todoState.draftTodo.title, completed: viewModel.todoState.draftTodo.completed, userIds: [currentUserId])
+                                                var draftTodo = viewModel.todoState.draftTodo
+                                                draftTodo.userIds = [currentUserId]
                                                 self.viewModel.storeService.addTodo(todo: draftTodo)
-                                                let emptyTodo = Todo(title: "", completed: false)
-                                                self.viewModel.todoService.updateDraftTodo(todo: emptyTodo)
+                                                self.viewModel.todoService.updateDraftTodo(todo: Todo())
                                                 self.viewModel.todoState.isHoveringDeleteButtons.append(false)
                                             }
                                             focusedField = todoListCount + 1

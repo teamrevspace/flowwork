@@ -94,7 +94,7 @@ struct JoinSessionView: View {
         VStack() {
             TextField("Enter session code or URL", text:  $viewModel.joinSessionCode)
                 .textFieldStyle(RoundedBorderTextFieldStyle())
-            List(viewModel.availableSessions) { session in
+            List(viewModel.sessionState.availableSessions) { session in
                 MarqueeText(text: session.name)
                     .foregroundColor(selectedSessionId == session.id ? Color.white : Color.primary)
                     .padding(.init(top: 5, leading: 10, bottom: 5, trailing: 10))
