@@ -9,11 +9,6 @@ import Swinject
 
 final class ViewModelAssembly: Assembly {
     func assemble(container: Container) {
-        container.register(LoginViewModel.self) { r in
-            LoginViewModel(resolver: r)
-        }
-        .inObjectScope(.transient)
-        
         container.register(HomeViewModel.self) { r in
             HomeViewModel(resolver: r)
         }

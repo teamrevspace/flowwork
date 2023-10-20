@@ -12,7 +12,6 @@ import SwiftUI
 
 enum NavigationEvent {
     case Home
-    case Login
     case Lobby
     case Session
 }
@@ -25,7 +24,6 @@ class AppCoordinator: ObservableObject {
     @Published var sessionService: SessionServiceProtocol
     @Published var storeService: StoreServiceProtocol
     
-    @Published var loginViewModel: LoginViewModel
     @Published var homeViewModel: HomeViewModel
     @Published var sessionViewModel: SessionViewModel
     @Published var lobbyViewModel: LobbyViewModel
@@ -45,7 +43,6 @@ class AppCoordinator: ObservableObject {
         self.todoService = resolver.resolve(TodoServiceProtocol.self)!
         self.storeService = resolver.resolve(StoreServiceProtocol.self)!
         
-        self.loginViewModel = resolver.resolve(LoginViewModel.self)!
         self.homeViewModel = resolver.resolve(HomeViewModel.self)!
         self.sessionViewModel = resolver.resolve(SessionViewModel.self)!
         self.lobbyViewModel = resolver.resolve(LobbyViewModel.self)!
@@ -72,8 +69,6 @@ class AppCoordinator: ObservableObject {
                 switch event {
                 case .Home:
                     self.currentView = AnyView(HomeView(viewModel: self.homeViewModel))
-                case .Login:
-                    self.currentView = AnyView(LoginView(viewModel: self.loginViewModel))
                 case .Lobby:
                     self.currentView = AnyView(LobbyView(viewModel: self.lobbyViewModel))
                 case .Session:

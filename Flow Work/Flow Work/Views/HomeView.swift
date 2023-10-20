@@ -26,8 +26,8 @@ struct HomeView: View {
                 HStack(spacing: 5) {
                     Circle()
                         .frame(width: 10, height: 10)
-                        .foregroundColor(viewModel.sessionState.isConnected ? .green : .yellow)
-                    Text(viewModel.sessionState.isConnected ? "connected" : "connecting")
+                        .foregroundColor(viewModel.sessionState.isConnected ? .green : viewModel.authState.isSignedIn ? .yellow : .gray)
+                    Text(viewModel.sessionState.isConnected ? "connected" : viewModel.authState.isSignedIn ? "connecting" : "disconnected")
                 }
                 Spacer()
                 AvatarView(avatarURL: viewModel.authState.currentUser?.avatarURL)
@@ -139,10 +139,12 @@ struct HomeView: View {
                 }
                 .padding(.bottom, 10)
             } else {
-                VStack {
-                    ProgressView()
+                if (viewModel.authState.isSignedIn) {
+                    VStack {
+                        ProgressView()
+                    }
+                    .padding(.vertical, 10)
                 }
-                .padding(.vertical, 10)
             }
             
             HStack{
@@ -160,8 +162,13 @@ struct HomeView: View {
         }
         .padding()
         .standardFrame()
-        .onChange(of: viewModel.authState.currentUser?.id) { value in
-            viewModel.fetchTodoList()
+        .onChange(of: viewModel.authState.isSignedIn) { value in
+            viewModel.todoState.isTodoListInitialized = false
+            if (viewModel.authState.isSignedIn) {
+                viewModel.fetchTodoList()
+            } else {
+                viewModel.sessionService.disconnect()
+            }
         }
         .onAppear() {
             viewModel.fetchTodoList()
