@@ -13,3 +13,4 @@ struct User: Identifiable {
     var emailAddress: String
     var avatarURL: URL
 }
+

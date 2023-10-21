@@ -14,6 +14,7 @@ enum NavigationEvent {
     case Home
     case Lobby
     case Session
+    case Settings
 }
 
 class AppCoordinator: ObservableObject {
@@ -27,6 +28,7 @@ class AppCoordinator: ObservableObject {
     @Published var homeViewModel: HomeViewModel
     @Published var sessionViewModel: SessionViewModel
     @Published var lobbyViewModel: LobbyViewModel
+    @Published var settingsViewModel: SettingsViewModel
     
     @Published var authState = AuthState()
     
@@ -46,6 +48,7 @@ class AppCoordinator: ObservableObject {
         self.homeViewModel = resolver.resolve(HomeViewModel.self)!
         self.sessionViewModel = resolver.resolve(SessionViewModel.self)!
         self.lobbyViewModel = resolver.resolve(LobbyViewModel.self)!
+        self.settingsViewModel = resolver.resolve(SettingsViewModel.self)!
         
         self.currentView = AnyView(EmptyView())
         
@@ -73,6 +76,8 @@ class AppCoordinator: ObservableObject {
                     self.currentView = AnyView(LobbyView(viewModel: self.lobbyViewModel))
                 case .Session:
                     self.currentView = AnyView(SessionView(viewModel: self.sessionViewModel))
+                case .Settings:
+                    self.currentView = AnyView(SettingsView(viewModel: self.settingsViewModel))
                 }
             }
             .store(in: &cancellables)
@@ -84,6 +89,7 @@ class AppCoordinator: ObservableObject {
         homeViewModel.delegate = self
         sessionViewModel.delegate = self
         lobbyViewModel.delegate = self
+        settingsViewModel.delegate = self
     }
 }
 
@@ -117,7 +123,7 @@ extension AppCoordinator: SessionServiceDelegate {
     }
 }
 
-extension AppCoordinator: HomeViewModelDelegate, LobbyViewModelDelegate, SessionViewModelDelegate {
+extension AppCoordinator: HomeViewModelDelegate, LobbyViewModelDelegate, SessionViewModelDelegate, SettingsViewModelDelegate {
     func showSessionView() {
         navigate(to: .Session)
     }
@@ -128,5 +134,9 @@ extension AppCoordinator: HomeViewModelDelegate, LobbyViewModelDelegate, Session
     
     func showHomeView() {
         navigate(to: .Home)
+    }
+    
+    func showSettingsView() {
+        navigate(to: .Settings)
     }
 }

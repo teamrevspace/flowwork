@@ -13,22 +13,6 @@ import NIOWebSocket
 import Swinject
 import Firebase
 
-enum MessageType {
-    case socketResponse(SocketResponse)
-    case sessionResponse(SessionResponse)
-    case lobbyResponse(LobbyResponse)
-    case errorResponse(ErrorResponse)
-    case unknown(Any)
-}
-
-struct SessionState {
-    var isConnected: Bool = false
-    var hasJoinedSession: Bool = false
-    var currentSession: Session? = nil
-    var currentSessionUsers: [User]? = nil
-    var availableSessions: [Session] = []
-}
-
 class SessionService: SessionServiceProtocol, ObservableObject {
     weak var delegate: SessionServiceDelegate?
     

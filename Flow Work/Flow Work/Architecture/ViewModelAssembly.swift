@@ -23,5 +23,10 @@ final class ViewModelAssembly: Assembly {
             LobbyViewModel(resolver: r)
         }
         .inObjectScope(.transient)
+        
+        container.register(SettingsViewModel.self) { r in
+            SettingsViewModel(resolver: r)
+        }
+        .inObjectScope(.transient)
     }
 }

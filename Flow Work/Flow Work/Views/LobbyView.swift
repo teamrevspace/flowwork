@@ -64,9 +64,7 @@ struct CreateSessionView: View {
                         .accentColor(.gray)
                 }
             }
-            
             Spacer()
-            
             HStack(spacing: 10) {
                 Button(action: {
                     viewModel.returnToHome()
@@ -108,7 +106,7 @@ struct JoinSessionView: View {
                         selectedSessionId = session.id
                     })
             }
-            .frame(minHeight: 240)
+            .frame(minHeight: 200)
             .cornerRadius(5)
             .listStyle(.plain)
             

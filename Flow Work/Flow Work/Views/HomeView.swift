@@ -12,6 +12,7 @@ struct HomeView: View {
     @FocusState private var focusedField: Int?
     
     var body: some View {
+        let todoListCount = viewModel.todoState.todoItems.count
         VStack {
             HStack {
                 HStack {
@@ -40,104 +41,60 @@ struct HomeView: View {
                     ProfilePopover(viewModel: viewModel)
                 }
             }
+            Spacer()
             if (viewModel.todoState.isTodoListInitialized) {
                 VStack(alignment: .leading) {
-                    let todoListCount = viewModel.todoState.todoItems.count
                     ForEach(0..<viewModel.todoState.todoItems.count, id: \.self) { index in
-                        HStack {
-                            Toggle("", isOn: $viewModel.todoState.todoItems[index].completed)
-                                .onChange(of: viewModel.todoState.todoItems[index].completed) { value in
-                                    viewModel.todoService.checkTodoCompleted(index: index, completed: value)
+                        TodoItem(
+                            todo: $viewModel.todoState.todoItems[index],
+                            isEditing: viewModel.todoState.isEditingTextField[index],
+                            isHoveringAction: viewModel.todoState.isHoveringActionButtons[index],
+                            onCheck: { value in
+                                viewModel.todoService.checkTodoCompleted(index: index, completed: value)
+                            },
+                            onChange: { newValue in
+                                viewModel.todoState.isEditingTextField[index] = !newValue.isEmpty
+                            },
+                            onSubmit: {
+                                if (viewModel.todoState.isEditingTextField[index]) {
+                                    viewModel.storeService.updateTodoByTodoId(updatedTodo: viewModel.todoState.todoItems[index])
+                                    viewModel.todoState.isEditingTextField[index] = false
                                 }
-                                .labelsHidden()
-                            
-                            TextField("Add new to-do here", text: $viewModel.todoState.todoItems[index].title)
-                                .textFieldStyle(PlainTextFieldStyle())
-                                .lineLimit(1)
-                                .truncationMode(.tail)
-                                .foregroundColor(viewModel.todoState.todoItems[index].completed ? Color.primary.opacity(0.5) : Color.primary)
-                                .focused($focusedField, equals: index)
-                                .frame(maxWidth: .infinity)
-                                .onChange(of: viewModel.todoState.todoItems[index].title) { newValue in
-                                    viewModel.todoState.isEditingTextField[index] = !newValue.isEmpty
-                                }
-                                .onSubmit {
-                                    if (viewModel.todoState.isEditingTextField[index]) {
-                                        viewModel.storeService.updateTodoByTodoId(updatedTodo: viewModel.todoState.todoItems[index])
-                                        viewModel.todoState.isEditingTextField[index] = false
-                                    }
-                                    focusedField = index + 1
-                                }
-                            
-                            if (!viewModel.todoState.todoItems[index].completed) {
-                                Button(action: {
-                                    if (viewModel.todoState.isEditingTextField[index]) {
-                                        viewModel.storeService.updateTodoByTodoId(updatedTodo: viewModel.todoState.todoItems[index])
-                                        viewModel.todoState.isEditingTextField[index] = false
-                                    } else {
-                                        viewModel.storeService.removeTodo(todoId: viewModel.todoState.todoItems[index].id!)
-                                        viewModel.todoState.isEditingTextField[index] = false
-                                    }
-                                }) {
-                                    Image(systemName: viewModel.todoState.isEditingTextField[index] ? "checkmark" : "xmark")
-                                        .padding(1.5)
-                                }
-                                .buttonStyle(.borderless)
-                                .foregroundColor(viewModel.todoState.isHoveringDeleteButtons[index] ? Color.white : viewModel.todoState.isEditingTextField[index] ? Color.white.opacity(0.75) : Color.secondary.opacity(0.5))
-                                .background(viewModel.todoState.isHoveringDeleteButtons[index] ? (viewModel.todoState.isEditingTextField[index] ? Color.blue : Color.secondary.opacity(0.4) ) : viewModel.todoState.isEditingTextField[index] ? Color.blue.opacity(0.75) : Color.clear)
-                                .cornerRadius(5)
-                                .onHover { isHovering in
-                                    viewModel.todoState.isHoveringDeleteButtons[index] = isHovering
-                                }
-                            }
-                        }
-                        .padding(.vertical, 2.5)
+                            },
+                            onDelete: {
+                                viewModel.storeService.removeTodo(todoId: viewModel.todoState.todoItems[index].id!)
+                            },
+                            onAdd: {
+                                viewModel.storeService.updateTodoByTodoId(updatedTodo: viewModel.todoState.todoItems[index])
+                            },
+                            onHoverAction: { isHovering in
+                                viewModel.todoState.isHoveringActionButtons[index] = isHovering
+                            },
+                            showActionButton: !viewModel.todoState.todoItems[index].completed
+                        )
                     }
                     if (viewModel.todoState.todoItems.count < 10) {
-                        HStack {
-                            Toggle("", isOn: $viewModel.todoState.draftTodo.completed)
-                                .onChange(of: viewModel.todoState.draftTodo.completed) { value in
-                                    viewModel.todoService.checkTodoCompleted(index: todoListCount, completed: value)
-                                }
-                                .labelsHidden()
-                            
-                            TextField("Add new to-do here", text: $viewModel.todoState.draftTodo.title)
-                                .textFieldStyle(PlainTextFieldStyle())
-                                .lineLimit(1)
-                                .truncationMode(.tail)
-                                .foregroundColor(viewModel.todoState.draftTodo.completed ? Color.primary.opacity(0.5) : Color.primary)
-                                .focused($focusedField, equals: todoListCount)
-                                .frame(maxWidth: .infinity)
-                                .onSubmit {
-                                    viewModel.addDraftTodo()
-                                    focusedField = todoListCount
-                                }
-                            
-                            if (!viewModel.todoState.draftTodo.title.isEmpty && !viewModel.todoState.draftTodo.completed) {
-                                Button(action: {
-                                    viewModel.addDraftTodo()
-                                    focusedField = todoListCount
-                                }) {
-                                    HStack {
-                                        Image(systemName: "plus")
-                                            .padding(1.5)
-                                    }
-                                    .background(Color.clear)
-                                }
-                                .buttonStyle(.borderless)
-                                .contentShape(Rectangle())
-                                .foregroundColor(viewModel.todoState.isHoveringAddButton ? Color.blue : Color.blue.opacity(0.75))
-                                .background(viewModel.todoState.isHoveringAddButton ? Color.blue.opacity(0.4) : Color.blue.opacity(0.25))
-                                .cornerRadius(5)
-                                .disabled(viewModel.todoState.draftTodo.title.isEmpty)
-                                .onHover { isHovering in
-                                    if (!viewModel.todoState.draftTodo.title.isEmpty) {
-                                        viewModel.todoState.isHoveringAddButton = isHovering
-                                    }
-                                }
-                            }
-                        }
-                        .padding(.vertical, 2.5)
+                        TodoItem(
+                            todo: $viewModel.todoState.draftTodo,
+                            isEditing: !viewModel.todoState.draftTodo.title.isEmpty,
+                            isHoveringAction: viewModel.todoState.isHoveringAddButton,
+                            onCheck: { value in
+                                viewModel.todoService.checkTodoCompleted(index: todoListCount, completed: value)
+                            },
+                            onSubmit: {
+                                viewModel.addDraftTodo()
+                            },
+                            onDelete: {
+                                viewModel.addDraftTodo()
+                            },
+                            onAdd: {
+                                viewModel.addDraftTodo()
+                            },
+                            onHoverAction: { isHovering in
+                                viewModel.todoState.isHoveringAddButton = isHovering
+                            },
+                            showActionButton: !viewModel.todoState.draftTodo.title.isEmpty && !viewModel.todoState.draftTodo.completed
+                        )
                     }
                     Spacer()
                 }
@@ -150,7 +107,7 @@ struct HomeView: View {
                     .padding(.vertical, 10)
                 }
             }
-            
+            Spacer()
             HStack{
                 Button(action: {
                     if viewModel.authState.isSignedIn {
@@ -179,6 +136,7 @@ struct HomeView: View {
         }
         .onDisappear() {
             viewModel.todoState.isTodoListInitialized = false
+            viewModel.todoService.checkTodoCompleted(index: todoListCount, completed: false)
         }
     }
 }
@@ -188,13 +146,19 @@ struct ProfilePopover: View {
     
     var body: some View {
         VStack {
-            if viewModel.authState.currentUser != nil {
-                Text("Hi \(viewModel.authState.currentUser!.name)!")
-                Button("Log out") {
+            Text("Hi \(viewModel.authState.currentUser?.name ?? "there")!")
+            Button(action: {
+                viewModel.goToSettings()
+            }) {
+                Text("Settings")
+            }
+            if (viewModel.authState.isSignedIn) {
+                Button(action: {
                     viewModel.signOut()
+                }) {
+                    Text("Log out")
                 }
             } else {
-                Text("Hi there!")
                 Button(action: {
                     viewModel.signInWithGoogle()
                 }) {

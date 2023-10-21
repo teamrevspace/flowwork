@@ -11,6 +11,7 @@ import Swinject
 protocol HomeViewModelDelegate: AnyObject {
     func showSessionView()
     func showLobbyView()
+    func showSettingsView()
 }
 
 class HomeViewModel: ObservableObject {
@@ -65,8 +66,12 @@ class HomeViewModel: ObservableObject {
             newTodo.userIds = [currentUserId]
             self.storeService.addTodo(todo: newTodo)
             self.todoService.updateDraftTodo(todo: Todo())
-            self.todoState.isHoveringDeleteButtons.append(false)
+            self.todoState.isHoveringActionButtons.append(false)
         }
+    }
+    
+    func goToSettings() {
+        self.delegate?.showSettingsView()
     }
     
     func goToLobby() {

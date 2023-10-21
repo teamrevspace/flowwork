@@ -118,9 +118,10 @@ class StoreService: StoreServiceProtocol, ObservableObject {
                     let docId = docSnapshot.documentID
                     let title = data["title"] as? String ?? ""
                     let completed = data["completed"] as? Bool ?? false
+                    let createdAt = data["createdAt"] as? Timestamp ?? Timestamp()
                     let userIds = data["userIds"] as? [String]
-                    let updatedAt = data["updatedAt"] as? Timestamp ?? Timestamp()
-                    return Todo(id: docId, title: title, completed: completed, userIds: userIds, updatedAt: updatedAt)
+                    let updatedAt = data["updatedAt"] as? Timestamp
+                    return Todo(id: docId, title: title, completed: completed, createdAt: createdAt, userIds: userIds, updatedAt: updatedAt)
                 })
                 completion(todos)
             })
@@ -130,8 +131,8 @@ class StoreService: StoreServiceProtocol, ObservableObject {
         let data: [String: Any] = [
             "title": todo.title,
             "completed": todo.completed,
-            "userIds": todo.userIds ?? [],
-            "updatedAt": FieldValue.serverTimestamp()
+            "createdAt": FieldValue.serverTimestamp(),
+            "userIds": todo.userIds ?? []
         ]
         
         db.collection("todos").addDocument(data: data)
@@ -142,6 +143,7 @@ class StoreService: StoreServiceProtocol, ObservableObject {
         var newData: [String: Any] = [
             "title": updatedTodo.title,
             "completed": updatedTodo.completed,
+            "userIds": updatedTodo.userIds ?? [],
             "updatedAt": FieldValue.serverTimestamp()
         ]
         if (updatedTodo.userIds != nil) {

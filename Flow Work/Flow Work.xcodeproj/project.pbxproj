@@ -40,6 +40,19 @@
 		116D19192ACFDEF800CB4F1D /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 116D19182ACFDEF800CB4F1D /* HomeView.swift */; };
 		116D191D2ACFE4FA00CB4F1D /* HomeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 116D191C2ACFE4FA00CB4F1D /* HomeViewModel.swift */; };
 		117FDB6F2AD6569E00E39E3F /* Response.swift in Sources */ = {isa = PBXBuildFile; fileRef = 117FDB6E2AD6569E00E39E3F /* Response.swift */; };
+		11A92E872AE4154A007F5DF4 /* TodoItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11A92E862AE4154A007F5DF4 /* TodoItem.swift */; };
+		11A92E912AE4404B007F5DF4 /* Flow_Work_HelperApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11A92E902AE4404B007F5DF4 /* Flow_Work_HelperApp.swift */; };
+		11A92E982AE4404D007F5DF4 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 11A92E972AE4404D007F5DF4 /* Preview Assets.xcassets */; };
+		11A92EA02AE444D7007F5DF4 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11A92E9F2AE444D7007F5DF4 /* main.swift */; };
+		11A92EA22AE44532007F5DF4 /* Flow Work Helper.app in CopyFiles */ = {isa = PBXBuildFile; fileRef = 11A92E8E2AE4404B007F5DF4 /* Flow Work Helper.app */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		11A92EA52AE44543007F5DF4 /* ServiceManagement.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 11A92EA42AE44543007F5DF4 /* ServiceManagement.framework */; };
+		11A92EA72AE44635007F5DF4 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11A92EA62AE44635007F5DF4 /* SettingsView.swift */; };
+		11A92EA92AE44658007F5DF4 /* SettingsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11A92EA82AE44658007F5DF4 /* SettingsViewModel.swift */; };
+		11A92EAC2AE44821007F5DF4 /* AuthState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11A92EAB2AE44821007F5DF4 /* AuthState.swift */; };
+		11A92EAE2AE44A77007F5DF4 /* TodoState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11A92EAD2AE44A77007F5DF4 /* TodoState.swift */; };
+		11A92EB02AE44A9C007F5DF4 /* SessionState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11A92EAF2AE44A9C007F5DF4 /* SessionState.swift */; };
+		11A92EB22AE45AF8007F5DF4 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 11A92EB12AE45AF8007F5DF4 /* Assets.xcassets */; };
+		11A92EB62AE465DB007F5DF4 /* ViewSizeKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11A92EB52AE465DB007F5DF4 /* ViewSizeKey.swift */; };
 		11C839ED2AD7AC9300DE62D2 /* AvatarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11C839EC2AD7AC9300DE62D2 /* AvatarView.swift */; };
 		11D7C1A72AD5E73E00AF1EEE /* Message.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11D7C1A62AD5E73E00AF1EEE /* Message.swift */; };
 		11E5AD2B2ADD84C7004670F0 /* FText.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11E5AD2A2ADD84C7004670F0 /* FText.swift */; };
@@ -52,6 +65,19 @@
 		11E5AD3A2AE2580C004670F0 /* WebRTC in Frameworks */ = {isa = PBXBuildFile; productRef = 11E5AD392AE2580C004670F0 /* WebRTC */; };
 		11E5AD3C2AE268B2004670F0 /* RTC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11E5AD3B2AE268B2004670F0 /* RTC.swift */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		11A92EA12AE4450B007F5DF4 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 8;
+			dstPath = Contents/Library/LoginItems;
+			dstSubfolderSpec = 1;
+			files = (
+				11A92EA22AE44532007F5DF4 /* Flow Work Helper.app in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 1;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		1106E6D82AD8CC100026600A /* AppAssembler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppAssembler.swift; sourceTree = "<group>"; };
@@ -84,6 +110,20 @@
 		116D19182ACFDEF800CB4F1D /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
 		116D191C2ACFE4FA00CB4F1D /* HomeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewModel.swift; sourceTree = "<group>"; };
 		117FDB6E2AD6569E00E39E3F /* Response.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Response.swift; sourceTree = "<group>"; };
+		11A92E862AE4154A007F5DF4 /* TodoItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodoItem.swift; sourceTree = "<group>"; };
+		11A92E8E2AE4404B007F5DF4 /* Flow Work Helper.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Flow Work Helper.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		11A92E902AE4404B007F5DF4 /* Flow_Work_HelperApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Flow_Work_HelperApp.swift; sourceTree = "<group>"; };
+		11A92E972AE4404D007F5DF4 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		11A92E992AE4404D007F5DF4 /* Flow_Work_Helper.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Flow_Work_Helper.entitlements; sourceTree = "<group>"; };
+		11A92E9F2AE444D7007F5DF4 /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
+		11A92EA42AE44543007F5DF4 /* ServiceManagement.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ServiceManagement.framework; path = System/Library/Frameworks/ServiceManagement.framework; sourceTree = SDKROOT; };
+		11A92EA62AE44635007F5DF4 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		11A92EA82AE44658007F5DF4 /* SettingsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewModel.swift; sourceTree = "<group>"; };
+		11A92EAB2AE44821007F5DF4 /* AuthState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthState.swift; sourceTree = "<group>"; };
+		11A92EAD2AE44A77007F5DF4 /* TodoState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodoState.swift; sourceTree = "<group>"; };
+		11A92EAF2AE44A9C007F5DF4 /* SessionState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionState.swift; sourceTree = "<group>"; };
+		11A92EB12AE45AF8007F5DF4 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		11A92EB52AE465DB007F5DF4 /* ViewSizeKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewSizeKey.swift; sourceTree = "<group>"; };
 		11C839EC2AD7AC9300DE62D2 /* AvatarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AvatarView.swift; sourceTree = "<group>"; };
 		11D7C1A62AD5E73E00AF1EEE /* Message.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Message.swift; sourceTree = "<group>"; };
 		11E5AD2A2ADD84C7004670F0 /* FText.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FText.swift; sourceTree = "<group>"; };
@@ -106,8 +146,16 @@
 				114AFDFD2AC76F4E00AB9A8B /* FirebaseAuth in Frameworks */,
 				11E5AD3A2AE2580C004670F0 /* WebRTC in Frameworks */,
 				1147A0DA2AD983E100D6C615 /* Swinject in Frameworks */,
+				11A92EA52AE44543007F5DF4 /* ServiceManagement.framework in Frameworks */,
 				114AFDFF2AC76F4E00AB9A8B /* FirebaseFirestore in Frameworks */,
 				110C43182AD20BC500201CD5 /* NIOWebSocket in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		11A92E8B2AE4404B007F5DF4 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -141,7 +189,9 @@
 			isa = PBXGroup;
 			children = (
 				114AFDE22AC765B700AB9A8B /* Flow Work */,
+				11A92E8F2AE4404B007F5DF4 /* Flow Work Helper */,
 				114AFDE12AC765B700AB9A8B /* Products */,
+				11A92EA32AE44543007F5DF4 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -149,6 +199,7 @@
 			isa = PBXGroup;
 			children = (
 				114AFDE02AC765B700AB9A8B /* Flow Work.app */,
+				11A92E8E2AE4404B007F5DF4 /* Flow Work Helper.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -156,6 +207,7 @@
 		114AFDE22AC765B700AB9A8B /* Flow Work */ = {
 			isa = PBXGroup;
 			children = (
+				11A92EAA2AE4481A007F5DF4 /* States */,
 				1106E6DE2AD8CD830026600A /* Protocols */,
 				1106E6D72AD8CC070026600A /* Architecture */,
 				11C839EB2AD7AC8800DE62D2 /* Components */,
@@ -205,6 +257,7 @@
 				11E5AD3B2AE268B2004670F0 /* RTC.swift */,
 				117FDB6E2AD6569E00E39E3F /* Response.swift */,
 				11E5AD302AE1E70B004670F0 /* Todo.swift */,
+				11A92EB52AE465DB007F5DF4 /* ViewSizeKey.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -216,6 +269,7 @@
 				116D19062ACFD67B00CB4F1D /* LobbyView.swift */,
 				116D19182ACFDEF800CB4F1D /* HomeView.swift */,
 				110C430D2AD052FF00201CD5 /* SessionView.swift */,
+				11A92EA62AE44635007F5DF4 /* SettingsView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -226,6 +280,7 @@
 				116D19082ACFD75300CB4F1D /* LobbyViewModel.swift */,
 				116D191C2ACFE4FA00CB4F1D /* HomeViewModel.swift */,
 				110C43112AD0997A00201CD5 /* SessionViewModel.swift */,
+				11A92EA82AE44658007F5DF4 /* SettingsViewModel.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -246,12 +301,51 @@
 			path = Modifiers;
 			sourceTree = "<group>";
 		};
+		11A92E8F2AE4404B007F5DF4 /* Flow Work Helper */ = {
+			isa = PBXGroup;
+			children = (
+				11A92E902AE4404B007F5DF4 /* Flow_Work_HelperApp.swift */,
+				11A92E9F2AE444D7007F5DF4 /* main.swift */,
+				11A92E992AE4404D007F5DF4 /* Flow_Work_Helper.entitlements */,
+				11A92E962AE4404D007F5DF4 /* Preview Content */,
+				11A92EB12AE45AF8007F5DF4 /* Assets.xcassets */,
+			);
+			path = "Flow Work Helper";
+			sourceTree = "<group>";
+		};
+		11A92E962AE4404D007F5DF4 /* Preview Content */ = {
+			isa = PBXGroup;
+			children = (
+				11A92E972AE4404D007F5DF4 /* Preview Assets.xcassets */,
+			);
+			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		11A92EA32AE44543007F5DF4 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				11A92EA42AE44543007F5DF4 /* ServiceManagement.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		11A92EAA2AE4481A007F5DF4 /* States */ = {
+			isa = PBXGroup;
+			children = (
+				11A92EAB2AE44821007F5DF4 /* AuthState.swift */,
+				11A92EAD2AE44A77007F5DF4 /* TodoState.swift */,
+				11A92EAF2AE44A9C007F5DF4 /* SessionState.swift */,
+			);
+			path = States;
+			sourceTree = "<group>";
+		};
 		11C839EB2AD7AC8800DE62D2 /* Components */ = {
 			isa = PBXGroup;
 			children = (
 				11C839EC2AD7AC9300DE62D2 /* AvatarView.swift */,
 				11E5AD2A2ADD84C7004670F0 /* FText.swift */,
 				11E5AD322AE21F28004670F0 /* MarqueeText.swift */,
+				11A92E862AE4154A007F5DF4 /* TodoItem.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -266,6 +360,7 @@
 				114AFDDC2AC765B700AB9A8B /* Sources */,
 				114AFDDD2AC765B700AB9A8B /* Frameworks */,
 				114AFDDE2AC765B700AB9A8B /* Resources */,
+				11A92EA12AE4450B007F5DF4 /* CopyFiles */,
 			);
 			buildRules = (
 			);
@@ -285,6 +380,23 @@
 			productReference = 114AFDE02AC765B700AB9A8B /* Flow Work.app */;
 			productType = "com.apple.product-type.application";
 		};
+		11A92E8D2AE4404B007F5DF4 /* Flow Work Helper */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 11A92E9A2AE4404D007F5DF4 /* Build configuration list for PBXNativeTarget "Flow Work Helper" */;
+			buildPhases = (
+				11A92E8A2AE4404B007F5DF4 /* Sources */,
+				11A92E8B2AE4404B007F5DF4 /* Frameworks */,
+				11A92E8C2AE4404B007F5DF4 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "Flow Work Helper";
+			productName = "Flow Work Helper";
+			productReference = 11A92E8E2AE4404B007F5DF4 /* Flow Work Helper.app */;
+			productType = "com.apple.product-type.application";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -296,6 +408,9 @@
 				LastUpgradeCheck = 1430;
 				TargetAttributes = {
 					114AFDDF2AC765B700AB9A8B = {
+						CreatedOnToolsVersion = 14.3.1;
+					};
+					11A92E8D2AE4404B007F5DF4 = {
 						CreatedOnToolsVersion = 14.3.1;
 					};
 				};
@@ -321,6 +436,7 @@
 			projectRoot = "";
 			targets = (
 				114AFDDF2AC765B700AB9A8B /* Flow Work */,
+				11A92E8D2AE4404B007F5DF4 /* Flow Work Helper */,
 			);
 		};
 /* End PBXProject section */
@@ -336,6 +452,15 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		11A92E8C2AE4404B007F5DF4 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				11A92EB22AE45AF8007F5DF4 /* Assets.xcassets in Resources */,
+				11A92E982AE4404D007F5DF4 /* Preview Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -343,10 +468,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				11A92E872AE4154A007F5DF4 /* TodoItem.swift in Sources */,
 				1147A0D12AD8D48E00D6C615 /* SessionServiceProtocol.swift in Sources */,
 				11E5AD332AE21F28004670F0 /* MarqueeText.swift in Sources */,
+				11A92EAC2AE44821007F5DF4 /* AuthState.swift in Sources */,
 				11E5AD352AE2561A004670F0 /* RoomService.swift in Sources */,
 				1147A0D32AD8DC4500D6C615 /* StoreService.swift in Sources */,
+				11A92EB62AE465DB007F5DF4 /* ViewSizeKey.swift in Sources */,
 				11E5AD372AE2563B004670F0 /* RoomServiceProtocol.swift in Sources */,
 				11E5AD2F2AE1E52D004670F0 /* TodoServiceProtocol.swift in Sources */,
 				116D191D2ACFE4FA00CB4F1D /* HomeViewModel.swift in Sources */,
@@ -355,6 +483,7 @@
 				11E5AD2D2ADECB9B004670F0 /* TodoService.swift in Sources */,
 				110C43122AD0997A00201CD5 /* SessionViewModel.swift in Sources */,
 				1106E6DB2AD8CC790026600A /* CoordinatorAssembly.swift in Sources */,
+				11A92EA92AE44658007F5DF4 /* SettingsViewModel.swift in Sources */,
 				116D19072ACFD67B00CB4F1D /* LobbyView.swift in Sources */,
 				116D19092ACFD75300CB4F1D /* LobbyViewModel.swift in Sources */,
 				116D18FF2ACFD2D200CB4F1D /* Session.swift in Sources */,
@@ -363,11 +492,14 @@
 				11D7C1A72AD5E73E00AF1EEE /* Message.swift in Sources */,
 				114AFDE62AC765B700AB9A8B /* AppView.swift in Sources */,
 				116D19192ACFDEF800CB4F1D /* HomeView.swift in Sources */,
+				11A92EA72AE44635007F5DF4 /* SettingsView.swift in Sources */,
 				1106E6E02AD8CD8C0026600A /* AuthServiceProtocol.swift in Sources */,
 				11E5AD2B2ADD84C7004670F0 /* FText.swift in Sources */,
+				11A92EB02AE44A9C007F5DF4 /* SessionState.swift in Sources */,
 				11E5AD3C2AE268B2004670F0 /* RTC.swift in Sources */,
 				116D19012ACFD34B00CB4F1D /* User.swift in Sources */,
 				1147A0D52AD8DC6C00D6C615 /* StoreServiceProtocol.swift in Sources */,
+				11A92EAE2AE44A77007F5DF4 /* TodoState.swift in Sources */,
 				116D19122ACFDD1D00CB4F1D /* AppCoordinator.swift in Sources */,
 				116D18F92ACFB07400CB4F1D /* AuthService.swift in Sources */,
 				116D19172ACFDE4D00CB4F1D /* StandardFrameModifer.swift in Sources */,
@@ -377,6 +509,15 @@
 				1106E6D92AD8CC100026600A /* AppAssembler.swift in Sources */,
 				110C430E2AD052FF00201CD5 /* SessionView.swift in Sources */,
 				116D18F32ACF8A7700CB4F1D /* SessionService.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		11A92E8A2AE4404B007F5DF4 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				11A92EA02AE444D7007F5DF4 /* main.swift in Sources */,
+				11A92E912AE4404B007F5DF4 /* Flow_Work_HelperApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -504,7 +645,7 @@
 				CODE_SIGN_ENTITLEMENTS = "Flow Work/Flow_Work.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 3;
+				CURRENT_PROJECT_VERSION = 4;
 				DEVELOPMENT_ASSET_PATHS = "\"Flow Work/Preview Content\"";
 				DEVELOPMENT_TEAM = 7574Y67WJ7;
 				ENABLE_HARDENED_RUNTIME = YES;
@@ -521,6 +662,7 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = school.rev.flowwork;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 			};
@@ -534,7 +676,7 @@
 				CODE_SIGN_ENTITLEMENTS = "Flow Work/Flow_Work.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 3;
+				CURRENT_PROJECT_VERSION = 4;
 				DEVELOPMENT_ASSET_PATHS = "\"Flow Work/Preview Content\"";
 				DEVELOPMENT_TEAM = 7574Y67WJ7;
 				ENABLE_HARDENED_RUNTIME = YES;
@@ -551,6 +693,71 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = school.rev.flowwork;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+		11A92E9B2AE4404D007F5DF4 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = "Flow Work Helper/Flow_Work_Helper.entitlements";
+				CODE_SIGN_IDENTITY = "Apple Development";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Distribution";
+				CODE_SIGN_STYLE = Manual;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "\"Flow Work Helper/Preview Content\"";
+				DEVELOPMENT_TEAM = 7574Y67WJ7;
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = "Flow Work Helper";
+				INFOPLIST_KEY_LSBackgroundOnly = YES;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "school.rev.flowwork-helper";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		11A92E9C2AE4404D007F5DF4 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = "Flow Work Helper/Flow_Work_Helper.entitlements";
+				CODE_SIGN_IDENTITY = "Apple Development";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Distribution";
+				CODE_SIGN_STYLE = Manual;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "\"Flow Work Helper/Preview Content\"";
+				DEVELOPMENT_TEAM = 7574Y67WJ7;
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = "Flow Work Helper";
+				INFOPLIST_KEY_LSBackgroundOnly = YES;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "school.rev.flowwork-helper";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 			};
@@ -573,6 +780,15 @@
 			buildConfigurations = (
 				114AFDF02AC765B800AB9A8B /* Debug */,
 				114AFDF12AC765B800AB9A8B /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		11A92E9A2AE4404D007F5DF4 /* Build configuration list for PBXNativeTarget "Flow Work Helper" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				11A92E9B2AE4404D007F5DF4 /* Debug */,
+				11A92E9C2AE4404D007F5DF4 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

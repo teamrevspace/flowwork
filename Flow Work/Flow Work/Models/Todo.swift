@@ -12,6 +12,7 @@ struct Todo: Identifiable {
     var id: String?
     var title: String = ""
     var completed: Bool = false
+    var createdAt: Timestamp = Timestamp()
     var userIds: [String]?
-    var updatedAt: Timestamp = Timestamp()
+    var updatedAt: Timestamp?
 }

@@ -11,11 +11,6 @@ import GoogleSignIn
 import Swinject
 import Combine
 
-struct AuthState {
-    var isSignedIn: Bool = false
-    var currentUser: User? = nil
-}
-
 class AuthService: AuthServiceProtocol, ObservableObject {
     weak var delegate: AuthServiceDelegate?
     

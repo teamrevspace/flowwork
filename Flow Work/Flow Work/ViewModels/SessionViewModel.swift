@@ -69,7 +69,7 @@ class SessionViewModel: ObservableObject {
             newTodo.userIds = [currentUserId]
             self.storeService.addTodo(todo: newTodo)
             self.todoService.updateDraftTodo(todo: Todo())
-            self.todoState.isHoveringDeleteButtons.append(false)
+            self.todoState.isHoveringActionButtons.append(false)
         }
     }
     

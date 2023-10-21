@@ -9,15 +9,6 @@ import Foundation
 import Swinject
 import Combine
 
-struct TodoState {
-    var todoItems: [Todo] = []
-    var draftTodo: Todo = Todo()
-    var isTodoListInitialized: Bool = false
-    var isHoveringAddButton: Bool = false
-    var isHoveringDeleteButtons: [Bool] = []
-    var isEditingTextField: [Bool] = []
-}
-
 class TodoService: TodoServiceProtocol, ObservableObject {
     @Published private var state = TodoState()
     
@@ -40,10 +31,10 @@ class TodoService: TodoServiceProtocol, ObservableObject {
     }
     
     func initTodoList(todos: [Todo]) {
-        self.state.todoItems = todos.filter({!$0.completed}).sorted(by: { $1.updatedAt.seconds > $0.updatedAt.seconds })
+        self.state.todoItems = todos.filter({!$0.completed}).sorted(by: { $1.createdAt.seconds > $0.createdAt.seconds })
         
-        self.state.isHoveringDeleteButtons = todos.map({_ in false})
-        self.state.isHoveringDeleteButtons.append(false)
+        self.state.isHoveringActionButtons = todos.map({_ in false})
+        self.state.isHoveringActionButtons.append(false)
         
         self.state.isEditingTextField = todos.map({_ in false})
         
