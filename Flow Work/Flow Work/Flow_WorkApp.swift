@@ -16,13 +16,11 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     var windowController: NSWindowController?
     
     func applicationDidFinishLaunching(_ notification: Notification) {
-        let appView = AppView(coordinator: appAssembler.resolver.resolve(AppCoordinator.self)!)
-        
         statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
         
         guard let menuButton = statusItem?.button else { return }
         menuButton.image = NSImage(systemSymbolName: "water.waves", accessibilityDescription: nil)
-        menuButton.action = #selector(showPopover)
+        menuButton.action = #selector(showWindow)
         
         if let window = NSApplication.shared.windows.first, let screenFrame = NSScreen.main?.frame {
             let windowWidth: CGFloat = 360
@@ -47,14 +45,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         }
     }
     
-        func applicationWillTerminate(_ aNotification: Notification) {
-            // Insert code here to tear down your application
-        }
-    
-    @objc func showPopover() {
-        guard let menuButton = statusItem?.button else { return }
-                
-        windowController?.window?.makeKeyAndOrderFront(nil)
+    @objc func showWindow() {
+        windowController?.window?.makeKeyAndOrderFront(self)
         NSApp.activate(ignoringOtherApps: true)
     }
     

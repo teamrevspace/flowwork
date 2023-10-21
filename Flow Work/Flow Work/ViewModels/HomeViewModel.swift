@@ -49,7 +49,10 @@ class HomeViewModel: ObservableObject {
     }
     
     func fetchTodoList() {
-        guard let currentUserId = self.authState.currentUser?.id else { return }
+        guard let currentUserId = self.authState.currentUser?.id else {
+            self.todoState.isTodoListInitialized = false
+            return
+        }
         self.storeService.findTodosByUserId(userId: currentUserId) { todos in
             self.todoService.initTodoList(todos: todos)
         }
