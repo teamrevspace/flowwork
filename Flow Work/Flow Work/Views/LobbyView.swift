@@ -25,7 +25,6 @@ struct LobbyView: View {
                 .tag(2)
         }
         .padding()
-        .standardFrame()
         .onAppear() {
             viewModel.fetchSessionList()
         }
@@ -42,7 +41,7 @@ struct CreateSessionView: View {
     @ObservedObject var viewModel: LobbyViewModel
     
     var body: some View {
-        VStack{
+        VStack {
             TextField("Session name", text:  $viewModel.newSessionName)
                 .textFieldStyle(RoundedBorderTextFieldStyle())
             HStack{
@@ -65,6 +64,8 @@ struct CreateSessionView: View {
                 }
             }
             
+            Spacer()
+            
             HStack(spacing: 10) {
                 Button(action: {
                     viewModel.returnToHome()
@@ -81,7 +82,7 @@ struct CreateSessionView: View {
                 }
             }
         }
-        .padding(10)
+        .padding()
     }
 }
 
@@ -90,13 +91,13 @@ struct JoinSessionView: View {
     @State private var selectedSessionId: String?
     
     var body: some View {
-        VStack() {
+        VStack {
             TextField("Enter session code or URL", text:  $viewModel.joinSessionCode)
                 .textFieldStyle(RoundedBorderTextFieldStyle())
             List(viewModel.sessionState.availableSessions) { session in
                 MarqueeText(text: session.name)
                     .foregroundColor(selectedSessionId == session.id ? Color.white : Color.primary)
-                    .padding(.init(top: 5, leading: 10, bottom: 5, trailing: 10))
+                    .padding(.init(top: 5, leading: 10, bottom: 10, trailing: 10))
                     .contentShape(Rectangle())
                     .background(selectedSessionId == session.id ? Color.blue : Color.clear)
                     .gesture(TapGesture(count: 2).onEnded {
@@ -123,6 +124,6 @@ struct JoinSessionView: View {
                 }
             }
         }
-        .padding(10)
+        .padding()
     }
 }

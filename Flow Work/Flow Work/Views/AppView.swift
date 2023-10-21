@@ -11,10 +11,6 @@ struct AppView: View {
     @ObservedObject var coordinator: AppCoordinator
     
     var body: some View {
-        GeometryReader { geometry in
-            coordinator.currentView
-                .frame(width: geometry.size.width, height: geometry.size.height, alignment: .topLeading)
-                .padding(0)
-        }
+        coordinator.currentView
     }
 }

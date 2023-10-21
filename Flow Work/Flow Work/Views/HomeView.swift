@@ -80,8 +80,8 @@ struct HomeView: View {
                                         .padding(1.5)
                                 }
                                 .buttonStyle(.borderless)
-                                .foregroundColor(viewModel.todoState.isHoveringDeleteButtons[index] ? Color.secondary : viewModel.todoState.isEditingTextField[index] ? Color.secondary.opacity(0.75) : Color.secondary.opacity(0.5))
-                                .background(viewModel.todoState.isHoveringDeleteButtons[index] ? Color.secondary.opacity(0.4) : viewModel.todoState.isEditingTextField[index] ? Color.secondary.opacity(0.25) : Color.clear)
+                                .foregroundColor(viewModel.todoState.isHoveringDeleteButtons[index] ? Color.white : viewModel.todoState.isEditingTextField[index] ? Color.white.opacity(0.75) : Color.secondary.opacity(0.5))
+                                .background(viewModel.todoState.isHoveringDeleteButtons[index] ? (viewModel.todoState.isEditingTextField[index] ? Color.blue.opacity(0.4) : Color.secondary.opacity(0.4) ) : viewModel.todoState.isEditingTextField[index] ? Color.blue.opacity(0.25) : Color.clear)
                                 .cornerRadius(5)
                                 .onHover { isHovering in
                                     viewModel.todoState.isHoveringDeleteButtons[index] = isHovering
@@ -122,8 +122,8 @@ struct HomeView: View {
                             }
                             .buttonStyle(.borderless)
                             .contentShape(Rectangle())
-                            .foregroundColor(viewModel.todoState.isHoveringAddButton ? Color.secondary : Color.secondary.opacity(0.75))
-                            .background(viewModel.todoState.isHoveringAddButton ? Color.secondary.opacity(0.4) : Color.secondary.opacity(0.25))
+                            .foregroundColor(viewModel.todoState.isHoveringAddButton ? Color.blue : Color.blue.opacity(0.75))
+                            .background(viewModel.todoState.isHoveringAddButton ? Color.blue.opacity(0.4) : Color.blue.opacity(0.25))
                             .cornerRadius(5)
                             .disabled(viewModel.todoState.draftTodo.title.isEmpty)
                             .onHover { isHovering in
@@ -134,8 +134,6 @@ struct HomeView: View {
                         }
                     }
                     .padding(.vertical, 2.5)
-                    
-                    Spacer()
                 }
                 .padding(.bottom, 10)
             } else {
@@ -161,7 +159,6 @@ struct HomeView: View {
             }
         }
         .padding()
-        .standardFrame()
         .onChange(of: viewModel.authState.isSignedIn) { value in
             viewModel.todoState.isTodoListInitialized = false
             if (viewModel.authState.isSignedIn) {
