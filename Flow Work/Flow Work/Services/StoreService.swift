@@ -119,7 +119,7 @@ class StoreService: StoreServiceProtocol, ObservableObject {
                     let title = data["title"] as? String ?? ""
                     let completed = data["completed"] as? Bool ?? false
                     let userIds = data["userIds"] as? [String]
-                    let updatedAt = data["updatedAt"] as? Date ?? Date()
+                    let updatedAt = data["updatedAt"] as? Timestamp ?? Timestamp()
                     return Todo(id: docId, title: title, completed: completed, userIds: userIds, updatedAt: updatedAt)
                 })
                 completion(todos)

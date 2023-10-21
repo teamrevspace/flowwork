@@ -15,7 +15,6 @@ struct SessionView: View {
         VStack {
             if viewModel.sessionState.currentSession == nil {
                 VStack(spacing: 10) {
-                    Spacer()
                     ProgressView()
                     Button(action: {
                         viewModel.leaveSession()
@@ -42,6 +41,7 @@ struct SessionView: View {
                             Text("Copy Invite Link")
                         }
                     }
+//                    MARK: - WebRTC Audio Room
 //                    VStack {
 //                        HStack {
 //                            Button(action: {
@@ -102,7 +102,7 @@ struct SessionView: View {
                                             }
                                             .buttonStyle(.borderless)
                                             .foregroundColor(viewModel.todoState.isHoveringDeleteButtons[index] ? Color.white : viewModel.todoState.isEditingTextField[index] ? Color.white.opacity(0.75) : Color.secondary.opacity(0.5))
-                                            .background(viewModel.todoState.isHoveringDeleteButtons[index] ? (viewModel.todoState.isEditingTextField[index] ? Color.blue.opacity(0.4) : Color.secondary.opacity(0.4) ) : viewModel.todoState.isEditingTextField[index] ? Color.blue.opacity(0.25) : Color.clear)
+                                            .background(viewModel.todoState.isHoveringDeleteButtons[index] ? (viewModel.todoState.isEditingTextField[index] ? Color.blue : Color.secondary.opacity(0.4) ) : viewModel.todoState.isEditingTextField[index] ? Color.blue.opacity(0.75) : Color.clear)
                                             .cornerRadius(5)
                                             .onHover { isHovering in
                                                 viewModel.todoState.isHoveringDeleteButtons[index] = isHovering
@@ -112,51 +112,52 @@ struct SessionView: View {
                                     .padding(.vertical, 2.5)
                                 }
                                 
-                                HStack {
-                                    Toggle("", isOn: $viewModel.todoState.draftTodo.completed)
-                                        .onChange(of: viewModel.todoState.draftTodo.completed) { value in
-                                            viewModel.todoService.checkTodoCompleted(index: todoListCount, completed: value)
-                                        }
-                                        .labelsHidden()
-                                    
-                                    TextField("Add new to-do here", text: $viewModel.todoState.draftTodo.title)
-                                        .textFieldStyle(PlainTextFieldStyle())
-                                        .lineLimit(1)
-                                        .truncationMode(.tail)
-                                        .foregroundColor(viewModel.todoState.draftTodo.completed ? Color.primary.opacity(0.5) : Color.primary)
-                                        .focused($focusedField, equals: todoListCount)
-                                        .frame(maxWidth: .infinity)
-                                        .onSubmit {
-                                            viewModel.addDraftTodo()
-                                            focusedField = todoListCount
-                                        }
-                                    
-                                    if (!viewModel.todoState.draftTodo.title.isEmpty && !viewModel.todoState.draftTodo.completed) {
-                                        Button(action: {
-                                            viewModel.addDraftTodo()
-                                            focusedField = todoListCount
-                                        }) {
-                                            HStack {
-                                                Image(systemName: "plus")
-                                                    .padding(1.5)
+                                if (viewModel.todoState.todoItems.count < 10) {
+                                    HStack {
+                                        Toggle("", isOn: $viewModel.todoState.draftTodo.completed)
+                                            .onChange(of: viewModel.todoState.draftTodo.completed) { value in
+                                                viewModel.todoService.checkTodoCompleted(index: todoListCount, completed: value)
                                             }
-                                            .background(Color.clear)
-                                        }
-                                        .buttonStyle(.borderless)
-                                        .contentShape(Rectangle())
-                                        .foregroundColor(viewModel.todoState.isHoveringAddButton ? Color.blue : Color.blue.opacity(0.75))
-                                        .background(viewModel.todoState.isHoveringAddButton ? Color.blue.opacity(0.4) : Color.blue.opacity(0.25))
-                                        .cornerRadius(5)
-                                        .disabled(viewModel.todoState.draftTodo.title.isEmpty)
-                                        .onHover { isHovering in
-                                            if (!viewModel.todoState.draftTodo.title.isEmpty) {
-                                                viewModel.todoState.isHoveringAddButton = isHovering
+                                            .labelsHidden()
+                                        
+                                        TextField("Add new to-do here", text: $viewModel.todoState.draftTodo.title)
+                                            .textFieldStyle(PlainTextFieldStyle())
+                                            .lineLimit(1)
+                                            .truncationMode(.tail)
+                                            .foregroundColor(viewModel.todoState.draftTodo.completed ? Color.primary.opacity(0.5) : Color.primary)
+                                            .focused($focusedField, equals: todoListCount)
+                                            .frame(maxWidth: .infinity)
+                                            .onSubmit {
+                                                viewModel.addDraftTodo()
+                                                focusedField = todoListCount
+                                            }
+                                        
+                                        if (!viewModel.todoState.draftTodo.title.isEmpty && !viewModel.todoState.draftTodo.completed) {
+                                            Button(action: {
+                                                viewModel.addDraftTodo()
+                                                focusedField = todoListCount
+                                            }) {
+                                                HStack {
+                                                    Image(systemName: "plus")
+                                                        .padding(1.5)
+                                                }
+                                                .background(Color.clear)
+                                            }
+                                            .buttonStyle(.borderless)
+                                            .contentShape(Rectangle())
+                                            .foregroundColor(viewModel.todoState.isHoveringAddButton ? Color.blue : Color.blue.opacity(0.75))
+                                            .background(viewModel.todoState.isHoveringAddButton ? Color.blue.opacity(0.4) : Color.blue.opacity(0.25))
+                                            .cornerRadius(5)
+                                            .disabled(viewModel.todoState.draftTodo.title.isEmpty)
+                                            .onHover { isHovering in
+                                                if (!viewModel.todoState.draftTodo.title.isEmpty) {
+                                                    viewModel.todoState.isHoveringAddButton = isHovering
+                                                }
                                             }
                                         }
                                     }
+                                    .padding(.vertical, 2.5)
                                 }
-                                .padding(.vertical, 2.5)
-                                
                                 Spacer()
                             }
                         } else {

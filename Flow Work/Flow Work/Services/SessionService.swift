@@ -69,7 +69,6 @@ class SessionService: SessionServiceProtocol, ObservableObject {
         var urlComponents = URLComponents()
         urlComponents.scheme = "wss"
         urlComponents.host = "api.flowwork.xyz"
-        //urlComponents.port = 4000
         urlComponents.path = "/session/websocket"
         urlComponents.queryItems = [
             URLQueryItem(name: "user_id", value: userId),

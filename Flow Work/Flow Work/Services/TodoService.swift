@@ -40,7 +40,7 @@ class TodoService: TodoServiceProtocol, ObservableObject {
     }
     
     func initTodoList(todos: [Todo]) {
-        self.state.todoItems = todos.filter({!$0.completed}).sorted(by: {$0.updatedAt.timeIntervalSince1970 < $1.updatedAt.timeIntervalSince1970})
+        self.state.todoItems = todos.filter({!$0.completed}).sorted(by: { $1.updatedAt.seconds > $0.updatedAt.seconds })
         
         self.state.isHoveringDeleteButtons = todos.map({_ in false})
         self.state.isHoveringDeleteButtons.append(false)

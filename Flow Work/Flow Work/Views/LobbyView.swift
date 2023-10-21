@@ -25,6 +25,7 @@ struct LobbyView: View {
                 .tag(2)
         }
         .padding()
+        .standardFrame()
         .onAppear() {
             viewModel.fetchSessionList()
         }

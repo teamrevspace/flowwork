@@ -6,11 +6,12 @@
 //
 
 import Foundation
+import Firebase
 
 struct Todo: Identifiable {
     var id: String?
     var title: String = ""
     var completed: Bool = false
     var userIds: [String]?
-    var updatedAt: Date = Date()
+    var updatedAt: Timestamp = Timestamp()
 }
