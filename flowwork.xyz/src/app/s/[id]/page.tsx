@@ -12,7 +12,7 @@ export default function JoinSessionPage({ params }: { params: { id: string } }) 
   }
 
   const joinSession = useCallback(async () => {
-    redirect(`flowwork://join?sessionId=${params.id}`)
+    document.location = `flowwork://join?sessionId=${params.id}`
   }, [params.id])
 
   useEffect(() => {
