@@ -20,6 +20,7 @@ class LobbyViewModel: ObservableObject {
     @Published var sessionService: SessionServiceProtocol
     @Published var authService: AuthServiceProtocol
     @Published var storeService: StoreServiceProtocol
+    @Published var apiService: APIServiceProtocol
     
     @Published var authState = AuthState()
     @Published var sessionState = SessionState()
@@ -37,6 +38,7 @@ class LobbyViewModel: ObservableObject {
         self.sessionService = resolver.resolve(SessionServiceProtocol.self)!
         self.authService = resolver.resolve(AuthServiceProtocol.self)!
         self.storeService = resolver.resolve(StoreServiceProtocol.self)!
+        self.apiService = resolver.resolve(APIServiceProtocol.self)!
         
         authService.statePublisher
             .assign(to: \.authState, on: self)
@@ -49,7 +51,22 @@ class LobbyViewModel: ObservableObject {
     func fetchSessionList() {
         guard let currentUserId = self.authState.currentUser?.id else { return }
         self.storeService.findSessionsByUserId(userId: currentUserId) { sessions in
-            self.sessionService.initSessionList(sessions: sessions)
+            var sessionList = sessions
+            let sessionIds = sessions.map { $0.id }.joined(separator: ",")
+            self.apiService.getUserCounts(sessionIds: sessionIds) { result in
+                switch result {
+                case .success(let userCountsResponse):
+                    for (index, session) in sessionList.enumerated() {
+                        let sessionId = session.id
+                        if let userCount = userCountsResponse[sessionId] {
+                            sessionList[index].onlineUserCount = userCount
+                        }
+                    }
+                case .failure(_):
+                    print(AppError.invalidURLFormat)
+                }
+                self.sessionService.initSessionList(sessions: sessionList)
+            }
         }
     }
     

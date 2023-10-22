@@ -40,7 +40,7 @@ struct TodoItem: View {
                 }
                 .buttonStyle(.borderless)
                 .contentShape(Rectangle())
-                .foregroundColor(isHoveringAction && isEditing ? Color.white : Color.white.opacity(0.5))
+                .foregroundColor(isEditing ? Color.white : Color("Primary").opacity(0.5))
                 .background(isHoveringAction && isEditing ? Color.secondary.opacity(0.75) : isEditing ? Color.secondary.opacity(0.4) : Color.clear)
                 .cornerRadius(5)
                 .onHover { isHovering in
@@ -52,7 +52,7 @@ struct TodoItem: View {
                 .lineLimit(1)
                 .truncationMode(.tail)
                 .textFieldStyle(PlainTextFieldStyle())
-                .foregroundColor(todo.completed ? Color.primary.opacity(0.5) : Color.primary)
+                .foregroundColor(todo.completed ? Color("Primary").opacity(0.5) : Color("Primary"))
                 .frame(maxWidth: .infinity)
                 .onChange(of: todo.title) { newValue in
                     onChange?(newValue)

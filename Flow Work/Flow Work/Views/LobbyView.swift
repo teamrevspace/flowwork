@@ -97,26 +97,28 @@ struct JoinSessionView: View {
                     viewModel.joinSession(viewModel.joinSessionCode)
                 }
             List(viewModel.sessionState.availableSessions) { session in
-                MarqueeText(text: session.name)
-                    .foregroundColor(selectedSessionId == session.id ? Color.white : Color.primary)
-                    .padding(.init(top: 5, leading: 10, bottom: 10, trailing: 10))
-                    .contentShape(Rectangle())
-                    .background(selectedSessionId == session.id ? Color.blue : Color.clear)
-                    .gesture(TapGesture(count: 2).onEnded {
-                        viewModel.joinSession(session.id)
-                    })
-                    .simultaneousGesture(TapGesture().onEnded {
-                        selectedSessionId = session.id
-                    })
-                    .contextMenu {
-                        Button(action: {
-                            if (viewModel.authState.isSignedIn) {
-                                self.viewModel.storeService.removeUserFromSession(userId: viewModel.authState.currentUser!.id, sessionId: session.id)
+                HStack {
+                    SessionItem(session: session)
+                        .foregroundColor(selectedSessionId == session.id ? Color.white : Color.primary)
+                        .padding(.init(top: 5, leading: 10, bottom: 5, trailing: 10))
+                        .contentShape(Rectangle())
+                        .background(selectedSessionId == session.id ? Color.blue : Color.clear)
+                        .gesture(TapGesture(count: 2).onEnded {
+                            viewModel.joinSession(session.id)
+                        })
+                        .simultaneousGesture(TapGesture().onEnded {
+                            selectedSessionId = session.id
+                        })
+                        .contextMenu {
+                            Button(action: {
+                                if (viewModel.authState.isSignedIn) {
+                                    self.viewModel.storeService.removeUserFromSession(userId: viewModel.authState.currentUser!.id, sessionId: session.id)
+                                }
+                            }) {
+                                Text("Remove")
                             }
-                        }) {
-                            Text("Remove")
                         }
-                    }
+                }
             }
             .frame(minHeight: 200)
             .cornerRadius(5)

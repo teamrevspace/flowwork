@@ -62,7 +62,10 @@ class SessionService: SessionServiceProtocol, ObservableObject {
             ]
         }
         
-        guard let url = urlComponents.url else { return }
+        guard let url = urlComponents.url else {
+            print(AppError.invalidURLFormat)
+            return
+        }
         
         var request = URLRequest(url: url)
         if let token = self.authToken {

@@ -16,7 +16,9 @@ struct SessionView: View {
         VStack {
             if (viewModel.sessionState.currentSession == nil || !viewModel.authState.isSignedIn) {
                 VStack(spacing: 10) {
+                    Spacer()
                     ProgressView()
+                    Spacer()
                     Button(action: {
                         viewModel.leaveSession()
                     }) {

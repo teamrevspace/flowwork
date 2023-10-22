@@ -24,6 +24,7 @@ class AppCoordinator: ObservableObject {
     @Published var todoService: TodoServiceProtocol
     @Published var sessionService: SessionServiceProtocol
     @Published var storeService: StoreServiceProtocol
+    @Published var apiService: APIServiceProtocol
     
     @Published var homeViewModel: HomeViewModel
     @Published var sessionViewModel: SessionViewModel
@@ -44,6 +45,7 @@ class AppCoordinator: ObservableObject {
         self.sessionService = resolver.resolve(SessionServiceProtocol.self)!
         self.todoService = resolver.resolve(TodoServiceProtocol.self)!
         self.storeService = resolver.resolve(StoreServiceProtocol.self)!
+        self.apiService = resolver.resolve(APIServiceProtocol.self)!
         
         self.homeViewModel = resolver.resolve(HomeViewModel.self)!
         self.sessionViewModel = resolver.resolve(SessionViewModel.self)!

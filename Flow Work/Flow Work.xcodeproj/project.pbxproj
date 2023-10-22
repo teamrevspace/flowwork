@@ -38,7 +38,6 @@
 		116D19172ACFDE4D00CB4F1D /* StandardFrameModifer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 116D19162ACFDE4D00CB4F1D /* StandardFrameModifer.swift */; };
 		116D19192ACFDEF800CB4F1D /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 116D19182ACFDEF800CB4F1D /* HomeView.swift */; };
 		116D191D2ACFE4FA00CB4F1D /* HomeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 116D191C2ACFE4FA00CB4F1D /* HomeViewModel.swift */; };
-		117FDB6F2AD6569E00E39E3F /* Response.swift in Sources */ = {isa = PBXBuildFile; fileRef = 117FDB6E2AD6569E00E39E3F /* Response.swift */; };
 		11A92E872AE4154A007F5DF4 /* TodoItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11A92E862AE4154A007F5DF4 /* TodoItem.swift */; };
 		11A92E912AE4404B007F5DF4 /* Flow_Work_HelperApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11A92E902AE4404B007F5DF4 /* Flow_Work_HelperApp.swift */; };
 		11A92E982AE4404D007F5DF4 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 11A92E972AE4404D007F5DF4 /* Preview Assets.xcassets */; };
@@ -51,18 +50,19 @@
 		11A92EAE2AE44A77007F5DF4 /* TodoState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11A92EAD2AE44A77007F5DF4 /* TodoState.swift */; };
 		11A92EB02AE44A9C007F5DF4 /* SessionState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11A92EAF2AE44A9C007F5DF4 /* SessionState.swift */; };
 		11A92EB22AE45AF8007F5DF4 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 11A92EB12AE45AF8007F5DF4 /* Assets.xcassets */; };
-		11A92EB62AE465DB007F5DF4 /* ViewSizeKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11A92EB52AE465DB007F5DF4 /* ViewSizeKey.swift */; };
 		11A92EBC2AE4C317007F5DF4 /* NetworkService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11A92EBB2AE4C317007F5DF4 /* NetworkService.swift */; };
 		11A92EBE2AE4C36F007F5DF4 /* NetworkServiceProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11A92EBD2AE4C36F007F5DF4 /* NetworkServiceProtocol.swift */; };
 		11A92EC02AE4F7C5007F5DF4 /* AccountMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11A92EBF2AE4F7C5007F5DF4 /* AccountMenu.swift */; };
-		11A92EC52AE55D12007F5DF4 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 11A92EC42AE55D12007F5DF4 /* GoogleService-Info.plist */; };
+		11A92ECD2AE56D9B007F5DF4 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 11A92ECC2AE56D9B007F5DF4 /* GoogleService-Info.plist */; };
+		11A92ECF2AE56DC9007F5DF4 /* APIService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11A92ECE2AE56DC9007F5DF4 /* APIService.swift */; };
+		11A92ED12AE56EBF007F5DF4 /* APIServiceProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11A92ED02AE56EBF007F5DF4 /* APIServiceProtocol.swift */; };
+		11A92ED32AE56F01007F5DF4 /* API.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11A92ED22AE56F01007F5DF4 /* API.swift */; };
 		11C839ED2AD7AC9300DE62D2 /* AvatarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11C839EC2AD7AC9300DE62D2 /* AvatarView.swift */; };
-		11D7C1A72AD5E73E00AF1EEE /* Message.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11D7C1A62AD5E73E00AF1EEE /* Message.swift */; };
 		11E5AD2B2ADD84C7004670F0 /* FText.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11E5AD2A2ADD84C7004670F0 /* FText.swift */; };
 		11E5AD2D2ADECB9B004670F0 /* TodoService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11E5AD2C2ADECB9B004670F0 /* TodoService.swift */; };
 		11E5AD2F2AE1E52D004670F0 /* TodoServiceProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11E5AD2E2AE1E52D004670F0 /* TodoServiceProtocol.swift */; };
 		11E5AD312AE1E70B004670F0 /* Todo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11E5AD302AE1E70B004670F0 /* Todo.swift */; };
-		11E5AD332AE21F28004670F0 /* MarqueeText.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11E5AD322AE21F28004670F0 /* MarqueeText.swift */; };
+		11E5AD332AE21F28004670F0 /* SessionItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11E5AD322AE21F28004670F0 /* SessionItem.swift */; };
 		11E5AD352AE2561A004670F0 /* RoomService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11E5AD342AE2561A004670F0 /* RoomService.swift */; };
 		11E5AD372AE2563B004670F0 /* RoomServiceProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11E5AD362AE2563B004670F0 /* RoomServiceProtocol.swift */; };
 		11E5AD3A2AE2580C004670F0 /* WebRTC in Frameworks */ = {isa = PBXBuildFile; productRef = 11E5AD392AE2580C004670F0 /* WebRTC */; };
@@ -110,7 +110,6 @@
 		116D19162ACFDE4D00CB4F1D /* StandardFrameModifer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StandardFrameModifer.swift; sourceTree = "<group>"; };
 		116D19182ACFDEF800CB4F1D /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
 		116D191C2ACFE4FA00CB4F1D /* HomeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewModel.swift; sourceTree = "<group>"; };
-		117FDB6E2AD6569E00E39E3F /* Response.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Response.swift; sourceTree = "<group>"; };
 		11A92E862AE4154A007F5DF4 /* TodoItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodoItem.swift; sourceTree = "<group>"; };
 		11A92E8E2AE4404B007F5DF4 /* Flow Work Helper.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Flow Work Helper.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		11A92E902AE4404B007F5DF4 /* Flow_Work_HelperApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Flow_Work_HelperApp.swift; sourceTree = "<group>"; };
@@ -124,20 +123,21 @@
 		11A92EAD2AE44A77007F5DF4 /* TodoState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodoState.swift; sourceTree = "<group>"; };
 		11A92EAF2AE44A9C007F5DF4 /* SessionState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionState.swift; sourceTree = "<group>"; };
 		11A92EB12AE45AF8007F5DF4 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		11A92EB52AE465DB007F5DF4 /* ViewSizeKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewSizeKey.swift; sourceTree = "<group>"; };
 		11A92EBB2AE4C317007F5DF4 /* NetworkService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkService.swift; sourceTree = "<group>"; };
 		11A92EBD2AE4C36F007F5DF4 /* NetworkServiceProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkServiceProtocol.swift; sourceTree = "<group>"; };
 		11A92EBF2AE4F7C5007F5DF4 /* AccountMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountMenu.swift; sourceTree = "<group>"; };
-		11A92EC42AE55D12007F5DF4 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		11A92EC82AE55ED8007F5DF4 /* Flow-Work-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "Flow-Work-Info.plist"; sourceTree = SOURCE_ROOT; };
 		11A92ECA2AE55F23007F5DF4 /* Flow-Work-Helper-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "Flow-Work-Helper-Info.plist"; sourceTree = SOURCE_ROOT; };
+		11A92ECC2AE56D9B007F5DF4 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		11A92ECE2AE56DC9007F5DF4 /* APIService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIService.swift; sourceTree = "<group>"; };
+		11A92ED02AE56EBF007F5DF4 /* APIServiceProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIServiceProtocol.swift; sourceTree = "<group>"; };
+		11A92ED22AE56F01007F5DF4 /* API.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = API.swift; sourceTree = "<group>"; };
 		11C839EC2AD7AC9300DE62D2 /* AvatarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AvatarView.swift; sourceTree = "<group>"; };
-		11D7C1A62AD5E73E00AF1EEE /* Message.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Message.swift; sourceTree = "<group>"; };
 		11E5AD2A2ADD84C7004670F0 /* FText.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FText.swift; sourceTree = "<group>"; };
 		11E5AD2C2ADECB9B004670F0 /* TodoService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodoService.swift; sourceTree = "<group>"; };
 		11E5AD2E2AE1E52D004670F0 /* TodoServiceProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodoServiceProtocol.swift; sourceTree = "<group>"; };
 		11E5AD302AE1E70B004670F0 /* Todo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Todo.swift; sourceTree = "<group>"; };
-		11E5AD322AE21F28004670F0 /* MarqueeText.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarqueeText.swift; sourceTree = "<group>"; };
+		11E5AD322AE21F28004670F0 /* SessionItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionItem.swift; sourceTree = "<group>"; };
 		11E5AD342AE2561A004670F0 /* RoomService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomService.swift; sourceTree = "<group>"; };
 		11E5AD362AE2563B004670F0 /* RoomServiceProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomServiceProtocol.swift; sourceTree = "<group>"; };
 		11E5AD3B2AE268B2004670F0 /* RTC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RTC.swift; sourceTree = "<group>"; };
@@ -189,6 +189,7 @@
 				1147A0D42AD8DC6C00D6C615 /* StoreServiceProtocol.swift */,
 				11E5AD2E2AE1E52D004670F0 /* TodoServiceProtocol.swift */,
 				11A92EBD2AE4C36F007F5DF4 /* NetworkServiceProtocol.swift */,
+				11A92ED02AE56EBF007F5DF4 /* APIServiceProtocol.swift */,
 			);
 			path = Protocols;
 			sourceTree = "<group>";
@@ -215,8 +216,8 @@
 		114AFDE22AC765B700AB9A8B /* Flow Work */ = {
 			isa = PBXGroup;
 			children = (
+				11A92ECC2AE56D9B007F5DF4 /* GoogleService-Info.plist */,
 				11A92EC82AE55ED8007F5DF4 /* Flow-Work-Info.plist */,
-				11A92EC42AE55D12007F5DF4 /* GoogleService-Info.plist */,
 				11A92EAA2AE4481A007F5DF4 /* States */,
 				1106E6DE2AD8CD830026600A /* Protocols */,
 				1106E6D72AD8CC070026600A /* Architecture */,
@@ -252,6 +253,7 @@
 				1147A0D22AD8DC4500D6C615 /* StoreService.swift */,
 				11A92EBB2AE4C317007F5DF4 /* NetworkService.swift */,
 				11E5AD342AE2561A004670F0 /* RoomService.swift */,
+				11A92ECE2AE56DC9007F5DF4 /* APIService.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -262,11 +264,9 @@
 				116D18FE2ACFD2D200CB4F1D /* Session.swift */,
 				116D19002ACFD34B00CB4F1D /* User.swift */,
 				116D190A2ACFDA8F00CB4F1D /* AppError.swift */,
-				11D7C1A62AD5E73E00AF1EEE /* Message.swift */,
 				11E5AD3B2AE268B2004670F0 /* RTC.swift */,
-				117FDB6E2AD6569E00E39E3F /* Response.swift */,
 				11E5AD302AE1E70B004670F0 /* Todo.swift */,
-				11A92EB52AE465DB007F5DF4 /* ViewSizeKey.swift */,
+				11A92ED22AE56F01007F5DF4 /* API.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -354,7 +354,7 @@
 			children = (
 				11C839EC2AD7AC9300DE62D2 /* AvatarView.swift */,
 				11E5AD2A2ADD84C7004670F0 /* FText.swift */,
-				11E5AD322AE21F28004670F0 /* MarqueeText.swift */,
+				11E5AD322AE21F28004670F0 /* SessionItem.swift */,
 				11A92E862AE4154A007F5DF4 /* TodoItem.swift */,
 				11A92EBF2AE4F7C5007F5DF4 /* AccountMenu.swift */,
 			);
@@ -459,7 +459,7 @@
 			files = (
 				114AFDEB2AC765B800AB9A8B /* Preview Assets.xcassets in Resources */,
 				114AFDE82AC765B800AB9A8B /* Assets.xcassets in Resources */,
-				11A92EC52AE55D12007F5DF4 /* GoogleService-Info.plist in Resources */,
+				11A92ECD2AE56D9B007F5DF4 /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -481,11 +481,10 @@
 			files = (
 				11A92E872AE4154A007F5DF4 /* TodoItem.swift in Sources */,
 				1147A0D12AD8D48E00D6C615 /* SessionServiceProtocol.swift in Sources */,
-				11E5AD332AE21F28004670F0 /* MarqueeText.swift in Sources */,
+				11E5AD332AE21F28004670F0 /* SessionItem.swift in Sources */,
 				11A92EAC2AE44821007F5DF4 /* AuthState.swift in Sources */,
 				11E5AD352AE2561A004670F0 /* RoomService.swift in Sources */,
 				1147A0D32AD8DC4500D6C615 /* StoreService.swift in Sources */,
-				11A92EB62AE465DB007F5DF4 /* ViewSizeKey.swift in Sources */,
 				11E5AD372AE2563B004670F0 /* RoomServiceProtocol.swift in Sources */,
 				11E5AD2F2AE1E52D004670F0 /* TodoServiceProtocol.swift in Sources */,
 				116D191D2ACFE4FA00CB4F1D /* HomeViewModel.swift in Sources */,
@@ -495,12 +494,11 @@
 				110C43122AD0997A00201CD5 /* SessionViewModel.swift in Sources */,
 				1106E6DB2AD8CC790026600A /* CoordinatorAssembly.swift in Sources */,
 				11A92EA92AE44658007F5DF4 /* SettingsViewModel.swift in Sources */,
+				11A92ECF2AE56DC9007F5DF4 /* APIService.swift in Sources */,
 				116D19072ACFD67B00CB4F1D /* LobbyView.swift in Sources */,
 				116D19092ACFD75300CB4F1D /* LobbyViewModel.swift in Sources */,
 				116D18FF2ACFD2D200CB4F1D /* Session.swift in Sources */,
 				11E5AD312AE1E70B004670F0 /* Todo.swift in Sources */,
-				117FDB6F2AD6569E00E39E3F /* Response.swift in Sources */,
-				11D7C1A72AD5E73E00AF1EEE /* Message.swift in Sources */,
 				114AFDE62AC765B700AB9A8B /* AppView.swift in Sources */,
 				116D19192ACFDEF800CB4F1D /* HomeView.swift in Sources */,
 				11A92EA72AE44635007F5DF4 /* SettingsView.swift in Sources */,
@@ -510,7 +508,9 @@
 				11E5AD3C2AE268B2004670F0 /* RTC.swift in Sources */,
 				116D19012ACFD34B00CB4F1D /* User.swift in Sources */,
 				1147A0D52AD8DC6C00D6C615 /* StoreServiceProtocol.swift in Sources */,
+				11A92ED12AE56EBF007F5DF4 /* APIServiceProtocol.swift in Sources */,
 				11A92EAE2AE44A77007F5DF4 /* TodoState.swift in Sources */,
+				11A92ED32AE56F01007F5DF4 /* API.swift in Sources */,
 				116D19122ACFDD1D00CB4F1D /* AppCoordinator.swift in Sources */,
 				116D18F92ACFB07400CB4F1D /* AuthService.swift in Sources */,
 				11A92EC02AE4F7C5007F5DF4 /* AccountMenu.swift in Sources */,

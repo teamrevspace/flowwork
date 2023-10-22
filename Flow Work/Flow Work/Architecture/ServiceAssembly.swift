@@ -38,5 +38,10 @@ final class ServiceAssembly: Assembly {
             NetworkService(resolver: r)
         }
         .inObjectScope(.container)
+        
+        container.register(APIServiceProtocol.self) { r in
+            APIService(resolver: r)
+        }
+        .inObjectScope(.container)
     }
 }
