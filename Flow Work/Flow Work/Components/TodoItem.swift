@@ -34,12 +34,8 @@ struct TodoItem: View {
                     onAdd()
                 }) {
                     HStack {
-                        if todo.title.isEmpty {
-                            Image(systemName: "arrowshape.forward.fill")
-                        } else {
-                            Image(systemName: "plus")
-                                .padding(1.5)
-                        }
+                        Image(systemName: "plus")
+                            .padding(1.5)
                     }
                     .background(Color.clear)
                 }

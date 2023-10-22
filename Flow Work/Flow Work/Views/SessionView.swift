@@ -132,7 +132,12 @@ struct SessionView: View {
                         
                         HStack {
                             ForEach(viewModel.sessionState.currentSessionUsers ?? []) { user in
-                                AvatarView(avatarURL: user.avatarURL)
+                                Menu {
+                                    Text("\(user.name)")
+                                } label: {
+                                    AvatarView(avatarURL: user.avatarURL)
+                                }
+                                .buttonStyle(PlainButtonStyle())
                             }
                             Spacer()
                             Button(action: {
