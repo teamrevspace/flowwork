@@ -82,6 +82,11 @@ class SessionService: SessionServiceProtocol, ObservableObject {
     func disconnect() {
         webSocketTask?.cancel(with: .goingAway, reason: nil)
         webSocketTask = nil
+        self.state.hasJoinedSession = false
+        self.state.currentSessionUsers = nil
+        self.state.currentSession = nil
+        self.state.availableSessions = []
+        self.state.isConnected = false
     }
     
     func createSession(_ session: Session) {
@@ -109,6 +114,7 @@ class SessionService: SessionServiceProtocol, ObservableObject {
             payload: createSessionPayload
         )
         self.sendMessage(message: createSessionMessage)
+        self.delegate?.didJoinSession(session.id)
     }
     
     func joinSession(_ sessionId: String) {

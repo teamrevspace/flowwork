@@ -68,7 +68,7 @@ struct HomeView: View {
                             showActionButton: !viewModel.todoState.todoItems[index].completed
                         )
                     }
-                    if (viewModel.todoState.todoItems.count < 10) {
+                    if (viewModel.todoState.todoItems.count < 8) {
                         TodoItem(
                             todo: $viewModel.todoState.draftTodo,
                             isEditing: !viewModel.todoState.draftTodo.title.isEmpty,
@@ -111,7 +111,7 @@ struct HomeView: View {
                         VStack(alignment: .leading, spacing: 10) {
                             Text("✅ Add a task")
                                 .font(.headline)
-                            Text("List your daily tasks to organize your workflow and prioritize your day. Add up to 10 tasks at a time.")
+                            Text("List your daily tasks to organize your workflow and prioritize your day. Add up to 8 tasks at a time.")
                         }
                         .backgroundStyle(.secondary.opacity(0.5))
                         

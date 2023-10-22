@@ -12,6 +12,7 @@ protocol HomeViewModelDelegate: AnyObject {
     func showSessionView()
     func showLobbyView()
     func showSettingsView()
+    func showProfileView()
 }
 
 class HomeViewModel: ObservableObject {
@@ -80,5 +81,9 @@ class HomeViewModel: ObservableObject {
     
     func signInWithGoogle() {
         self.authService.signInWithGoogle()
+    }
+    
+    func goToProfile() {
+        self.delegate?.showProfileView()
     }
 }

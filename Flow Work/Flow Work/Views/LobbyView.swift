@@ -120,6 +120,7 @@ struct JoinSessionView: View {
                         }
                 }
             }
+            .padding(0)
             .frame(minHeight: 200)
             .cornerRadius(5)
             .listStyle(.plain)

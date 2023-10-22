@@ -12,6 +12,8 @@
 	<array>
 		<string>group.$(TeamIdentifierPrefix)school.rev.flowwork</string>
 	</array>
+	<key>com.apple.security.device.audio-input</key>
+	<true/>
 	<key>com.apple.security.network.client</key>
 	<true/>
 	<key>keychain-access-groups</key>

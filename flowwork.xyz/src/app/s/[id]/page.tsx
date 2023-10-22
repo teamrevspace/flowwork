@@ -1,15 +1,18 @@
 "use client"
 
 import Link from "next/link";
+import { redirect, useRouter } from "next/navigation";
 import { useCallback, useEffect } from "react";
 
 export default function JoinSessionPage({ params }: { params: { id: string } }) {
+  const router = useRouter();
+
   const downloadApp = async () => {
-    window.location.href = 'https://flowwork.xyz/download'
+    router.push('/download');
   }
 
   const joinSession = useCallback(async () => {
-    window.location.href = `flowwork://join?sessionId=${params.id}`
+    redirect(`flowwork://join?sessionId=${params.id}`)
   }, [params.id])
 
   useEffect(() => {

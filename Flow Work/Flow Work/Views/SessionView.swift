@@ -96,7 +96,7 @@ struct SessionView: View {
                                     )
                                 }
                                 
-                                if (viewModel.todoState.todoItems.count < 10) {
+                                if (viewModel.todoState.todoItems.count < 8) {
                                     TodoItem(
                                         todo: $viewModel.todoState.draftTodo,
                                         isEditing: !viewModel.todoState.draftTodo.title.isEmpty,

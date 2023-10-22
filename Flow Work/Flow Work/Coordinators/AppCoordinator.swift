@@ -15,6 +15,7 @@ enum NavigationEvent {
     case Lobby
     case Session
     case Settings
+    case Profile
 }
 
 class AppCoordinator: ObservableObject {
@@ -30,10 +31,13 @@ class AppCoordinator: ObservableObject {
     @Published var sessionViewModel: SessionViewModel
     @Published var lobbyViewModel: LobbyViewModel
     @Published var settingsViewModel: SettingsViewModel
+    @Published var profileViewModel: ProfileViewModel
     
     @Published var authState = AuthState()
+    @Published var sessionState = SessionState()
     
     private let resolver: Resolver
+    private var appDelegate = NSApplication.shared.delegate as? AppDelegate
     
     private let navigationSubject = PassthroughSubject<NavigationEvent, Never>()
     private var cancellables = Set<AnyCancellable>()
@@ -51,6 +55,7 @@ class AppCoordinator: ObservableObject {
         self.sessionViewModel = resolver.resolve(SessionViewModel.self)!
         self.lobbyViewModel = resolver.resolve(LobbyViewModel.self)!
         self.settingsViewModel = resolver.resolve(SettingsViewModel.self)!
+        self.profileViewModel = resolver.resolve(ProfileViewModel.self)!
         
         self.currentView = AnyView(EmptyView())
         
@@ -59,6 +64,9 @@ class AppCoordinator: ObservableObject {
         
         authService.statePublisher
             .assign(to: \.authState, on: self)
+            .store(in: &cancellables)
+        sessionService.statePublisher
+            .assign(to: \.sessionState, on: self)
             .store(in: &cancellables)
     }
     
@@ -80,6 +88,8 @@ class AppCoordinator: ObservableObject {
                     self.currentView = AnyView(SessionView(viewModel: self.sessionViewModel))
                 case .Settings:
                     self.currentView = AnyView(SettingsView(viewModel: self.settingsViewModel))
+                case .Profile:
+                    self.currentView = AnyView(ProfileView(viewModel: self.profileViewModel))
                 }
             }
             .store(in: &cancellables)
@@ -92,6 +102,7 @@ class AppCoordinator: ObservableObject {
         sessionViewModel.delegate = self
         lobbyViewModel.delegate = self
         settingsViewModel.delegate = self
+        profileViewModel.delegate = self
     }
 }
 
@@ -102,6 +113,11 @@ extension AppCoordinator: AuthServiceDelegate {
     
     func didSignOut() {
         navigate(to: .Home)
+        self.sessionService.disconnect()
+    }
+    
+    func redirectToApp() {
+        self.appDelegate?.openMenuPopover()
     }
 }
 
@@ -112,6 +128,7 @@ extension AppCoordinator: SessionServiceDelegate {
             return
         }
         self.storeService.addUserToSession(userId: userId, sessionId: sessionId)
+        navigate(to: .Session)
     }
     
     func sessionNotFound() {
@@ -125,7 +142,7 @@ extension AppCoordinator: SessionServiceDelegate {
     }
 }
 
-extension AppCoordinator: HomeViewModelDelegate, LobbyViewModelDelegate, SessionViewModelDelegate, SettingsViewModelDelegate {
+extension AppCoordinator: HomeViewModelDelegate, LobbyViewModelDelegate, SessionViewModelDelegate, SettingsViewModelDelegate, ProfileViewModelDelegate {
     func showSessionView() {
         navigate(to: .Session)
     }
@@ -140,5 +157,9 @@ extension AppCoordinator: HomeViewModelDelegate, LobbyViewModelDelegate, Session
     
     func showSettingsView() {
         navigate(to: .Settings)
+    }
+    
+    func showProfileView() {
+        navigate(to: .Profile)
     }
 }

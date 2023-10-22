@@ -13,7 +13,6 @@ import Combine
 
 class AuthService: AuthServiceProtocol, ObservableObject {
     weak var delegate: AuthServiceDelegate?
-    weak var appDelegate = NSApplication.shared.delegate as? AppDelegate
     
     @Published var networkService: NetworkServiceProtocol
     @Published var sessionService: SessionServiceProtocol
@@ -105,8 +104,7 @@ class AuthService: AuthServiceProtocol, ObservableObject {
                     return
                 }
                 
-                self.appDelegate?.openMenuPopover()
-                print("Signed in \(authResult.user.displayName ?? "")")
+                self.delegate?.redirectToApp()
                 
                 let isNewUser = authResult.additionalUserInfo?.isNewUser ?? false
                 if (isNewUser) {

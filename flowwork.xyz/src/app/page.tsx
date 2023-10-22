@@ -9,7 +9,7 @@ import Image from 'next/image';
 import Airtable from 'airtable';
 import { ResponseStatus } from '@/types';
 import Link from 'next/link';
-import { redirect } from 'next/navigation';
+import { redirect, useRouter } from 'next/navigation';
 
 // Airtable API
 Airtable.configure({
@@ -44,6 +44,8 @@ export default function Home() {
   const [ loading, setLoading ] = useState(false);
 
   const emailInputRef = useRef<HTMLInputElement>(null);
+
+  const router = useRouter();
 
   const validateEmail = (email: string) => {
     const validRegex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g;
@@ -110,7 +112,7 @@ export default function Home() {
 
   const downloadApp = () => {
     captureClick('download');
-    window.location.href = 'https://flowwork.xyz/download';
+    router.push('/download');
   }
 
   return (

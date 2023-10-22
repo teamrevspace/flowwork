@@ -96,11 +96,10 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
                 let pathComponents = url.host()?.components(separatedBy: "/")
                 let queryItems = url.query()?.components(separatedBy: "&")
                 let sessionId = queryItems?.first?.components(separatedBy: "=").last
-                let coordinator = appAssembler.resolver.resolve(AppCoordinator.self)
                 let lobbyViewModel = appAssembler.resolver.resolve(LobbyViewModel.self)
                 if let navAction = pathComponents?.first, String(navAction) == "join", sessionId != nil {
                     lobbyViewModel?.joinSession(String(sessionId!))
-                    coordinator?.navigate(to: .Session)
+                    self.openMenuPopover()
                 }
             }
         }

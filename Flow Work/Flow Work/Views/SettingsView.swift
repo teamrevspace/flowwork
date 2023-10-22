@@ -29,19 +29,6 @@ struct SettingsView: View {
                         }
                         .labelsHidden()
                 }
-                if (viewModel.authState.isSignedIn) {
-                    HStack {
-                        Text("Account: \(viewModel.authState.currentUser!.emailAddress)")
-                            .lineLimit(1)
-                            .truncationMode(.tail)
-                        Spacer()
-                        Button(action: {
-                            viewModel.signOut()
-                        }) {
-                            Text("Log out")
-                        }
-                    }
-                }
                 HStack {
                     Link(destination: URL(string: "https://flowwork.xyz")!) {
                         HStack(spacing: 5) {

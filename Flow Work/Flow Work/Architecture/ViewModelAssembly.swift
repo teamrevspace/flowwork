@@ -28,5 +28,10 @@ final class ViewModelAssembly: Assembly {
             SettingsViewModel(resolver: r)
         }
         .inObjectScope(.transient)
+        
+        container.register(ProfileViewModel.self) { r in
+            ProfileViewModel(resolver: r)
+        }
+        .inObjectScope(.transient)
     }
 }

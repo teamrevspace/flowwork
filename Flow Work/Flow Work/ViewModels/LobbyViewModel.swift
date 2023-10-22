@@ -103,7 +103,6 @@ class LobbyViewModel: ObservableObject {
         }
         
         self.sessionService.joinSession(sessionId)
-        self.delegate?.showSessionView()
     }
     
     func returnToHome() {

@@ -57,6 +57,8 @@
 		11A92ECF2AE56DC9007F5DF4 /* APIService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11A92ECE2AE56DC9007F5DF4 /* APIService.swift */; };
 		11A92ED12AE56EBF007F5DF4 /* APIServiceProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11A92ED02AE56EBF007F5DF4 /* APIServiceProtocol.swift */; };
 		11A92ED32AE56F01007F5DF4 /* API.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11A92ED22AE56F01007F5DF4 /* API.swift */; };
+		11A92ED52AE5B724007F5DF4 /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11A92ED42AE5B724007F5DF4 /* ProfileView.swift */; };
+		11A92ED72AE5B776007F5DF4 /* ProfileViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11A92ED62AE5B776007F5DF4 /* ProfileViewModel.swift */; };
 		11C839ED2AD7AC9300DE62D2 /* AvatarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11C839EC2AD7AC9300DE62D2 /* AvatarView.swift */; };
 		11E5AD2B2ADD84C7004670F0 /* FText.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11E5AD2A2ADD84C7004670F0 /* FText.swift */; };
 		11E5AD2D2ADECB9B004670F0 /* TodoService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11E5AD2C2ADECB9B004670F0 /* TodoService.swift */; };
@@ -132,6 +134,8 @@
 		11A92ECE2AE56DC9007F5DF4 /* APIService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIService.swift; sourceTree = "<group>"; };
 		11A92ED02AE56EBF007F5DF4 /* APIServiceProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIServiceProtocol.swift; sourceTree = "<group>"; };
 		11A92ED22AE56F01007F5DF4 /* API.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = API.swift; sourceTree = "<group>"; };
+		11A92ED42AE5B724007F5DF4 /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
+		11A92ED62AE5B776007F5DF4 /* ProfileViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewModel.swift; sourceTree = "<group>"; };
 		11C839EC2AD7AC9300DE62D2 /* AvatarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AvatarView.swift; sourceTree = "<group>"; };
 		11E5AD2A2ADD84C7004670F0 /* FText.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FText.swift; sourceTree = "<group>"; };
 		11E5AD2C2ADECB9B004670F0 /* TodoService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodoService.swift; sourceTree = "<group>"; };
@@ -278,6 +282,7 @@
 				116D19062ACFD67B00CB4F1D /* LobbyView.swift */,
 				116D19182ACFDEF800CB4F1D /* HomeView.swift */,
 				110C430D2AD052FF00201CD5 /* SessionView.swift */,
+				11A92ED42AE5B724007F5DF4 /* ProfileView.swift */,
 				11A92EA62AE44635007F5DF4 /* SettingsView.swift */,
 			);
 			path = Views;
@@ -289,6 +294,7 @@
 				116D19082ACFD75300CB4F1D /* LobbyViewModel.swift */,
 				116D191C2ACFE4FA00CB4F1D /* HomeViewModel.swift */,
 				110C43112AD0997A00201CD5 /* SessionViewModel.swift */,
+				11A92ED62AE5B776007F5DF4 /* ProfileViewModel.swift */,
 				11A92EA82AE44658007F5DF4 /* SettingsViewModel.swift */,
 			);
 			path = ViewModels;
@@ -516,6 +522,8 @@
 				11A92EC02AE4F7C5007F5DF4 /* AccountMenu.swift in Sources */,
 				11A92EBC2AE4C317007F5DF4 /* NetworkService.swift in Sources */,
 				116D19172ACFDE4D00CB4F1D /* StandardFrameModifer.swift in Sources */,
+				11A92ED52AE5B724007F5DF4 /* ProfileView.swift in Sources */,
+				11A92ED72AE5B776007F5DF4 /* ProfileViewModel.swift in Sources */,
 				116D190B2ACFDA8F00CB4F1D /* AppError.swift in Sources */,
 				114AFDE42AC765B700AB9A8B /* Flow_WorkApp.swift in Sources */,
 				11A92EBE2AE4C36F007F5DF4 /* NetworkServiceProtocol.swift in Sources */,
