@@ -46,11 +46,13 @@ defmodule FlowStream.ChannelMonitor do
   end
 
   def handle_call({:get_user_counts, session_ids}, _from, state) do
-    counts = Enum.map(session_ids, fn session_id ->
-      channel = "coworking_session:#{session_id}"
-      users = Map.get(state, channel, [])
-      %{session_id => length(users)}
-    end)
+    counts =
+      Enum.reduce(session_ids, %{}, fn session_id, acc ->
+        channel = "coworking_session:#{session_id}"
+        users = Map.get(state, channel, [])
+        Map.put(acc, session_id, length(users))
+      end)
+
     {:reply, counts, state}
   end
 end
