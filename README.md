@@ -19,6 +19,3 @@ Bonus features:
 - see a list of people you have coworked with (friends) and get notifications when someone invites you to cowork
 
 https://github.com/teamrevspace/flowwork/assets/16998534/01c3498d-b6a3-4da3-ae9b-ad3ed5165cc5
-
-
-

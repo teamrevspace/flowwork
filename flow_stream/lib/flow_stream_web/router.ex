@@ -7,6 +7,7 @@ defmodule FlowStreamWeb.Router do
 
   scope "/api", FlowStreamWeb do
     pipe_through :api
+    get "/user_counts", UserCountController, :index
   end
 
   # Enable LiveDashboard and Swoosh mailbox preview in development
