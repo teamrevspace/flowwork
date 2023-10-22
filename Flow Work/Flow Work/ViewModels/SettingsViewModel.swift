@@ -68,4 +68,8 @@ class SettingsViewModel: ObservableObject {
             }
         }
     }
+    
+    func signOut() {
+        self.authService.signOut()
+    }
 }

@@ -14,7 +14,7 @@ struct SessionView: View {
     var body: some View {
         let todoListCount = viewModel.todoState.todoItems.count
         VStack {
-            if viewModel.sessionState.currentSession == nil {
+            if (viewModel.sessionState.currentSession == nil || !viewModel.authState.isSignedIn) {
                 VStack(spacing: 10) {
                     ProgressView()
                     Button(action: {
@@ -30,6 +30,9 @@ struct SessionView: View {
             } else {
                 VStack {
                     HStack(spacing: 10) {
+                        Circle()
+                            .frame(width: 10, height: 10)
+                            .foregroundColor(viewModel.networkService.connected ? (viewModel.sessionState.isConnected ? .green : .yellow) : .gray)
                         Text("\(viewModel.sessionState.currentSession!.name)")
                             .fontWeight(.bold)
                             .lineLimit(1)
@@ -144,7 +147,9 @@ struct SessionView: View {
                 }
                 .onDisappear() {
                     viewModel.todoState.isTodoListInitialized = false
-                    viewModel.todoService.checkTodoCompleted(index: todoListCount, completed: false)
+                    if (viewModel.authState.isSignedIn) {
+                        viewModel.todoService.checkTodoCompleted(index: todoListCount, completed: false)
+                    }
                 }
             }
         }

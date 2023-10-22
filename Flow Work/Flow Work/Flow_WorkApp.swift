@@ -23,6 +23,15 @@ class BetterHostingController<Content: View>: NSHostingController<Content> {
     }
 }
 
+class InvisibleWindow: NSWindow {
+    override init(contentRect: NSRect, styleMask style: NSWindow.StyleMask, backing backingStoreType: NSWindow.BackingStoreType, defer flag: Bool) {
+        let offscreenRect = NSRect(x: -1000, y: -1000, width: 1, height: 1)
+        super.init(contentRect: offscreenRect, styleMask: [], backing: .buffered, defer: false)
+        self.alphaValue = 0.0
+        self.hasShadow = false
+        self.ignoresMouseEvents = true
+    }
+}
 
 class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
     var popover: NSPopover!
@@ -38,6 +47,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
         let popover = NSPopover()
         popover.contentSize = NSSize(width: 360, height: 360)
         popover.behavior = .transient
+        popover.animates = true
         popover.contentViewController = BetterHostingController(rootView: appView)
         self.popover = popover
         
@@ -56,8 +66,16 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
             if self.popover.isShown {
                 self.popover.performClose(sender)
             } else {
-                self.popover.show(relativeTo: button.bounds, of: button, preferredEdge: NSRectEdge.minY)
+                self.popover.performClose(nil)
+                self.popover.show(relativeTo: button.bounds, of: button, preferredEdge: NSRectEdge.maxY)
             }
+        }
+    }
+    
+    func openMenuPopover() {
+        if let button = self.statusBarItem.button {
+            self.popover.performClose(nil)
+            self.popover.show(relativeTo: button.bounds, of: button, preferredEdge: NSRectEdge.maxY)
         }
     }
     

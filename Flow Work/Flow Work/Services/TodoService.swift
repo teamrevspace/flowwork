@@ -8,6 +8,7 @@
 import Foundation
 import Swinject
 import Combine
+import Firebase
 
 class TodoService: TodoServiceProtocol, ObservableObject {
     @Published private var state = TodoState()

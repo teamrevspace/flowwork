@@ -13,7 +13,9 @@ import Combine
 
 class AuthService: AuthServiceProtocol, ObservableObject {
     weak var delegate: AuthServiceDelegate?
+    weak var appDelegate = NSApplication.shared.delegate as? AppDelegate
     
+    @Published var networkService: NetworkServiceProtocol
     @Published var sessionService: SessionServiceProtocol
     @Published var storeService: StoreServiceProtocol
     
@@ -30,6 +32,7 @@ class AuthService: AuthServiceProtocol, ObservableObject {
     
     init(resolver: Resolver) {
         self.resolver = resolver
+        self.networkService = resolver.resolve(NetworkServiceProtocol.self)!
         self.sessionService = resolver.resolve(SessionServiceProtocol.self)!
         self.storeService = resolver.resolve(StoreServiceProtocol.self)!
         
@@ -56,6 +59,8 @@ class AuthService: AuthServiceProtocol, ObservableObject {
                 }
             }
         })
+        
+        networkService.delegate = self
     }
     
     deinit {
@@ -70,7 +75,9 @@ class AuthService: AuthServiceProtocol, ObservableObject {
         let config = GIDConfiguration(clientID: clientID)
         GIDSignIn.sharedInstance.configuration = config
         
-        GIDSignIn.sharedInstance.signIn(withPresenting: NSApplication.shared.mainWindow!) { result, error in
+        let invisibleWindow = InvisibleWindow()
+        
+        GIDSignIn.sharedInstance.signIn(withPresenting: invisibleWindow) { result, error in
             guard error == nil else {
                 print("Error signing in: \(error!.localizedDescription)")
                 return
@@ -98,7 +105,8 @@ class AuthService: AuthServiceProtocol, ObservableObject {
                     return
                 }
                 
-                print("Signed in to Firebase as: \(authResult.user.email!)")
+                self.appDelegate?.openMenuPopover()
+                print("Signed in \(authResult.user.displayName ?? "")")
                 
                 let isNewUser = authResult.additionalUserInfo?.isNewUser ?? false
                 if (isNewUser) {
@@ -131,5 +139,15 @@ class AuthService: AuthServiceProtocol, ObservableObject {
                 print("Error getting ID token: \(error.localizedDescription)")
             }
         }
+    }
+}
+
+extension AuthService: NetworkServiceDelegate {
+    func didConnect() {
+        self.connectWebSocketIfSignedIn()
+    }
+    
+    func didDisconnect() {
+        self.sessionService.disconnect()
     }
 }

@@ -33,5 +33,10 @@ final class ServiceAssembly: Assembly {
             StoreService(resolver: r)
         }
         .inObjectScope(.container)
+        
+        container.register(NetworkServiceProtocol.self) { r in
+            NetworkService(resolver: r)
+        }
+        .inObjectScope(.container)
     }
 }

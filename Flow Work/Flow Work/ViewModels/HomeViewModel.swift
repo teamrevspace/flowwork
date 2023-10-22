@@ -21,12 +21,11 @@ class HomeViewModel: ObservableObject {
     @Published var sessionService: SessionServiceProtocol
     @Published var todoService: TodoServiceProtocol
     @Published var storeService: StoreServiceProtocol
+    @Published var networkService: NetworkServiceProtocol
     
     @Published var sessionState = SessionState()
     @Published var authState = AuthState()
     @Published var todoState = TodoState()
-    
-    @Published var showAccountPopover: Bool = false
     
     private var cancellables = Set<AnyCancellable>()
     private let resolver: Resolver
@@ -37,6 +36,7 @@ class HomeViewModel: ObservableObject {
         self.sessionService = resolver.resolve(SessionServiceProtocol.self)!
         self.todoService = resolver.resolve(TodoServiceProtocol.self)!
         self.storeService = resolver.resolve(StoreServiceProtocol.self)!
+        self.networkService = resolver.resolve(NetworkServiceProtocol.self)!
         
         sessionService.statePublisher
             .assign(to: \.sessionState, on: self)
@@ -80,10 +80,5 @@ class HomeViewModel: ObservableObject {
     
     func signInWithGoogle() {
         self.authService.signInWithGoogle()
-    }
-    
-    func signOut() {
-        self.showAccountPopover.toggle()
-        self.authService.signOut()
     }
 }

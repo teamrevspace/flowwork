@@ -24,23 +24,19 @@ struct HomeView: View {
                         .font(.title)
                         .fontWeight(.bold)
                 }
-                HStack(spacing: 5) {
-                    Circle()
-                        .frame(width: 10, height: 10)
-                        .foregroundColor(viewModel.sessionState.isConnected ? .green : viewModel.authState.isSignedIn ? .yellow : .gray)
-                    Text(viewModel.sessionState.isConnected ? "connected" : viewModel.authState.isSignedIn ? "connecting" : "disconnected")
+                if (viewModel.authState.isSignedIn) {
+                    HStack(spacing: 5) {
+                        Circle()
+                            .frame(width: 10, height: 10)
+                            .foregroundColor(viewModel.networkService.connected ? (viewModel.sessionState.isConnected ? .green : .yellow) : .gray)
+                        Text(viewModel.networkService.connected ? (viewModel.sessionState.isConnected ? "connected" : "connecting") : "disconnected")
+                    }
                 }
                 Spacer()
-                Button(action: {
-                    viewModel.showAccountPopover.toggle()
-                }) {
-                    AvatarView(avatarURL: viewModel.authState.currentUser?.avatarURL)
-                }
-                .buttonStyle(PlainButtonStyle())
-                .popover(isPresented: self.$viewModel.showAccountPopover) {
-                    ProfilePopover(viewModel: viewModel)
-                }
+                
+                AccountMenu(viewModel: viewModel)
             }
+            .padding(.bottom, 10)
             Spacer()
             if (viewModel.todoState.isTodoListInitialized) {
                 VStack(alignment: .leading) {
@@ -98,28 +94,53 @@ struct HomeView: View {
                     }
                     Spacer()
                 }
-                .padding(.bottom, 10)
             } else {
                 if (viewModel.authState.isSignedIn) {
                     VStack {
                         ProgressView()
                     }
                     .padding(.vertical, 10)
+                } else {
+                    VStack(alignment: .leading, spacing: 20) {
+                        VStack(alignment: .leading, spacing: 10) {
+                            Text("👤 Set up your account")
+                                .font(.headline)
+                            Text("Sign in to sync tasks, join coworking sessions, and track your productivity streaks.")
+                        }
+                        .backgroundStyle(.secondary.opacity(0.5))
+                        
+                        VStack(alignment: .leading, spacing: 10) {
+                            Text("✅ Add a task")
+                                .font(.headline)
+                            Text("List your daily tasks to organize your workflow and prioritize your day. Add up to 10 tasks at a time.")
+                        }
+                        .backgroundStyle(.secondary.opacity(0.5))
+                        
+                        VStack(alignment: .leading, spacing: 10) {
+                            Text("🔗 Join a Session")
+                                .font(.headline)
+                            Text("Start or join a coworking session in one click. Invite your friends to kickstart your collaborative productivity journey.")
+                        }
+                    }
+                    .padding(10)
+                    .background(Color.secondary.opacity(0.25))
+                    .cornerRadius(5)
                 }
             }
             Spacer()
-            HStack{
+            HStack {
                 Button(action: {
                     if viewModel.authState.isSignedIn {
                         viewModel.todoService.sanitizeTodoItems()
                         viewModel.goToLobby()
                     } else {
-                        viewModel.showAccountPopover.toggle()
+                        viewModel.signInWithGoogle()
                     }
                 }) {
                     FText("Start Your Flow")
                 }
             }
+            .padding(.top, 10)
         }
         .padding()
         .standardFrame()
@@ -136,36 +157,11 @@ struct HomeView: View {
         }
         .onDisappear() {
             viewModel.todoState.isTodoListInitialized = false
-            viewModel.todoService.checkTodoCompleted(index: todoListCount, completed: false)
+            if (viewModel.authState.isSignedIn) {
+                viewModel.todoService.checkTodoCompleted(index: todoListCount, completed: false)
+            }
         }
     }
 }
 
-struct ProfilePopover: View {
-    @ObservedObject var viewModel: HomeViewModel
-    
-    var body: some View {
-        VStack {
-            Text("Hi \(viewModel.authState.currentUser?.name ?? "there")!")
-            Button(action: {
-                viewModel.goToSettings()
-            }) {
-                Text("Settings")
-            }
-            if (viewModel.authState.isSignedIn) {
-                Button(action: {
-                    viewModel.signOut()
-                }) {
-                    Text("Log out")
-                }
-            } else {
-                Button(action: {
-                    viewModel.signInWithGoogle()
-                }) {
-                    Text("Sign in with Google")
-                }
-            }
-        }
-        .padding(15)
-    }
-}
+

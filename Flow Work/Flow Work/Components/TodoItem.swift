@@ -22,11 +22,31 @@ struct TodoItem: View {
     
     var body: some View {
         HStack {
-            Toggle("", isOn: $todo.completed)
-                .onChange(of: todo.completed) { value in
-                    onCheck(value)
+            if (todo.id != nil) {
+                Toggle("", isOn: $todo.completed)
+                    .onChange(of: todo.completed) { value in
+                        onCheck(value)
+                    }
+                    .labelsHidden()
+            } else {
+                Button(action: {
+                    onAdd()
+                }) {
+                    HStack {
+                        Image(systemName: "plus")
+                            .padding(1.5)
+                    }
+                    .background(Color.clear)
                 }
-                .labelsHidden()
+                .buttonStyle(.borderless)
+                .contentShape(Rectangle())
+                .foregroundColor(isHoveringAction && isEditing ? Color.white : Color.white.opacity(0.5))
+                .background(isHoveringAction && isEditing ? Color.secondary.opacity(0.75) : isEditing ? Color.secondary.opacity(0.4) : Color.clear)
+                .cornerRadius(5)
+                .onHover { isHovering in
+                    onHoverAction(isHovering)
+                }
+            }
             
             TextField("Add new to-do here", text: $todo.title)
                 .lineLimit(1)
@@ -41,13 +61,13 @@ struct TodoItem: View {
                     onSubmit()
                 }
             
-            if showActionButton {
+            if showActionButton && todo.id != nil {
                 if isEditing {
                     Button(action: {
                         onAdd()
                     }) {
                         HStack {
-                            Image(systemName: "plus")
+                            Image(systemName: "checkmark")
                                 .padding(1.5)
                         }
                         .background(Color.clear)
@@ -68,7 +88,7 @@ struct TodoItem: View {
                             .padding(1.5)
                     }
                     .buttonStyle(.borderless)
-                    .foregroundColor(isHoveringAction ? Color.white : Color.secondary.opacity(0.5))
+                    .foregroundColor(isHoveringAction ? Color.white : Color.secondary.opacity(0.75))
                     .background(isHoveringAction ? Color.secondary.opacity(0.4) : Color.clear)
                     .cornerRadius(5)
                     .onHover { isHovering in

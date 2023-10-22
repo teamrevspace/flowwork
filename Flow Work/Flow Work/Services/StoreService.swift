@@ -105,6 +105,12 @@ class StoreService: StoreServiceProtocol, ObservableObject {
         ])
     }
     
+    func removeUserFromSession(userId: String, sessionId: String) -> Void {
+        db.collection("sessions").document(sessionId).updateData([
+            "userIds": FieldValue.arrayRemove([userId])
+        ])
+    }
+    
     func findTodosByUserId(userId: String, completion: @escaping ([Todo]) -> Void) {
         db.collection("todos").whereField("userIds", arrayContains: userId)
             .addSnapshotListener({(snapshot, error) in
@@ -128,12 +134,18 @@ class StoreService: StoreServiceProtocol, ObservableObject {
     }
     
     func addTodo(todo: Todo) -> Void {
-        let data: [String: Any] = [
+        var data: [String: Any] = [
             "title": todo.title,
             "completed": todo.completed,
             "createdAt": FieldValue.serverTimestamp(),
             "userIds": todo.userIds ?? []
         ]
+        if (todo.userIds != nil) {
+            data.updateValue(todo.userIds!, forKey: "userIds")
+        }
+        if (todo.completed) {
+            data.updateValue(FieldValue.serverTimestamp(), forKey: "completedAt")
+        }
         
         db.collection("todos").addDocument(data: data)
     }
@@ -148,6 +160,9 @@ class StoreService: StoreServiceProtocol, ObservableObject {
         ]
         if (updatedTodo.userIds != nil) {
             newData.updateValue(updatedTodo.userIds!, forKey: "userIds")
+        }
+        if (updatedTodo.completed) {
+            newData.updateValue(FieldValue.serverTimestamp(), forKey: "completedAt")
         }
         db.collection("todos").document(todoId).updateData(newData)
     }

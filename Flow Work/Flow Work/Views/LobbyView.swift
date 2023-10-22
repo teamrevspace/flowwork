@@ -72,8 +72,8 @@ struct CreateSessionView: View {
                     Text("Back")
                 }
                 Button(action: {
-                    let userIds = [self.viewModel.authState.currentUser!.id]
-                    if (!viewModel.newSessionName.isEmpty) {
+                    if (viewModel.authState.isSignedIn && !viewModel.newSessionName.isEmpty) {
+                        let userIds = [self.viewModel.authState.currentUser!.id]
                         viewModel.createSession(userIds: userIds)
                     }
                 }) {
@@ -93,6 +93,9 @@ struct JoinSessionView: View {
         VStack {
             TextField("Enter session code or URL", text:  $viewModel.joinSessionCode)
                 .textFieldStyle(RoundedBorderTextFieldStyle())
+                .onSubmit {
+                    viewModel.joinSession(viewModel.joinSessionCode)
+                }
             List(viewModel.sessionState.availableSessions) { session in
                 MarqueeText(text: session.name)
                     .foregroundColor(selectedSessionId == session.id ? Color.white : Color.primary)
@@ -105,6 +108,15 @@ struct JoinSessionView: View {
                     .simultaneousGesture(TapGesture().onEnded {
                         selectedSessionId = session.id
                     })
+                    .contextMenu {
+                        Button(action: {
+                            if (viewModel.authState.isSignedIn) {
+                                self.viewModel.storeService.removeUserFromSession(userId: viewModel.authState.currentUser!.id, sessionId: session.id)
+                            }
+                        }) {
+                            Text("Remove")
+                        }
+                    }
             }
             .frame(minHeight: 200)
             .cornerRadius(5)

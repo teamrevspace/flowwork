@@ -22,6 +22,7 @@ class SessionViewModel: ObservableObject {
     @Published var roomService: RoomServiceProtocol
     @Published var storeService: StoreServiceProtocol
     @Published var todoService: TodoServiceProtocol
+    @Published var networkService: NetworkServiceProtocol
     
     @Published var authState = AuthState()
     @Published var sessionState = SessionState()
@@ -37,6 +38,7 @@ class SessionViewModel: ObservableObject {
         self.roomService = resolver.resolve(RoomServiceProtocol.self)!
         self.todoService = resolver.resolve(TodoServiceProtocol.self)!
         self.storeService = resolver.resolve(StoreServiceProtocol.self)!
+        self.networkService = resolver.resolve(NetworkServiceProtocol.self)!
         
         authService.statePublisher
             .assign(to: \.authState, on: self)
