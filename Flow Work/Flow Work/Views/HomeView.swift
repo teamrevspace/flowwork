@@ -122,9 +122,6 @@ struct HomeView: View {
                             Text("Start or join a coworking session in one click. Invite your friends to kickstart your collaborative productivity journey.")
                         }
                     }
-                    .padding(10)
-                    .background(Color.secondary.opacity(0.25))
-                    .cornerRadius(5)
                 }
             }
             Spacer()

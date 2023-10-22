@@ -23,7 +23,6 @@
 		114AFDE62AC765B700AB9A8B /* AppView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 114AFDE52AC765B700AB9A8B /* AppView.swift */; };
 		114AFDE82AC765B800AB9A8B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 114AFDE72AC765B800AB9A8B /* Assets.xcassets */; };
 		114AFDEB2AC765B800AB9A8B /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 114AFDEA2AC765B800AB9A8B /* Preview Assets.xcassets */; };
-		114AFDF82AC76F1300AB9A8B /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 114AFDF72AC76F1300AB9A8B /* GoogleService-Info.plist */; };
 		114AFDFB2AC76F4E00AB9A8B /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = 114AFDFA2AC76F4E00AB9A8B /* FirebaseAnalytics */; };
 		114AFDFD2AC76F4E00AB9A8B /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 114AFDFC2AC76F4E00AB9A8B /* FirebaseAuth */; };
 		114AFDFF2AC76F4E00AB9A8B /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = 114AFDFE2AC76F4E00AB9A8B /* FirebaseFirestore */; };
@@ -53,10 +52,10 @@
 		11A92EB02AE44A9C007F5DF4 /* SessionState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11A92EAF2AE44A9C007F5DF4 /* SessionState.swift */; };
 		11A92EB22AE45AF8007F5DF4 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 11A92EB12AE45AF8007F5DF4 /* Assets.xcassets */; };
 		11A92EB62AE465DB007F5DF4 /* ViewSizeKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11A92EB52AE465DB007F5DF4 /* ViewSizeKey.swift */; };
-		11A92EBA2AE48BD2007F5DF4 /* Flow-Work-Helper-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 11A92EB92AE48BD2007F5DF4 /* Flow-Work-Helper-Info.plist */; };
 		11A92EBC2AE4C317007F5DF4 /* NetworkService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11A92EBB2AE4C317007F5DF4 /* NetworkService.swift */; };
 		11A92EBE2AE4C36F007F5DF4 /* NetworkServiceProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11A92EBD2AE4C36F007F5DF4 /* NetworkServiceProtocol.swift */; };
 		11A92EC02AE4F7C5007F5DF4 /* AccountMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11A92EBF2AE4F7C5007F5DF4 /* AccountMenu.swift */; };
+		11A92EC52AE55D12007F5DF4 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 11A92EC42AE55D12007F5DF4 /* GoogleService-Info.plist */; };
 		11C839ED2AD7AC9300DE62D2 /* AvatarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11C839EC2AD7AC9300DE62D2 /* AvatarView.swift */; };
 		11D7C1A72AD5E73E00AF1EEE /* Message.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11D7C1A62AD5E73E00AF1EEE /* Message.swift */; };
 		11E5AD2B2ADD84C7004670F0 /* FText.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11E5AD2A2ADD84C7004670F0 /* FText.swift */; };
@@ -100,8 +99,6 @@
 		114AFDE72AC765B800AB9A8B /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		114AFDEA2AC765B800AB9A8B /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		114AFDEC2AC765B800AB9A8B /* Flow_Work.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Flow_Work.entitlements; sourceTree = "<group>"; };
-		114AFDF72AC76F1300AB9A8B /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../../../../Downloads/GoogleService-Info.plist"; sourceTree = "<group>"; };
-		114AFE032AC7716300AB9A8B /* Flow-Work-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "Flow-Work-Info.plist"; sourceTree = SOURCE_ROOT; };
 		116D18F22ACF8A7700CB4F1D /* SessionService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionService.swift; sourceTree = "<group>"; };
 		116D18F82ACFB07400CB4F1D /* AuthService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthService.swift; sourceTree = "<group>"; };
 		116D18FE2ACFD2D200CB4F1D /* Session.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Session.swift; sourceTree = "<group>"; };
@@ -128,10 +125,12 @@
 		11A92EAF2AE44A9C007F5DF4 /* SessionState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionState.swift; sourceTree = "<group>"; };
 		11A92EB12AE45AF8007F5DF4 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		11A92EB52AE465DB007F5DF4 /* ViewSizeKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewSizeKey.swift; sourceTree = "<group>"; };
-		11A92EB92AE48BD2007F5DF4 /* Flow-Work-Helper-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Flow-Work-Helper-Info.plist"; sourceTree = "<group>"; };
 		11A92EBB2AE4C317007F5DF4 /* NetworkService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkService.swift; sourceTree = "<group>"; };
 		11A92EBD2AE4C36F007F5DF4 /* NetworkServiceProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkServiceProtocol.swift; sourceTree = "<group>"; };
 		11A92EBF2AE4F7C5007F5DF4 /* AccountMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountMenu.swift; sourceTree = "<group>"; };
+		11A92EC42AE55D12007F5DF4 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		11A92EC82AE55ED8007F5DF4 /* Flow-Work-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "Flow-Work-Info.plist"; sourceTree = SOURCE_ROOT; };
+		11A92ECA2AE55F23007F5DF4 /* Flow-Work-Helper-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "Flow-Work-Helper-Info.plist"; sourceTree = SOURCE_ROOT; };
 		11C839EC2AD7AC9300DE62D2 /* AvatarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AvatarView.swift; sourceTree = "<group>"; };
 		11D7C1A62AD5E73E00AF1EEE /* Message.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Message.swift; sourceTree = "<group>"; };
 		11E5AD2A2ADD84C7004670F0 /* FText.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FText.swift; sourceTree = "<group>"; };
@@ -216,6 +215,8 @@
 		114AFDE22AC765B700AB9A8B /* Flow Work */ = {
 			isa = PBXGroup;
 			children = (
+				11A92EC82AE55ED8007F5DF4 /* Flow-Work-Info.plist */,
+				11A92EC42AE55D12007F5DF4 /* GoogleService-Info.plist */,
 				11A92EAA2AE4481A007F5DF4 /* States */,
 				1106E6DE2AD8CD830026600A /* Protocols */,
 				1106E6D72AD8CC070026600A /* Architecture */,
@@ -226,8 +227,6 @@
 				116D18FB2ACFD29900CB4F1D /* Views */,
 				116D18FA2ACFD29400CB4F1D /* Models */,
 				116D18F52ACF9D8300CB4F1D /* Services */,
-				114AFE032AC7716300AB9A8B /* Flow-Work-Info.plist */,
-				114AFDF72AC76F1300AB9A8B /* GoogleService-Info.plist */,
 				114AFDE32AC765B700AB9A8B /* Flow_WorkApp.swift */,
 				114AFDE72AC765B800AB9A8B /* Assets.xcassets */,
 				114AFDEC2AC765B800AB9A8B /* Flow_Work.entitlements */,
@@ -314,12 +313,12 @@
 		11A92E8F2AE4404B007F5DF4 /* Flow Work Helper */ = {
 			isa = PBXGroup;
 			children = (
+				11A92ECA2AE55F23007F5DF4 /* Flow-Work-Helper-Info.plist */,
 				11A92E902AE4404B007F5DF4 /* Flow_Work_HelperApp.swift */,
 				11A92E9F2AE444D7007F5DF4 /* main.swift */,
 				11A92E992AE4404D007F5DF4 /* Flow_Work_Helper.entitlements */,
 				11A92E962AE4404D007F5DF4 /* Preview Content */,
 				11A92EB12AE45AF8007F5DF4 /* Assets.xcassets */,
-				11A92EB92AE48BD2007F5DF4 /* Flow-Work-Helper-Info.plist */,
 			);
 			path = "Flow Work Helper";
 			sourceTree = "<group>";
@@ -460,7 +459,7 @@
 			files = (
 				114AFDEB2AC765B800AB9A8B /* Preview Assets.xcassets in Resources */,
 				114AFDE82AC765B800AB9A8B /* Assets.xcassets in Resources */,
-				114AFDF82AC76F1300AB9A8B /* GoogleService-Info.plist in Resources */,
+				11A92EC52AE55D12007F5DF4 /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -470,7 +469,6 @@
 			files = (
 				11A92EB22AE45AF8007F5DF4 /* Assets.xcassets in Resources */,
 				11A92E982AE4404D007F5DF4 /* Preview Assets.xcassets in Resources */,
-				11A92EBA2AE48BD2007F5DF4 /* Flow-Work-Helper-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -590,6 +588,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				GENERATE_INFOPLIST_FILE = YES;
 				MACOSX_DEPLOYMENT_TARGET = 13.3;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
@@ -644,6 +643,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				GENERATE_INFOPLIST_FILE = YES;
 				MACOSX_DEPLOYMENT_TARGET = 13.3;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
@@ -662,7 +662,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 6;
+				CURRENT_PROJECT_VERSION = 7;
 				DEVELOPMENT_ASSET_PATHS = "\"Flow Work/Preview Content\"";
 				DEVELOPMENT_TEAM = 7574Y67WJ7;
 				ENABLE_HARDENED_RUNTIME = YES;
@@ -695,7 +695,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 6;
+				CURRENT_PROJECT_VERSION = 7;
 				DEVELOPMENT_ASSET_PATHS = "\"Flow Work/Preview Content\"";
 				DEVELOPMENT_TEAM = 7574Y67WJ7;
 				ENABLE_HARDENED_RUNTIME = YES;
@@ -729,12 +729,13 @@
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 3;
+				CURRENT_PROJECT_VERSION = 4;
 				DEVELOPMENT_ASSET_PATHS = "\"Flow Work Helper/Preview Content\"";
 				DEVELOPMENT_TEAM = 7574Y67WJ7;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "Flow-Work-Helper-Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = "Flow Work Helper";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.productivity";
 				INFOPLIST_KEY_LSBackgroundOnly = YES;
@@ -763,12 +764,13 @@
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 3;
+				CURRENT_PROJECT_VERSION = 4;
 				DEVELOPMENT_ASSET_PATHS = "\"Flow Work Helper/Preview Content\"";
 				DEVELOPMENT_TEAM = 7574Y67WJ7;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "Flow-Work-Helper-Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = "Flow Work Helper";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.productivity";
 				INFOPLIST_KEY_LSBackgroundOnly = YES;

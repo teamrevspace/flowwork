@@ -20,7 +20,7 @@ protocol SessionServiceProtocol {
     
     func initSessionList(sessions: [Session])
     func updateAuthToken(_ token: String?)
-    func connect(_ userId: String)
+    func connect(_ userId: String?)
     func disconnect()
     func createSession(_ session: Session)
     func joinSession(_ sessionId: String)

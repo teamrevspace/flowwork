@@ -24,6 +24,8 @@ class SessionService: SessionServiceProtocol, ObservableObject {
     private var webSocketSession: URLSession
     private var pingTimer: Timer?
     private var authToken: String?
+    private var retryCount = 0
+    private let maxRetries = 5
     
     var statePublisher: AnyPublisher<SessionState, Never> {
         $state.eraseToAnyPublisher()
@@ -49,14 +51,16 @@ class SessionService: SessionServiceProtocol, ObservableObject {
         self.authToken = authToken
     }
     
-    func connect(_ userId: String) {
+    func connect(_ userId: String?) {
         var urlComponents = URLComponents()
         urlComponents.scheme = "wss"
         urlComponents.host = "api.flowwork.xyz"
         urlComponents.path = "/session/websocket"
-        urlComponents.queryItems = [
-            URLQueryItem(name: "user_id", value: userId),
-        ]
+        if (userId != nil) {
+            urlComponents.queryItems = [
+                URLQueryItem(name: "user_id", value: userId),
+            ]
+        }
         
         guard let url = urlComponents.url else { return }
         
@@ -69,11 +73,12 @@ class SessionService: SessionServiceProtocol, ObservableObject {
         webSocketTask?.resume()
         
         sendPing()
-        receiveMessage()
+        receiveMessage(userId)
     }
     
     func disconnect() {
         webSocketTask?.cancel(with: .goingAway, reason: nil)
+        webSocketTask = nil
     }
     
     func createSession(_ session: Session) {
@@ -151,7 +156,7 @@ class SessionService: SessionServiceProtocol, ObservableObject {
         }
     }
     
-    private func receiveMessage() {
+    private func receiveMessage(_ userId: String?) {
         webSocketTask?.receive(completionHandler: { [weak self] result in
             switch result {
             case .failure(let error):
@@ -159,15 +164,31 @@ class SessionService: SessionServiceProtocol, ObservableObject {
                     self?.state.isConnected = false
                 }
                 self?.handleError(error)
+                self?.disconnect()
+                self?.retryConnection(userId)
                 
             case .success(let message):
                 DispatchQueue.main.async {
                     self?.state.isConnected = true
                 }
                 self?.handleMessage(message)
+                self?.retryCount = 0
+                self?.receiveMessage(userId)
             }
-            self?.receiveMessage()
         })
+    }
+    
+    private func retryConnection(_ userId: String?) {
+        guard retryCount < maxRetries else {
+            print("Max retry attempts reached. Stopping reconnection attempts.")
+            return
+        }
+        
+        let delayInterval = Double(pow(2, Double(retryCount)))
+        DispatchQueue.global().asyncAfter(deadline: .now() + delayInterval) {
+            self.retryCount += 1
+            self.connect(userId)
+        }
     }
     
     private func handleError(_ error: Error) {

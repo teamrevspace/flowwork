@@ -122,7 +122,9 @@ struct SessionView: View {
                             }
                         } else {
                             VStack {
+                                Spacer()
                                 ProgressView()
+                                Spacer()
                             }
                             .padding(.vertical, 10)
                         }
