@@ -9,7 +9,6 @@ import SwiftUI
 
 struct HomeView: View {
     @ObservedObject var viewModel: HomeViewModel
-    @FocusState private var focusedField: Int?
     
     var body: some View {
         let todoListCount = viewModel.todoState.todoItems.count

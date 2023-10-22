@@ -9,7 +9,6 @@ import SwiftUI
 
 struct SessionView: View {
     @ObservedObject var viewModel: SessionViewModel
-    @FocusState private var focusedField: Int?
     
     var body: some View {
         let todoListCount = viewModel.todoState.todoItems.count

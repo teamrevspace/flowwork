@@ -27,14 +27,19 @@ struct TodoItem: View {
                     .onChange(of: todo.completed) { value in
                         onCheck(value)
                     }
+                    .padding(1.5)
                     .labelsHidden()
             } else {
                 Button(action: {
                     onAdd()
                 }) {
                     HStack {
-                        Image(systemName: "plus")
-                            .padding(1.5)
+                        if todo.title.isEmpty {
+                            Image(systemName: "arrowshape.forward.fill")
+                        } else {
+                            Image(systemName: "plus")
+                                .padding(1.5)
+                        }
                     }
                     .background(Color.clear)
                 }
