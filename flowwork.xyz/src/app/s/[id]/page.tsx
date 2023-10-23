@@ -12,7 +12,7 @@ export default function JoinSessionPage({ params }: { params: { id: string } }) 
   }
 
   const joinSession = useCallback(async () => {
-    router.replace(`flowwork://join?sessionId=${params.id}`)
+    router.push(`flowwork://join?sessionId=${params.id}`)
   }, [params.id, router])
 
   useEffect(() => {

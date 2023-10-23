@@ -7,6 +7,12 @@
 
 import Foundation
 
+enum WorkMode {
+    case lounge
+    case pomodoro
+    case focus
+}
+
 struct Session: Codable, Identifiable {
     var id: String
     var name: String

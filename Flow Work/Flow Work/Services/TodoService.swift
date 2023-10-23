@@ -67,7 +67,7 @@ class TodoService: TodoServiceProtocol, ObservableObject {
                 }
                 var updatedTodo = self.state.todoItems[index]
                 updatedTodo.completed = completed
-                self.storeService.updateTodoByTodoId(updatedTodo: updatedTodo)
+                self.storeService.updateTodo(todo: updatedTodo)
             }
             self.delayedTasks[index] = task
             

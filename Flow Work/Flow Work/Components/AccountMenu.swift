@@ -13,10 +13,12 @@ struct AccountMenu: View {
     var body: some View {
         Menu {
             Text("Hi \(viewModel.authState.currentUser?.name ?? "there")!")
-            Button(action: {
-                viewModel.goToProfile()
-            }) {
-                Text("Profile")
+            if viewModel.authState.isSignedIn {
+                Button(action: {
+                    viewModel.goToProfile()
+                }) {
+                    Text("Profile")
+                }
             }
             Button(action: {
                 viewModel.goToSettings()

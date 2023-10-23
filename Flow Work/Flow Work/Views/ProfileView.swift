@@ -34,8 +34,8 @@ struct ProfileView: View {
                         }
                     }
                 }
-                Spacer()
             }
+            Spacer()
             HStack(spacing: 10) {
                 Button(action: {
                      viewModel.returnToHome()

@@ -82,11 +82,13 @@ class SessionService: SessionServiceProtocol, ObservableObject {
     func disconnect() {
         webSocketTask?.cancel(with: .goingAway, reason: nil)
         webSocketTask = nil
-        self.state.hasJoinedSession = false
-        self.state.currentSessionUsers = nil
-        self.state.currentSession = nil
-        self.state.availableSessions = []
-        self.state.isConnected = false
+        DispatchQueue.main.async {
+            self.state.hasJoinedSession = false
+            self.state.currentSessionUsers = nil
+            self.state.currentSession = nil
+            self.state.availableSessions = []
+            self.state.isConnected = false
+        }
     }
     
     func createSession(_ session: Session) {

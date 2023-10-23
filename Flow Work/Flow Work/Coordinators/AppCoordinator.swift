@@ -117,7 +117,7 @@ extension AppCoordinator: AuthServiceDelegate {
     }
     
     func redirectToApp() {
-        self.appDelegate?.openMenuPopover()
+        appDelegate?.openMenuPopover(self)
     }
 }
 

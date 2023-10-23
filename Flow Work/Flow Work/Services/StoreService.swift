@@ -150,20 +150,21 @@ class StoreService: StoreServiceProtocol, ObservableObject {
         db.collection("todos").addDocument(data: data)
     }
     
-    func updateTodoByTodoId(updatedTodo: Todo) -> Void {
-        guard let todoId = updatedTodo.id else { return }
+    func updateTodo(todo: Todo) -> Void {
+        guard let todoId = todo.id else { return }
         var newData: [String: Any] = [
-            "title": updatedTodo.title,
-            "completed": updatedTodo.completed,
-            "userIds": updatedTodo.userIds ?? [],
+            "title": todo.title,
+            "completed": todo.completed,
+            "userIds": todo.userIds ?? [],
             "updatedAt": FieldValue.serverTimestamp()
         ]
-        if (updatedTodo.userIds != nil) {
-            newData.updateValue(updatedTodo.userIds!, forKey: "userIds")
+        if (todo.userIds != nil) {
+            newData.updateValue(todo.userIds!, forKey: "userIds")
         }
-        if (updatedTodo.completed) {
+        if (todo.completed) {
             newData.updateValue(FieldValue.serverTimestamp(), forKey: "completedAt")
         }
+        
         db.collection("todos").document(todoId).updateData(newData)
     }
     

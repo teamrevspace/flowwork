@@ -66,16 +66,22 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
             if self.popover.isShown {
                 self.popover.performClose(sender)
             } else {
-                self.popover.performClose(nil)
+                self.popover.performClose(sender)
                 self.popover.show(relativeTo: button.bounds, of: button, preferredEdge: NSRectEdge.maxY)
             }
         }
     }
     
-    func openMenuPopover() {
+    func openMenuPopover(_ sender: AnyObject?) {
         if let button = self.statusBarItem.button {
-            self.popover.performClose(nil)
+            self.popover.performClose(sender)
             self.popover.show(relativeTo: button.bounds, of: button, preferredEdge: NSRectEdge.maxY)
+        }
+    }
+    
+    func closeMenuPopover(_ sender: AnyObject?) {
+        if let button = self.statusBarItem.button {
+            self.popover.performClose(sender)
         }
     }
     
@@ -99,7 +105,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
                 let lobbyViewModel = appAssembler.resolver.resolve(LobbyViewModel.self)
                 if let navAction = pathComponents?.first, String(navAction) == "join", sessionId != nil {
                     lobbyViewModel?.joinSession(String(sessionId!))
-                    self.openMenuPopover()
+                    self.openMenuPopover(nil)
                 }
             }
         }

@@ -42,7 +42,7 @@ struct TodoItem: View {
                 .buttonStyle(.borderless)
                 .contentShape(Rectangle())
                 .foregroundColor(isEditing ? Color.white : Color("Primary").opacity(0.5))
-                .background(isHoveringAction && isEditing ? Color.secondary.opacity(0.75) : isEditing ? Color.secondary.opacity(0.4) : Color.clear)
+                .background(isHoveringAction && isEditing ? Color.blue : isEditing ? Color.blue.opacity(0.75) : Color.clear)
                 .cornerRadius(5)
                 .onHover { isHovering in
                     onHoverAction(isHovering)
