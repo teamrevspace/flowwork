@@ -15,7 +15,7 @@ struct TodoItem: View {
     var onCheck: (Bool) -> Void
     var onChange: ((String) -> Void)?
     var onSubmit: () -> Void
-    var onDelete: () -> Void
+    var onDelete: (() -> Void)?
     var onAdd: () -> Void
     var onHoverAction: (Bool) -> Void
     var showActionButton: Bool
@@ -83,7 +83,7 @@ struct TodoItem: View {
                     }
                 } else {
                     Button(action: {
-                        onDelete()
+                        onDelete?()
                     }) {
                         Image(systemName: "xmark")
                             .padding(1.5)

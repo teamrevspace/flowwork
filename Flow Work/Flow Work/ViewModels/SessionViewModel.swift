@@ -11,7 +11,7 @@ import Swinject
 import AppKit
 
 protocol SessionViewModelDelegate: AnyObject {
-    func showLobbyView()
+    func showHomeView()
 }
 
 class SessionViewModel: ObservableObject {
@@ -87,7 +87,7 @@ class SessionViewModel: ObservableObject {
         if let currentSessionId = self.sessionState.currentSession?.id {
             self.sessionService.leaveSession(currentSessionId)
         }
-        self.delegate?.showLobbyView()
+        self.delegate?.showHomeView()
     }
     
     func createAudioRoom() {

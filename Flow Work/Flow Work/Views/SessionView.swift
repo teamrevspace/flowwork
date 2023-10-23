@@ -83,6 +83,8 @@ struct SessionView: View {
                                                     },
                                                     onDelete: {
                                                         viewModel.storeService.removeTodo(todoId: sessionId!)
+                                                        viewModel.todoState.isHoveringActionButtons.remove(at: index)
+                                                        viewModel.todoState.isEditingTextField[index] = false
                                                     },
                                                     onAdd: {
                                                         if (viewModel.todoState.isEditingTextField[index]) {
@@ -98,7 +100,7 @@ struct SessionView: View {
                                                 .id(sessionId)
                                             }
                                             Spacer()
-                                                .frame(height: 10)
+                                                .frame(height: 20)
                                                 .id("-1")
                                         }
                                         .padding(.horizontal, 15)
@@ -122,10 +124,6 @@ struct SessionView: View {
                                                 viewModel.todoService.checkTodoCompleted(index: todoListCount, completed: value)
                                             },
                                             onSubmit: {
-                                                viewModel.addDraftTodo()
-                                                self.scrollToId = "-1"
-                                            },
-                                            onDelete: {
                                                 viewModel.addDraftTodo()
                                                 self.scrollToId = "-1"
                                             },
