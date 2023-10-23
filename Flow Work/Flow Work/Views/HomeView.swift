@@ -12,15 +12,17 @@ struct HomeView: View {
     @State var scrollToIndex: Int? = nil
     
     var body: some View {
-        let todoListCount = viewModel.todoState.todoItems.count
         VStack {
             HStack {
                 HStack {
-                    Image("FlowWorkLogo")
-                        .resizable()
-                        .frame(width: 30, height: 30)
-                        .scaledToFit()
-                    Text("Flow Work")
+//                    Image("FlowWorkLogo")
+//                        .resizable()
+//                        .frame(width: 30, height: 30)
+//                        .scaledToFit()
+//                    Text("Flow Work")
+//                        .font(.title)
+//                        .fontWeight(.bold)
+                    Text("Choose your work mode")
                         .font(.title)
                         .fontWeight(.bold)
                 }
@@ -30,48 +32,68 @@ struct HomeView: View {
             }
             if (viewModel.authState.isSignedIn) {
                 VStack(alignment: .leading, spacing: 10) {
-                    VStack(alignment: .leading, spacing: 5) {
-                        HStack(spacing: 5) {
-                            Image(systemName: "sofa.fill")
-                                .resizable()
-                                .frame(width: 15, height: 15)
-                            Text("Lounge Mode")
-                                .font(.headline)
+                    Button(action: {
+                        viewModel.selectedMode = .lounge
+                    }) {
+                        VStack(alignment: .leading, spacing: 5) {
+                            HStack(spacing: 5) {
+                                Image(systemName: "sofa.fill")
+                                    .resizable()
+                                    .frame(width: 15, height: 15)
+                                Text("Lounge Mode")
+                                    .font(.headline)
+                            }
+                            Text("Cowork with others in a virtual lounge. Join audio room or share screen to collaborate on tasks.")
+                                .fixedSize(horizontal: false, vertical: true)
                         }
-                        Text("Cowork with others in a virtual lounge. Join audio room or share screen to collaborate on tasks.")
-                            .fixedSize(horizontal: false, vertical: true)
+                        .padding(10)
+                        .background(viewModel.selectedMode == .lounge ? Color.blue.opacity(0.9) : Color.secondary.opacity(0.1))
+                        .foregroundColor(viewModel.selectedMode == .lounge ? Color.white : Color("Primary").opacity(0.75))
+                        .cornerRadius(10)
                     }
-                    .padding(10)
-                    .background(Color.secondary.opacity(0.1))
-                    .cornerRadius(10)
-                    VStack(alignment: .leading, spacing: 5) {
-                        HStack(spacing: 5) {
-                            Image(systemName: "deskclock.fill")
-                                .resizable()
-                                .frame(width: 15, height: 15)
-                            Text("Pomodoro Mode")
-                                .font(.headline)
+                    .buttonStyle(PlainButtonStyle())
+                    
+                    Button(action: {
+                        viewModel.selectedMode = .pomodoro
+                    }) {
+                        VStack(alignment: .leading, spacing: 5) {
+                            HStack(spacing: 5) {
+                                Image(systemName: "deskclock.fill")
+                                    .resizable()
+                                    .frame(width: 15, height: 15)
+                                Text("Pomodoro Mode")
+                                    .font(.headline)
+                            }
+                            Text("Set a timer to focus on your task. Take a 5 minute break after each Pomodoro.")
+                                .fixedSize(horizontal: false, vertical: true)
                         }
-                        Text("Set a timer to focus on your task. Take a 5 minute break after each Pomodoro.")
-                            .fixedSize(horizontal: false, vertical: true)
+                        .padding(10)
+                        .background(viewModel.selectedMode == .pomodoro ? Color.red.opacity(0.9) : Color.secondary.opacity(0.1))
+                        .foregroundColor(viewModel.selectedMode == .pomodoro ? Color.white : Color("Primary").opacity(0.75))
+                        .cornerRadius(10)
                     }
-                    .padding(10)
-                    .background(Color.secondary.opacity(0.1))
-                    .cornerRadius(10)
-                    VStack(alignment: .leading, spacing: 5) {
-                        HStack(spacing: 5) {
-                            Image(systemName: "moon.fill")
-                                .resizable()
-                                .frame(width: 15, height: 15)
-                            Text("Focus Mode")
-                                .font(.headline)
+                    .buttonStyle(PlainButtonStyle())
+                    
+                    Button(action: {
+                        viewModel.selectedMode = .focus
+                    }) {
+                        VStack(alignment: .leading, spacing: 5) {
+                            HStack(spacing: 5) {
+                                Image(systemName: "moon.fill")
+                                    .resizable()
+                                    .frame(width: 15, height: 15)
+                                Text("Focus Mode")
+                                    .font(.headline)
+                            }
+                            Text("Hide all your apps to focus on your task. Restore them after your session.")
+                                .fixedSize(horizontal: false, vertical: true)
                         }
-                        Text("Hide all your apps to focus on your task. Restore them after your session.")
-                            .fixedSize(horizontal: false, vertical: true)
+                        .padding(10)
+                        .background(viewModel.selectedMode == .focus ? Color.indigo.opacity(0.9) : Color.secondary.opacity(0.1))
+                        .foregroundColor(viewModel.selectedMode == .focus ? Color.white : Color("Primary").opacity(0.75))
+                        .cornerRadius(10)
                     }
-                    .padding(10)
-                    .background(Color.secondary.opacity(0.1))
-                    .cornerRadius(10)
+                    .buttonStyle(PlainButtonStyle())
                 }
             } else {
                 VStack(alignment: .leading, spacing: 10) {
@@ -117,12 +139,7 @@ struct HomeView: View {
                     }
                 }) {
                     Text(viewModel.authState.isSignedIn ? "Start Your Flow" : "Get Started")
-                        .padding(10)
-                        .background(Color.blue)
-                        .foregroundColor(Color.white)
-                        .cornerRadius(10)
                 }
-                .buttonStyle(.plain)
             }
         }
         .padding()
