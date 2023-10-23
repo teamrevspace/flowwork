@@ -1,7 +1,7 @@
 "use client"
 
 import Link from "next/link";
-import { redirect, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { useCallback, useEffect } from "react";
 
 export default function JoinSessionPage({ params }: { params: { id: string } }) {
@@ -12,12 +12,12 @@ export default function JoinSessionPage({ params }: { params: { id: string } }) 
   }
 
   const joinSession = useCallback(async () => {
-    document.location = `flowwork://join?sessionId=${params.id}`
-  }, [params.id])
+    router.replace(`flowwork://join?sessionId=${params.id}`)
+  }, [params.id, router])
 
   useEffect(() => {
     joinSession()
-  }, [joinSession])
+  }, [params.id, joinSession])
 
   return (
     <div className="h-screen w-full flex flex-col bg-white px-6">
