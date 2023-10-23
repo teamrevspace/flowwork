@@ -10,6 +10,10 @@ import Combine
 import Swinject
 import AppKit
 
+private struct Constants {
+    static let countdownTime = 25 * 60 // 25 minutes in seconds
+}
+
 protocol SessionViewModelDelegate: AnyObject {
     func showHomeView()
 }
@@ -31,6 +35,12 @@ class SessionViewModel: ObservableObject {
     @Published var totalSessionsCount: Int? = nil
     @Published var inFocusMode: Bool = false
     
+    // MARK: pomodoro mode
+    @Published var timeRemaining: Int = Constants.countdownTime
+    @Published var isTimerRunning: Bool = false
+    private var timer: Timer?
+    
+    // MARK: focus mode
     private let defaults = UserDefaults.standard
     private let ignoreSystemWindows: Bool = false
     private let terminateApps: Bool = false
@@ -106,6 +116,33 @@ class SessionViewModel: ObservableObject {
         }
         
         roomService.joinRoom(roomId: roomId)
+    }
+}
+
+// MARK: pomodoro mode implementation
+extension SessionViewModel {
+    func startTimer() {
+        guard !self.isTimerRunning else { return }
+        self.isTimerRunning = true
+        timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { _ in
+            guard self.isTimerRunning else { return }
+            if self.timeRemaining > 0 {
+                self.timeRemaining -= 1
+            } else {
+                self.resetTimer()
+            }
+        }
+    }
+    
+    func pauseTimer() {
+        timer?.invalidate()
+        self.isTimerRunning = false
+    }
+    
+    func resetTimer() {
+        timer?.invalidate()
+        timeRemaining = Constants.countdownTime
+        self.isTimerRunning = false
     }
 }
 

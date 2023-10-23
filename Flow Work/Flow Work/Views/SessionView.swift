@@ -149,69 +149,60 @@ struct SessionView: View {
                             .padding(.vertical, 10)
                         }
                     }
-                    //                    ScrollView(.horizontal) {
-                    //                        LazyHStack {
-                    //                            Button(action: {
-                    //                                viewModel.saveSessionGlobal()
-                    //                            }) {
-                    //                                Text("Enter Focus Mode")
-                    //                            }
-                    //                            .disabled(viewModel.inFocusMode)
-                    //
-                    //                            Button(action: {
-                    //                                viewModel.restoreSessionGlobal()
-                    //                            }) {
-                    //                                if viewModel.inFocusMode {
-                    //                                    Text("Restore Apps (\(viewModel.totalSessionsCount ?? 0))")
-                    //                                } else {
-                    //                                    Text("Restore Apps")
-                    //                                }
-                    //                            }
-                    //                            .disabled(!viewModel.inFocusMode)
-                    //
-                    //                        MARK: - WebRTC Audio Room
-                    //                            Button(action: {
-                    //                                viewModel.createAudioRoom()
-                    //                            }) {
-                    //                                Text("Create Audio Room")
-                    //                            }
-                    //                            .padding()
-                    //                            Button(action: {
-                    //                                viewModel.joinAudioRoom()
-                    //                            }) {
-                    //                                Text("Join Audio Room")
-                    //                            }
-                    //                            .padding()
-                    //                        }
-                    //                    }
-                    //                    .padding(.horizontal, 15)
-                    //                    .scrollIndicators(.never)
-                    
-                    Spacer()
-                    
-                    HStack {
-                        ScrollView(.horizontal) {
-                            LazyHStack {
-                                ForEach(viewModel.sessionState.currentSessionUsers ?? []) { user in
-                                    Menu {
-                                        Text("\(user.name)")
-                                    } label: {
-                                        AvatarView(avatarURL: user.avatarURL)
+                    VStack(spacing: 10) {
+                        switch viewModel.sessionState.selectedMode {
+                        case .lounge:
+                            HStack {}
+                        case .pomodoro:
+                            HStack {
+                                PomodoroTimer(viewModel: viewModel)
+                                Spacer()
+                            }
+                        case .focus:
+                            HStack {}
+                        }
+                        //                        MARK: - WebRTC Audio Room
+                        //                            Button(action: {
+                        //                                viewModel.createAudioRoom()
+                        //                            }) {
+                        //                                Text("Create Audio Room")
+                        //                            }
+                        //                            .padding()
+                        //                            Button(action: {
+                        //                                viewModel.joinAudioRoom()
+                        //                            }) {
+                        //                                Text("Join Audio Room")
+                        //                            }
+                        //                            .padding()
+                        //                        }
+                        //                    }
+                        //                    .padding(.horizontal, 15)
+                        //                    .scrollIndicators(.never)
+                        
+                        HStack {
+                            ScrollView(.horizontal) {
+                                LazyHStack {
+                                    ForEach(viewModel.sessionState.currentSessionUsers ?? []) { user in
+                                        Menu {
+                                            Text("\(user.name)")
+                                        } label: {
+                                            AvatarView(avatarURL: user.avatarURL)
+                                        }
+                                        .buttonStyle(PlainButtonStyle())
                                     }
-                                    .buttonStyle(PlainButtonStyle())
                                 }
                             }
+                            Button(action: {
+                                viewModel.leaveSession()
+                            }) {
+                                Image(systemName: "rectangle.portrait.and.arrow.right")
+                                Text("Leave Session")
+                            }
                         }
-                        Button(action: {
-                            viewModel.leaveSession()
-                        }) {
-                            Image(systemName: "rectangle.portrait.and.arrow.right")
-                            Text("Leave Session")
-                        }
+                        .frame(height: 30)
+                        .padding(.horizontal, 15)
+                        .padding(.bottom, 15)
                     }
-                    .frame(minHeight: 30)
-                    .padding(.horizontal, 15)
-                    .padding(.bottom, 15)
                 }
                 .padding(0)
                 .standardFrame()
