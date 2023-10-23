@@ -252,9 +252,17 @@ class SessionService: SessionServiceProtocol, ObservableObject {
     }
 }
 
-
+// MARK: work mode implementation
 extension SessionService {
-    
+    func updateWorkMode(_ mode: WorkMode) {
+        DispatchQueue.main.async {
+            self.state.selectedMode = mode
+        }
+    }
+}
+
+// MARK: socket implementation
+extension SessionService {
     private func handleSocketResponse(_ response: SocketResponse) {
         DispatchQueue.main.async {
             if response.topic.starts(with: "coworking_session:") && response.event == "phx_join" && response.payload.status == "ok" {

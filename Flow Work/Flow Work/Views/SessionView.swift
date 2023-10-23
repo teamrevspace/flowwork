@@ -151,43 +151,46 @@ struct SessionView: View {
                             .padding(.vertical, 10)
                         }
                     }
-                    ScrollView(.horizontal) {
-                        LazyHStack {
-                            Button(action: {
-                                viewModel.saveSessionGlobal()
-                            }) {
-                                Text("Enter Focus Mode")
-                            }
-                            .disabled(viewModel.inFocusMode)
-                            
-                            Button(action: {
-                                viewModel.restoreSessionGlobal()
-                            }) {
-                                if viewModel.inFocusMode {
-                                    Text("Restore Apps (\(viewModel.totalSessionsCount ?? 0))")
-                                } else {
-                                    Text("Restore Apps")
-                                }
-                            }
-                            .disabled(!viewModel.inFocusMode)
-                            
-//                        MARK: - WebRTC Audio Room
-//                            Button(action: {
-//                                viewModel.createAudioRoom()
-//                            }) {
-//                                Text("Create Audio Room")
-//                            }
-//                            .padding()
-//                            Button(action: {
-//                                viewModel.joinAudioRoom()
-//                            }) {
-//                                Text("Join Audio Room")
-//                            }
-//                            .padding()
-                        }
-                    }
-                    .padding(.horizontal, 15)
-                    .scrollIndicators(.never)
+                    //                    ScrollView(.horizontal) {
+                    //                        LazyHStack {
+                    //                            Button(action: {
+                    //                                viewModel.saveSessionGlobal()
+                    //                            }) {
+                    //                                Text("Enter Focus Mode")
+                    //                            }
+                    //                            .disabled(viewModel.inFocusMode)
+                    //
+                    //                            Button(action: {
+                    //                                viewModel.restoreSessionGlobal()
+                    //                            }) {
+                    //                                if viewModel.inFocusMode {
+                    //                                    Text("Restore Apps (\(viewModel.totalSessionsCount ?? 0))")
+                    //                                } else {
+                    //                                    Text("Restore Apps")
+                    //                                }
+                    //                            }
+                    //                            .disabled(!viewModel.inFocusMode)
+                    //
+                    //                        MARK: - WebRTC Audio Room
+                    //                            Button(action: {
+                    //                                viewModel.createAudioRoom()
+                    //                            }) {
+                    //                                Text("Create Audio Room")
+                    //                            }
+                    //                            .padding()
+                    //                            Button(action: {
+                    //                                viewModel.joinAudioRoom()
+                    //                            }) {
+                    //                                Text("Join Audio Room")
+                    //                            }
+                    //                            .padding()
+                    //                        }
+                    //                    }
+                    //                    .padding(.horizontal, 15)
+                    //                    .scrollIndicators(.never)
+                    
+                    Spacer()
+                    
                     HStack {
                         ScrollView(.horizontal) {
                             LazyHStack {
@@ -227,10 +230,26 @@ struct SessionView: View {
                 }
                 .onAppear() {
                     viewModel.fetchTodoList()
+                    switch (viewModel.sessionState.selectedMode) {
+                    case .lounge:
+                        break
+                    case .pomodoro:
+                        break
+                    case .focus:
+                        viewModel.saveSessionGlobal()
+                    }
                 }
                 .onDisappear() {
                     if (viewModel.todoState.isTodoListInitialized) {
                         viewModel.todoService.checkTodoCompleted(index: todoListCount, completed: false)
+                    }
+                    switch (viewModel.sessionState.selectedMode) {
+                    case .lounge:
+                        break
+                    case .pomodoro:
+                        break
+                    case .focus:
+                        viewModel.restoreSessionGlobal()
                     }
                 }
             }

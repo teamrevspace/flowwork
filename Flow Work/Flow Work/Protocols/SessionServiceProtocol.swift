@@ -26,4 +26,6 @@ protocol SessionServiceProtocol {
     func joinSession(_ sessionId: String)
     func leaveSession(_ sessionId: String)
     func sendMessage(message: Message)
+    
+    func updateWorkMode(_ mode: WorkMode)
 }

@@ -13,6 +13,14 @@ enum WorkMode {
     case focus
 }
 
+enum MessageType {
+    case socketResponse(SocketResponse)
+    case sessionResponse(SessionResponse)
+    case lobbyResponse(LobbyResponse)
+    case errorResponse(ErrorResponse)
+    case unknown(Any)
+}
+
 struct Session: Codable, Identifiable {
     var id: String
     var name: String

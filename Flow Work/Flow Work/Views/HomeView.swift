@@ -33,7 +33,7 @@ struct HomeView: View {
             if (viewModel.authState.isSignedIn) {
                 VStack(alignment: .leading, spacing: 10) {
                     Button(action: {
-                        viewModel.selectedMode = .lounge
+                        viewModel.sessionService.updateWorkMode(.lounge)
                     }) {
                         VStack(alignment: .leading, spacing: 5) {
                             HStack(spacing: 5) {
@@ -47,14 +47,14 @@ struct HomeView: View {
                                 .fixedSize(horizontal: false, vertical: true)
                         }
                         .padding(10)
-                        .background(viewModel.selectedMode == .lounge ? Color.blue.opacity(0.9) : Color.secondary.opacity(0.1))
-                        .foregroundColor(viewModel.selectedMode == .lounge ? Color.white : Color("Primary").opacity(0.75))
+                        .background(viewModel.sessionState.selectedMode == .lounge ? Color.blue.opacity(0.9) : Color.secondary.opacity(0.1))
+                        .foregroundColor(viewModel.sessionState.selectedMode == .lounge ? Color.white : Color("Primary").opacity(0.75))
                         .cornerRadius(10)
                     }
                     .buttonStyle(PlainButtonStyle())
                     
                     Button(action: {
-                        viewModel.selectedMode = .pomodoro
+                        viewModel.sessionService.updateWorkMode(.pomodoro)
                     }) {
                         VStack(alignment: .leading, spacing: 5) {
                             HStack(spacing: 5) {
@@ -68,14 +68,14 @@ struct HomeView: View {
                                 .fixedSize(horizontal: false, vertical: true)
                         }
                         .padding(10)
-                        .background(viewModel.selectedMode == .pomodoro ? Color.red.opacity(0.9) : Color.secondary.opacity(0.1))
-                        .foregroundColor(viewModel.selectedMode == .pomodoro ? Color.white : Color("Primary").opacity(0.75))
+                        .background(viewModel.sessionState.selectedMode == .pomodoro ? Color.red.opacity(0.9) : Color.secondary.opacity(0.1))
+                        .foregroundColor(viewModel.sessionState.selectedMode == .pomodoro ? Color.white : Color("Primary").opacity(0.75))
                         .cornerRadius(10)
                     }
                     .buttonStyle(PlainButtonStyle())
                     
                     Button(action: {
-                        viewModel.selectedMode = .focus
+                        viewModel.sessionService.updateWorkMode(.focus)
                     }) {
                         VStack(alignment: .leading, spacing: 5) {
                             HStack(spacing: 5) {
@@ -89,8 +89,8 @@ struct HomeView: View {
                                 .fixedSize(horizontal: false, vertical: true)
                         }
                         .padding(10)
-                        .background(viewModel.selectedMode == .focus ? Color.indigo.opacity(0.9) : Color.secondary.opacity(0.1))
-                        .foregroundColor(viewModel.selectedMode == .focus ? Color.white : Color("Primary").opacity(0.75))
+                        .background(viewModel.sessionState.selectedMode == .focus ? Color.indigo.opacity(0.9) : Color.secondary.opacity(0.1))
+                        .foregroundColor(viewModel.sessionState.selectedMode == .focus ? Color.white : Color("Primary").opacity(0.75))
                         .cornerRadius(10)
                     }
                     .buttonStyle(PlainButtonStyle())
@@ -144,9 +144,6 @@ struct HomeView: View {
         }
         .padding()
         .standardFrame()
-        .onAppear() {
-            viewModel.selectedMode = .lounge
-        }
     }
 }
 

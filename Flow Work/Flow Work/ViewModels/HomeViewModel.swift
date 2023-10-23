@@ -28,7 +28,6 @@ class HomeViewModel: ObservableObject {
     @Published var authState = AuthState()
     @Published var todoState = TodoState()
     
-    @Published var selectedMode: WorkMode = .lounge
     @Published var hoverIndex: Int? = nil
     
     private var cancellables = Set<AnyCancellable>()

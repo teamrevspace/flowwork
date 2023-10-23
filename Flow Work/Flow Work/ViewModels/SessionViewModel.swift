@@ -33,7 +33,8 @@ class SessionViewModel: ObservableObject {
     
     private let defaults = UserDefaults.standard
     private let ignoreSystemWindows: Bool = false
-    private let closeApps: Bool = false
+    private let terminateApps: Bool = false
+    private let keepRunningAppOpen: Bool = false
     
     private let resolver: Resolver
     private var cancellables = Set<AnyCancellable>()
@@ -130,12 +131,12 @@ extension SessionViewModel {
             if ((ignoreSystemWindows && (runningApplication.localizedName != "Finder" && runningApplication.localizedName != "Activity Monitor" && runningApplication.localizedName != "System Preferences" && runningApplication.localizedName != "App Store")) || !ignoreSystemWindows) {
                 
                 // Ignore itself + only affect regular applications
-                if (runningApplication.activationPolicy == .regular && runningApplication.localizedName != "Later" && runningApplication != runningApp) {
+                if (runningApplication.activationPolicy == .regular && runningApplication.localizedName != "Flow Work" && runningApplication != runningApp) {
                     array.append(runningApplication.executableURL!.absoluteString)
                     arrayNames.append(runningApplication.localizedName!)
                     
                     // Only close applications if "keep windows open" is disabled
-                    if (!closeApps) {
+                    if (!terminateApps) {
                         runningApplication.hide()
                     } else {
                         if (runningApplication.localizedName != "Finder") {
@@ -160,13 +161,13 @@ extension SessionViewModel {
             }
         }
         
-        if ((ignoreSystemWindows && (runningApp.localizedName != "Finder" && runningApp.localizedName != "Activity Monitor" && runningApp.localizedName != "System Preferences" && runningApp.localizedName != "App Store")) || !ignoreSystemWindows) {
-            if (runningApp.activationPolicy == .regular && runningApp.localizedName != "Later") {
+        if (!keepRunningAppOpen && ((ignoreSystemWindows && (runningApp.localizedName != "Finder" && runningApp.localizedName != "Activity Monitor" && runningApp.localizedName != "System Preferences" && runningApp.localizedName != "App Store")) || !ignoreSystemWindows)) {
+            if (runningApp.activationPolicy == .regular && runningApp.localizedName != "Flow Work") {
                 array.append(runningApp.executableURL!.absoluteString)
                 arrayNames.append(runningApp.localizedName!)
                 
                 // Only close applications if "keep windows open" is disabled
-                if (!closeApps) {
+                if (!terminateApps) {
                     runningApp.hide()
                 } else {
                     if (runningApp.localizedName != "Finder") {
@@ -211,7 +212,7 @@ extension SessionViewModel {
     func restoreSessionGlobal() {
         
         // Check if apps are to be terminated as opposed to hiding them
-        if (closeApps) {
+        if (terminateApps) {
             for runningApplication in NSWorkspace.shared.runningApplications {
                 if ((ignoreSystemWindows && (runningApplication.localizedName != "Finder" && runningApplication.localizedName != "Activity Monitor" && runningApplication.localizedName != "System Preferences" && runningApplication.localizedName != "App Store")) || !ignoreSystemWindows) {
                     if (runningApplication.activationPolicy == .regular && runningApplication.localizedName != "Terminal") {
@@ -232,7 +233,7 @@ extension SessionViewModel {
         }
         
         let appDelegate = NSApplication.shared.delegate as? AppDelegate
-        appDelegate?.closeMenuPopover(self)
+        appDelegate?.openMenuPopover(self)
     }
     
     private func checkAnyWindows() {
