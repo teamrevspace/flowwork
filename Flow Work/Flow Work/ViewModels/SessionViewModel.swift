@@ -119,6 +119,15 @@ class SessionViewModel: ObservableObject {
     }
 }
 
+// MARK: lounge mode implementation
+extension SessionViewModel {
+    func playDoorSound() {
+        if let sound = NSSound(named: "Door") {
+            sound.play()
+        }
+    }
+}
+
 // MARK: pomodoro mode implementation
 extension SessionViewModel {
     func startTimer() {
@@ -264,7 +273,6 @@ extension SessionViewModel {
         
         let appDelegate = NSApplication.shared.delegate as? AppDelegate
         appDelegate?.closeMenuPopover(self)
-        playCongaSound()
     }
     
     func restoreSessionGlobal() {
@@ -291,6 +299,12 @@ extension SessionViewModel {
         
         let appDelegate = NSApplication.shared.delegate as? AppDelegate
         appDelegate?.openMenuPopover(self)
+    }
+    
+    func playCongaSound() {
+        if let sound = NSSound(named: "Conga") {
+            sound.play()
+        }
     }
     
     private func checkAnyWindows() {
@@ -333,11 +347,5 @@ extension SessionViewModel {
         defaults.set(false, forKey:"session")
         self.inFocusMode = false
         checkAnyWindows()
-    }
-    
-    private func playCongaSound() {
-        if let sound = NSSound(named: "Conga") {
-            sound.play()
-        }
     }
 }

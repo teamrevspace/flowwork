@@ -21,31 +21,27 @@ struct WorkModeButton: View {
     }
     
     var body: some View {
-        Button(action: {
-            viewModel.sessionService.updateWorkMode(mode)
-        }) {
-            VStack(alignment: .leading, spacing: 5) {
-                HStack(spacing: 5) {
-                    Image(systemName: iconName)
-                        .resizable()
-                        .frame(width: 15, height: 15)
-                    Text(title)
-                        .font(.headline)
-                }
-                Text(description)
-                    .fixedSize(horizontal: false, vertical: true)
+        VStack(alignment: .leading, spacing: 5) {
+            HStack(spacing: 5) {
+                Image(systemName: iconName)
+                    .resizable()
+                    .frame(width: 15, height: 15)
+                Text(title)
+                    .font(.headline)
             }
-            .padding(10)
-            .background(isSelected ? mode.color.opacity(0.9) : Color.secondary.opacity(0.1))
-            .foregroundColor(isSelected ? Color.white : Color("Primary").opacity(0.75))
-            .cornerRadius(10)
-            .gesture(TapGesture(count: 2).onEnded {
-                viewModel.goToLobby()
-            })
-            .simultaneousGesture(TapGesture().onEnded {
-                viewModel.sessionService.updateWorkMode(mode)
-            })
+            Text(description)
+                .fixedSize(horizontal: false, vertical: true)
+                .frame(maxWidth: .infinity, alignment: .leading)
         }
-        .buttonStyle(PlainButtonStyle())
+        .padding(10)
+        .background(isSelected ? mode.color.opacity(0.9) : Color.secondary.opacity(0.1))
+        .foregroundColor(isSelected ? Color.white : Color("Primary").opacity(0.75))
+        .cornerRadius(10)
+        .gesture(TapGesture(count: 2).onEnded {
+            viewModel.goToLobby()
+        })
+        .simultaneousGesture(TapGesture().onEnded {
+            viewModel.sessionService.updateWorkMode(mode)
+        })
     }
 }

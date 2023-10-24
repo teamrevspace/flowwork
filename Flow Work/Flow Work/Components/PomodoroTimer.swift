@@ -44,6 +44,7 @@ struct PomodoroTimer: View {
                 }
                 Button(action: {
                     viewModel.resetTimer()
+                    viewModel.startTimer()
                     viewModel.playTickSound()
                 }) {
                     Image(systemName: "arrow.counterclockwise")

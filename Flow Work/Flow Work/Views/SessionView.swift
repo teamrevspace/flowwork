@@ -136,15 +136,11 @@ struct SessionView: View {
                                             },
                                             onSubmit: {
                                                 viewModel.addDraftTodo()
-                                                if (!viewModel.todoState.draftTodo.title.isEmpty) {
-                                                    self.scrollToIndex = -1
-                                                }
+                                                self.scrollToIndex = -1
                                             },
                                             onAdd: {
                                                 viewModel.addDraftTodo()
-                                                if (!viewModel.todoState.draftTodo.title.isEmpty) {
-                                                    self.scrollToIndex = -1
-                                                }
+                                                self.scrollToIndex = -1
                                             },
                                             onHoverAction: { isHovering in
                                                 viewModel.todoState.isHoveringAddButton = isHovering
@@ -241,13 +237,14 @@ struct SessionView: View {
                     viewModel.fetchTodoList()
                     switch (viewModel.sessionState.selectedMode) {
                     case .lounge:
-                        break
+                        viewModel.playDoorSound()
                     case .pomodoro:
                         viewModel.resetTimer()
                         viewModel.startTimer()
                         viewModel.playTickSound()
                     case .focus:
                         viewModel.saveSessionGlobal()
+                        viewModel.playCongaSound()
                     }
                 }
                 .onDisappear() {
