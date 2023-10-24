@@ -16,6 +16,7 @@ private struct Constants {
 
 protocol SessionViewModelDelegate: AnyObject {
     func showHomeView()
+    func showLobbyView()
     func didRedirectToApp()
 }
 
@@ -100,6 +101,13 @@ class SessionViewModel: ObservableObject {
             self.sessionService.leaveSession(currentSessionId)
         }
         self.delegate?.showHomeView()
+    }
+    
+    func rejoinSession() {
+        if let currentSessionId = self.sessionState.currentSession?.id {
+            self.sessionService.joinSession(currentSessionId)
+        }
+        self.delegate?.showLobbyView()
     }
     
     func createAudioRoom() {

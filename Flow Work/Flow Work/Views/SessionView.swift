@@ -70,9 +70,9 @@ struct SessionView: View {
                         if (viewModel.sessionState.maxRetriesReached) {
                             Button(action: {
                                 guard let userId = viewModel.authState.currentUser?.id else { return }
-                                viewModel.sessionService.connect(userId)
                                 viewModel.sessionService.resetMaxRetries()
-                                viewModel.leaveSession()
+                                viewModel.sessionService.connect(userId)
+                                viewModel.rejoinSession()
                             }) {
                                 HStack {
                                     Text("Reconnect")
@@ -303,9 +303,9 @@ struct SessionView: View {
             guard let userId = viewModel.authState.currentUser?.id else { return }
             viewModel.todoState.isTodoListInitialized = false
             if (viewModel.networkService.connected) {
-                viewModel.sessionService.connect(userId)
                 viewModel.sessionService.resetMaxRetries()
-                viewModel.leaveSession()
+                viewModel.sessionService.connect(userId)
+                viewModel.rejoinSession()
             } else {
                 viewModel.sessionService.disconnect()
                 viewModel.todoState.isTodoListInitialized = false
@@ -315,9 +315,9 @@ struct SessionView: View {
             guard let userId = viewModel.authState.currentUser?.id else { return }
             viewModel.todoState.isTodoListInitialized = false
             if (viewModel.sessionState.isConnected) {
-                viewModel.sessionService.connect(userId)
                 viewModel.sessionService.resetMaxRetries()
-                viewModel.leaveSession()
+                viewModel.sessionService.connect(userId)
+                viewModel.rejoinSession()
             } else {
                 viewModel.sessionService.disconnect()
                 viewModel.todoState.isTodoListInitialized = false
@@ -326,9 +326,9 @@ struct SessionView: View {
         .onAppear {
             guard let userId = viewModel.authState.currentUser?.id else { return }
             if viewModel.sessionState.maxRetriesReached {
-                viewModel.sessionService.connect(userId)
                 viewModel.sessionService.resetMaxRetries()
-                viewModel.leaveSession()
+                viewModel.sessionService.connect(userId)
+                viewModel.rejoinSession()
             }
         }
     }
