@@ -164,12 +164,12 @@ class StoreService: StoreServiceProtocol, ObservableObject {
         if (todo.completed) {
             newData.updateValue(FieldValue.serverTimestamp(), forKey: "completedAt")
         }
-        
         db.collection("todos").document(todoId).updateData(newData)
     }
     
-    func removeTodo(todoId: String) {
+    func removeTodo(todoId: String, completion: @escaping () -> Void) {
         db.collection("todos").document(todoId).delete()
+        completion()
     }
     
     func stopLobbyListener() {

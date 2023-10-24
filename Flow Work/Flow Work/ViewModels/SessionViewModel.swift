@@ -16,6 +16,7 @@ private struct Constants {
 
 protocol SessionViewModelDelegate: AnyObject {
     func showHomeView()
+    func didRedirectToApp()
 }
 
 class SessionViewModel: ObservableObject {
@@ -27,6 +28,7 @@ class SessionViewModel: ObservableObject {
     @Published var storeService: StoreServiceProtocol
     @Published var todoService: TodoServiceProtocol
     @Published var networkService: NetworkServiceProtocol
+    @Published var audioService: AudioServiceProtocol
     
     @Published var authState = AuthState()
     @Published var sessionState = SessionState()
@@ -56,6 +58,7 @@ class SessionViewModel: ObservableObject {
         self.todoService = resolver.resolve(TodoServiceProtocol.self)!
         self.storeService = resolver.resolve(StoreServiceProtocol.self)!
         self.networkService = resolver.resolve(NetworkServiceProtocol.self)!
+        self.audioService = resolver.resolve(AudioServiceProtocol.self)!
         
         authService.statePublisher
             .assign(to: \.authState, on: self)
@@ -86,8 +89,8 @@ class SessionViewModel: ObservableObject {
             guard let currentUserId = self.authState.currentUser?.id else { return }
             var newTodo = self.todoState.draftTodo
             newTodo.userIds = [currentUserId]
-            self.storeService.addTodo(todo: newTodo)
             self.todoService.updateDraftTodo(todo: Todo())
+            self.storeService.addTodo(todo: newTodo)
             self.todoState.isHoveringActionButtons.append(false)
         }
     }
@@ -121,9 +124,7 @@ class SessionViewModel: ObservableObject {
 // MARK: lounge mode implementation
 extension SessionViewModel {
     func playDoorSound() {
-        if let sound = NSSound(named: "Door") {
-            sound.play()
-        }
+        self.audioService.playSound(.door)
     }
 }
 
@@ -155,15 +156,11 @@ extension SessionViewModel {
     }
     
     func playTickSound() {
-        if let sound = NSSound(named: "Tick") {
-            sound.play()
-        }
+        self.audioService.playSound(.tick)
     }
     
     func playClickSound() {
-        if let sound = NSSound(named: "Click") {
-            sound.play()
-        }
+        self.audioService.playSound(.click)
     }
     
     func timeString(from seconds: Int) -> String {
@@ -270,8 +267,7 @@ extension SessionViewModel {
         defaults.set(String(totalSessions), forKey: "totalSessions")
         updateSession()
         
-        let appDelegate = NSApplication.shared.delegate as? AppDelegate
-        appDelegate?.closeMenuPopover(self)
+        self.delegate?.didRedirectToApp()
     }
     
     func restoreSessionGlobal() {
@@ -296,14 +292,11 @@ extension SessionViewModel {
             }
         }
         
-        let appDelegate = NSApplication.shared.delegate as? AppDelegate
-        appDelegate?.openMenuPopover(self)
+        self.delegate?.didRedirectToApp()
     }
     
     func playCongaSound() {
-        if let sound = NSSound(named: "Conga") {
-            sound.play()
-        }
+        self.audioService.playSound(.conga)
     }
     
     private func checkAnyWindows() {

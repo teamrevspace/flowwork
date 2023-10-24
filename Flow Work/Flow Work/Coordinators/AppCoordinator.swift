@@ -36,8 +36,9 @@ class AppCoordinator: ObservableObject {
     @Published var authState = AuthState()
     @Published var sessionState = SessionState()
     
+    @Published var shouldShowPopover: Bool = false
+    
     private let resolver: Resolver
-    private var appDelegate = NSApplication.shared.delegate as? AppDelegate
     
     private let navigationSubject = PassthroughSubject<NavigationEvent, Never>()
     private var cancellables = Set<AnyCancellable>()
@@ -116,8 +117,12 @@ extension AppCoordinator: AuthServiceDelegate {
         self.sessionService.disconnect()
     }
     
-    func redirectToApp() {
-        appDelegate?.openMenuPopover(self)
+    func didRedirectToApp() {
+        shouldShowPopover = true
+    }
+    
+    func resetPopoverFlag() {
+        shouldShowPopover = false
     }
 }
 
@@ -161,5 +166,9 @@ extension AppCoordinator: HomeViewModelDelegate, LobbyViewModelDelegate, Session
     
     func showProfileView() {
         navigate(to: .Profile)
+    }
+    
+    func didRedirectToAppSession() {
+        shouldShowPopover = true
     }
 }

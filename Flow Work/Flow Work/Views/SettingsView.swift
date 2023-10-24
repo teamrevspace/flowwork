@@ -30,6 +30,15 @@ struct SettingsView: View {
                         .labelsHidden()
                 }
                 HStack {
+                    Text("Mute sound effects")
+                    Spacer()
+                    Toggle("", isOn: $viewModel.audioService.isMuted)
+                        .onChange(of: viewModel.audioService.isMuted) { value in
+                            viewModel.audioService.muteSoundFx(value)
+                        }
+                        .labelsHidden()
+                }
+                HStack {
                     Link(destination: URL(string: "https://flowwork.xyz")!) {
                         HStack(spacing: 5) {
                             Image(systemName: "safari.fill")
@@ -51,8 +60,5 @@ struct SettingsView: View {
         }
         .padding()
         .standardFrame()
-        .onAppear() {
-            viewModel.initLaunchAtLogin()
-        }
     }
 }

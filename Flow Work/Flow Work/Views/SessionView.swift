@@ -9,7 +9,8 @@ import SwiftUI
 
 struct SessionView: View {
     @ObservedObject var viewModel: SessionViewModel
-    @State var scrollToIndex: Int? = nil
+    @State private var scrollToIndex: Int? = nil
+    @State private var isUpdating: Bool = false
     @FocusState private var focusedIndex: Int?
     
     var body: some View {
@@ -20,11 +21,13 @@ struct SessionView: View {
                     Spacer()
                     ProgressView()
                     Spacer()
-                    Button(action: {
-                        viewModel.leaveSession()
-                    }) {
-                        HStack {
-                            Text("Back")
+                    HStack {
+                        Button(action: {
+                            viewModel.leaveSession()
+                        }) {
+                            HStack {
+                                Text("Back")
+                            }
                         }
                     }
                 }
@@ -65,38 +68,27 @@ struct SessionView: View {
                                     ScrollView(.vertical) {
                                         LazyVStack(alignment: .leading) {
                                             ForEach(0..<viewModel.todoState.todoItems.count, id: \.self) { index in
-                                                let sessionId = viewModel.todoState.todoItems[index].id
+                                                let todo = viewModel.todoState.todoItems[index]
                                                 TodoItem(
                                                     todo: $viewModel.todoState.todoItems[index],
-                                                    isEditing: viewModel.todoState.isEditingTextField[index],
                                                     isHoveringAction: viewModel.todoState.isHoveringActionButtons[index],
                                                     onCheck: { value in
                                                         viewModel.todoService.checkTodoCompleted(index: index, completed: value)
                                                     },
-                                                    onChange: { newValue in
-                                                        viewModel.todoState.isEditingTextField[index] = true
-                                                    },
-                                                    onSubmit: {
-                                                        if (viewModel.todoState.isEditingTextField[index]) {
-                                                            viewModel.storeService.updateTodo(todo: viewModel.todoState.todoItems[index])
-                                                            viewModel.todoState.isEditingTextField[index] = false
-                                                        }
+                                                    onUpdate: {
+                                                        viewModel.storeService.updateTodo(todo: todo)
                                                     },
                                                     onDelete: {
-                                                        viewModel.storeService.removeTodo(todoId: sessionId!)
-                                                        viewModel.todoState.isHoveringActionButtons.remove(at: index)
-                                                        viewModel.todoState.isEditingTextField[index] = false
-                                                    },
-                                                    onAdd: {
-                                                        if (viewModel.todoState.isEditingTextField[index]) {
-                                                            viewModel.storeService.updateTodo(todo: viewModel.todoState.todoItems[index])
-                                                            viewModel.todoState.isEditingTextField[index] = false
+                                                        guard !isUpdating else { return }
+                                                        isUpdating = true
+                                                        viewModel.storeService.removeTodo(todoId: todo.id!) {
+                                                            isUpdating = false
                                                         }
                                                     },
                                                     onHoverAction: { isHovering in
                                                         viewModel.todoState.isHoveringActionButtons[index] = isHovering
                                                     },
-                                                    showActionButton: !viewModel.todoState.todoItems[index].completed
+                                                    showActionButton: !todo.completed
                                                 )
                                                 .focused($focusedIndex, equals: index)
                                                 .onSubmit {
@@ -129,14 +121,10 @@ struct SessionView: View {
                                     VStack {
                                         TodoItem(
                                             todo: $viewModel.todoState.draftTodo,
-                                            isEditing: !viewModel.todoState.draftTodo.title.isEmpty,
+                                            isEditingDraft: !viewModel.todoState.draftTodo.title.isEmpty,
                                             isHoveringAction: viewModel.todoState.isHoveringAddButton,
                                             onCheck: { value in
                                                 viewModel.todoService.checkTodoCompleted(index: todoListCount, completed: value)
-                                            },
-                                            onSubmit: {
-                                                viewModel.addDraftTodo()
-                                                self.scrollToIndex = -1
                                             },
                                             onAdd: {
                                                 viewModel.addDraftTodo()
@@ -233,7 +221,23 @@ struct SessionView: View {
                         viewModel.todoState.isTodoListInitialized = false
                     }
                 }
+                .onChange(of: viewModel.sessionState.isConnected) { value in
+                    guard let userId = viewModel.authState.currentUser?.id else { return }
+                    viewModel.todoState.isTodoListInitialized = false
+                    if (viewModel.sessionState.isConnected) {
+                        viewModel.sessionService.connect(userId)
+                        viewModel.fetchTodoList()
+                    } else {
+                        viewModel.sessionService.disconnect()
+                        viewModel.todoState.isTodoListInitialized = false
+                    }
+                }
                 .onAppear() {
+                    guard let userId = viewModel.authState.currentUser?.id else { return }
+                    if viewModel.sessionState.maxRetriesReached {
+                        print(userId)
+                        viewModel.sessionService.connect(userId)
+                    }
                     viewModel.fetchTodoList()
                     switch (viewModel.sessionState.selectedMode) {
                     case .lounge:

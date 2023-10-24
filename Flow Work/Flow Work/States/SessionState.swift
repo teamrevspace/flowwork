@@ -12,4 +12,5 @@ struct SessionState {
     var currentSessionUsers: [User]? = nil
     var availableSessions: [Session] = []
     var selectedMode: WorkMode = .lounge
+    var maxRetriesReached: Bool = false
 }

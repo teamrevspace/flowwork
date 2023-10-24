@@ -191,10 +191,15 @@ class SessionService: SessionServiceProtocol, ObservableObject {
     
     private func retryConnection(_ userId: String?) {
         guard retryCount < maxRetries else {
+            DispatchQueue.main.async {
+                self.state.maxRetriesReached = true
+            }
             print("Max retry attempts reached. Stopping reconnection attempts.")
             return
         }
-        
+        DispatchQueue.main.async {
+            self.state.maxRetriesReached = false
+        }
         let delayInterval = Double(pow(2, Double(retryCount)))
         DispatchQueue.global().asyncAfter(deadline: .now() + delayInterval) {
             self.retryCount += 1

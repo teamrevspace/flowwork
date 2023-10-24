@@ -5,33 +5,73 @@
 //  Created by Allen Lin on 10/21/23.
 //
 
-import Foundation
 import SwiftUI
+import Combine
 
 struct TodoItem: View {
     @Binding var todo: Todo
-    var isEditing: Bool
+    var isEditingDraft: Bool?
     var isHoveringAction: Bool
     var onCheck: (Bool) -> Void
-    var onChange: ((String) -> Void)?
-    var onSubmit: () -> Void
+    var onAdd: (() -> Void)?
+    var onUpdate: (() -> Void)?
     var onDelete: (() -> Void)?
-    var onAdd: () -> Void
     var onHoverAction: (Bool) -> Void
     var showActionButton: Bool
+    
+    @State private var isEditing: Bool = false
+    
+    private let savePublisher = PassthroughSubject<Void, Never>()
+    private let throttleSavePublisher = PassthroughSubject<Void, Never>()
+    private var cancellables: Set<AnyCancellable> = []
+    
+    init(todo: Binding<Todo>,
+         isEditingDraft: Bool = false,
+         isHoveringAction: Bool = false,
+         onCheck: @escaping (Bool) -> Void,
+         onAdd: (() -> Void)? = nil,
+         onUpdate: (() -> Void)? = nil,
+         onDelete: (() -> Void)? = nil,
+         onHoverAction: @escaping (Bool) -> Void,
+         showActionButton: Bool) {
+        
+        self._todo = todo
+        self.isEditingDraft = isEditingDraft
+        self.isHoveringAction = isHoveringAction
+        self.onCheck = onCheck
+        self.onAdd = onAdd
+        self.onUpdate = onUpdate
+        self.onDelete = onDelete
+        self.onHoverAction = onHoverAction
+        self.showActionButton = showActionButton
+        
+        savePublisher
+            .debounce(for: 0.25, scheduler: DispatchQueue.main)
+//            .merge(with: throttleSavePublisher.throttle(for: 2.0, scheduler: DispatchQueue.main, latest: true))
+            .sink { _ in
+                onUpdate?()
+            }
+            .store(in: &cancellables)
+    }
     
     var body: some View {
         HStack {
             if (todo.id != nil) {
                 Toggle("", isOn: $todo.completed)
                     .onChange(of: todo.completed) { value in
-                        onCheck(value)
+                        withAnimation {
+                            onCheck(value)
+                        }
                     }
                     .padding(1.5)
                     .labelsHidden()
             } else {
                 Button(action: {
-                    onAdd()
+                    onUpdate?()
+                    isEditing = false
+                    withAnimation {
+                        onAdd?()
+                    }
                 }) {
                     HStack {
                         Image(systemName: "plus")
@@ -41,8 +81,8 @@ struct TodoItem: View {
                 }
                 .buttonStyle(.borderless)
                 .contentShape(Rectangle())
-                .foregroundColor(isEditing ? Color.white : Color("Primary").opacity(0.5))
-                .background(isHoveringAction && isEditing ? Color.blue : isEditing ? Color.blue.opacity(0.75) : Color.clear)
+                .foregroundColor((isEditingDraft ?? false) ? Color.white : Color("Primary").opacity(0.5))
+                .background(isHoveringAction && (isEditingDraft ?? false) ? Color.blue : (isEditingDraft ?? false) ? Color.blue.opacity(0.75) : Color.clear)
                 .cornerRadius(5)
                 .onHover { isHovering in
                     onHoverAction(isHovering)
@@ -55,46 +95,39 @@ struct TodoItem: View {
                 .textFieldStyle(PlainTextFieldStyle())
                 .foregroundColor(todo.completed ? Color("Primary").opacity(0.5) : Color("Primary"))
                 .frame(maxWidth: .infinity)
-                .onChange(of: todo.title) { newValue in
-                    onChange?(newValue)
+                .onChange(of: todo.title) { _ in
+                    isEditing = true
+                }
+                .onReceive(Just(todo.title)) { _ in
+                    if (isEditing) {
+                        savePublisher.send(())
+                        isEditing = false
+                    }
                 }
                 .onSubmit {
-                    onSubmit()
+                    isEditing = false
+                    withAnimation {
+                        onAdd?()
+                        onUpdate?()
+                    }
                 }
             
             if showActionButton && todo.id != nil {
-                if isEditing {
-                    Button(action: {
-                        onAdd()
-                    }) {
-                        HStack {
-                            Image(systemName: "checkmark")
-                                .padding(1.5)
-                        }
-                        .background(Color.clear)
-                    }
-                    .buttonStyle(.borderless)
-                    .contentShape(Rectangle())
-                    .foregroundColor(isHoveringAction ? Color.white : isEditing ? Color.white.opacity(0.75) : Color.secondary.opacity(0.5))
-                    .background(isHoveringAction ? (isEditing ? Color.blue : Color.secondary.opacity(0.4) ) : isEditing ? Color.blue.opacity(0.75) : Color.clear)
-                    .cornerRadius(5)
-                    .onHover { isHovering in
-                        onHoverAction(isHovering)
-                    }
-                } else {
-                    Button(action: {
+                Button(action: {
+                    isEditing = false
+                    withAnimation {
                         onDelete?()
-                    }) {
-                        Image(systemName: "xmark")
-                            .padding(1.5)
                     }
-                    .buttonStyle(.borderless)
-                    .foregroundColor(isHoveringAction ? Color.white : Color.secondary.opacity(0.75))
-                    .background(isHoveringAction ? Color.secondary.opacity(0.4) : Color.clear)
-                    .cornerRadius(5)
-                    .onHover { isHovering in
-                        onHoverAction(isHovering)
-                    }
+                }) {
+                    Image(systemName: "xmark")
+                        .padding(1.5)
+                }
+                .buttonStyle(.borderless)
+                .foregroundColor(isHoveringAction ? Color.white : Color.secondary.opacity(0.75))
+                .background(isHoveringAction ? Color.secondary.opacity(0.4) : Color.clear)
+                .cornerRadius(5)
+                .onHover { isHovering in
+                    onHoverAction(isHovering)
                 }
             }
         }

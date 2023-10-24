@@ -62,10 +62,13 @@
 		11A92EDB2AE6FACB007F5DF4 /* PomodoroTimer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11A92EDA2AE6FACB007F5DF4 /* PomodoroTimer.swift */; };
 		11A92EE02AE761A6007F5DF4 /* WorkModeButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11A92EDF2AE761A6007F5DF4 /* WorkModeButton.swift */; };
 		11A92EE42AE77FE9007F5DF4 /* EventMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11A92EE32AE77FE9007F5DF4 /* EventMonitor.swift */; };
-		11AD39392AE7970E00833426 /* Conga.wav in Resources */ = {isa = PBXBuildFile; fileRef = 11AD39382AE7970E00833426 /* Conga.wav */; };
 		11AD393B2AE79A2E00833426 /* Click.wav in Resources */ = {isa = PBXBuildFile; fileRef = 11AD393A2AE79A2E00833426 /* Click.wav */; };
 		11AD393F2AE79AD700833426 /* Tick.wav in Resources */ = {isa = PBXBuildFile; fileRef = 11AD393E2AE79AD700833426 /* Tick.wav */; };
 		11AD39432AE7A05400833426 /* Door.wav in Resources */ = {isa = PBXBuildFile; fileRef = 11AD39422AE7A05400833426 /* Door.wav */; };
+		11AD39452AE7FCF400833426 /* Conga.wav in Resources */ = {isa = PBXBuildFile; fileRef = 11AD39442AE7FCF400833426 /* Conga.wav */; };
+		11AD39482AE8656900833426 /* AudioService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11AD39472AE8656900833426 /* AudioService.swift */; };
+		11AD394A2AE865C200833426 /* Audio.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11AD39492AE865C200833426 /* Audio.swift */; };
+		11AD394C2AE8683900833426 /* AudioServiceProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11AD394B2AE8683900833426 /* AudioServiceProtocol.swift */; };
 		11C839ED2AD7AC9300DE62D2 /* AvatarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11C839EC2AD7AC9300DE62D2 /* AvatarView.swift */; };
 		11E5AD2B2ADD84C7004670F0 /* FText.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11E5AD2A2ADD84C7004670F0 /* FText.swift */; };
 		11E5AD2D2ADECB9B004670F0 /* TodoService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11E5AD2C2ADECB9B004670F0 /* TodoService.swift */; };
@@ -146,10 +149,13 @@
 		11A92EDA2AE6FACB007F5DF4 /* PomodoroTimer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PomodoroTimer.swift; sourceTree = "<group>"; };
 		11A92EDF2AE761A6007F5DF4 /* WorkModeButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkModeButton.swift; sourceTree = "<group>"; };
 		11A92EE32AE77FE9007F5DF4 /* EventMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventMonitor.swift; sourceTree = "<group>"; };
-		11AD39382AE7970E00833426 /* Conga.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = Conga.wav; sourceTree = "<group>"; };
 		11AD393A2AE79A2E00833426 /* Click.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = Click.wav; sourceTree = "<group>"; };
 		11AD393E2AE79AD700833426 /* Tick.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = Tick.wav; sourceTree = "<group>"; };
 		11AD39422AE7A05400833426 /* Door.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = Door.wav; sourceTree = "<group>"; };
+		11AD39442AE7FCF400833426 /* Conga.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = Conga.wav; sourceTree = "<group>"; };
+		11AD39472AE8656900833426 /* AudioService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioService.swift; sourceTree = "<group>"; };
+		11AD39492AE865C200833426 /* Audio.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Audio.swift; sourceTree = "<group>"; };
+		11AD394B2AE8683900833426 /* AudioServiceProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioServiceProtocol.swift; sourceTree = "<group>"; };
 		11C839EC2AD7AC9300DE62D2 /* AvatarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AvatarView.swift; sourceTree = "<group>"; };
 		11E5AD2A2ADD84C7004670F0 /* FText.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FText.swift; sourceTree = "<group>"; };
 		11E5AD2C2ADECB9B004670F0 /* TodoService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodoService.swift; sourceTree = "<group>"; };
@@ -208,6 +214,7 @@
 				11E5AD2E2AE1E52D004670F0 /* TodoServiceProtocol.swift */,
 				11A92EBD2AE4C36F007F5DF4 /* NetworkServiceProtocol.swift */,
 				11A92ED02AE56EBF007F5DF4 /* APIServiceProtocol.swift */,
+				11AD394B2AE8683900833426 /* AudioServiceProtocol.swift */,
 			);
 			path = Protocols;
 			sourceTree = "<group>";
@@ -234,10 +241,7 @@
 		114AFDE22AC765B700AB9A8B /* Flow Work */ = {
 			isa = PBXGroup;
 			children = (
-				11AD39382AE7970E00833426 /* Conga.wav */,
-				11AD393E2AE79AD700833426 /* Tick.wav */,
-				11AD39422AE7A05400833426 /* Door.wav */,
-				11AD393A2AE79A2E00833426 /* Click.wav */,
+				11AD39462AE8107B00833426 /* Resources */,
 				11A92ECC2AE56D9B007F5DF4 /* GoogleService-Info.plist */,
 				11A92EC82AE55ED8007F5DF4 /* Flow-Work-Info.plist */,
 				11A92EAA2AE4481A007F5DF4 /* States */,
@@ -271,6 +275,7 @@
 			children = (
 				116D18F22ACF8A7700CB4F1D /* SessionService.swift */,
 				11E5AD2C2ADECB9B004670F0 /* TodoService.swift */,
+				11AD39472AE8656900833426 /* AudioService.swift */,
 				116D18F82ACFB07400CB4F1D /* AuthService.swift */,
 				1147A0D22AD8DC4500D6C615 /* StoreService.swift */,
 				11A92EBB2AE4C317007F5DF4 /* NetworkService.swift */,
@@ -287,6 +292,7 @@
 				116D19002ACFD34B00CB4F1D /* User.swift */,
 				116D190A2ACFDA8F00CB4F1D /* AppError.swift */,
 				11E5AD3B2AE268B2004670F0 /* RTC.swift */,
+				11AD39492AE865C200833426 /* Audio.swift */,
 				11E5AD302AE1E70B004670F0 /* Todo.swift */,
 				11A92ED22AE56F01007F5DF4 /* API.swift */,
 			);
@@ -371,6 +377,17 @@
 				11A92EAF2AE44A9C007F5DF4 /* SessionState.swift */,
 			);
 			path = States;
+			sourceTree = "<group>";
+		};
+		11AD39462AE8107B00833426 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				11AD393E2AE79AD700833426 /* Tick.wav */,
+				11AD39442AE7FCF400833426 /* Conga.wav */,
+				11AD39422AE7A05400833426 /* Door.wav */,
+				11AD393A2AE79A2E00833426 /* Click.wav */,
+			);
+			path = Resources;
 			sourceTree = "<group>";
 		};
 		11C839EB2AD7AC8800DE62D2 /* Components */ = {
@@ -489,7 +506,7 @@
 				114AFDE82AC765B800AB9A8B /* Assets.xcassets in Resources */,
 				11A92ECD2AE56D9B007F5DF4 /* GoogleService-Info.plist in Resources */,
 				11AD39432AE7A05400833426 /* Door.wav in Resources */,
-				11AD39392AE7970E00833426 /* Conga.wav in Resources */,
+				11AD39452AE7FCF400833426 /* Conga.wav in Resources */,
 				11AD393B2AE79A2E00833426 /* Click.wav in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -519,6 +536,7 @@
 				11E5AD372AE2563B004670F0 /* RoomServiceProtocol.swift in Sources */,
 				11E5AD2F2AE1E52D004670F0 /* TodoServiceProtocol.swift in Sources */,
 				116D191D2ACFE4FA00CB4F1D /* HomeViewModel.swift in Sources */,
+				11AD394A2AE865C200833426 /* Audio.swift in Sources */,
 				1106E6DD2AD8CC830026600A /* ServiceAssembly.swift in Sources */,
 				1147A0CF2AD8D0B900D6C615 /* ViewModelAssembly.swift in Sources */,
 				11A92EE42AE77FE9007F5DF4 /* EventMonitor.swift in Sources */,
@@ -530,6 +548,7 @@
 				116D19072ACFD67B00CB4F1D /* LobbyView.swift in Sources */,
 				116D19092ACFD75300CB4F1D /* LobbyViewModel.swift in Sources */,
 				11A92EDB2AE6FACB007F5DF4 /* PomodoroTimer.swift in Sources */,
+				11AD39482AE8656900833426 /* AudioService.swift in Sources */,
 				116D18FF2ACFD2D200CB4F1D /* Session.swift in Sources */,
 				11E5AD312AE1E70B004670F0 /* Todo.swift in Sources */,
 				114AFDE62AC765B700AB9A8B /* AppView.swift in Sources */,
@@ -538,6 +557,7 @@
 				1106E6E02AD8CD8C0026600A /* AuthServiceProtocol.swift in Sources */,
 				11E5AD2B2ADD84C7004670F0 /* FText.swift in Sources */,
 				11A92EB02AE44A9C007F5DF4 /* SessionState.swift in Sources */,
+				11AD394C2AE8683900833426 /* AudioServiceProtocol.swift in Sources */,
 				11E5AD3C2AE268B2004670F0 /* RTC.swift in Sources */,
 				116D19012ACFD34B00CB4F1D /* User.swift in Sources */,
 				1147A0D52AD8DC6C00D6C615 /* StoreServiceProtocol.swift in Sources */,

@@ -38,10 +38,13 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
     var statusBarItem: NSStatusItem!
     var eventMonitor: EventMonitor?
     
+    private var cancellables = Set<AnyCancellable>()
+    
     private func runApp() {
         FirebaseApp.configure()
         
-        let appView = AppView(coordinator: appAssembler.resolver.resolve(AppCoordinator.self)!).edgesIgnoringSafeArea(.top)
+        let coordinator = appAssembler.resolver.resolve(AppCoordinator.self)!
+        let appView = AppView(coordinator: coordinator).edgesIgnoringSafeArea(.top)
         
         let popover = NSPopover()
         popover.contentSize = NSSize(width: 360, height: 360)
@@ -58,11 +61,23 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
             button.target = self
             button.action = #selector(togglePopover(_:))
         }
+        
+        coordinator.$shouldShowPopover
+            .sink { [weak self] shouldShow in
+                if shouldShow {
+                    self?.openMenuPopover(nil)
+                    coordinator.resetPopoverFlag()
+                }
+            }
+            .store(in: &cancellables)
     }
     
     func applicationDidFinishLaunching(_ notification: Notification) {
         NSApp.setActivationPolicy(.accessory)
         runApp()
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+            self.openMenuPopover(nil)
+        }
     }
     
     func applicationSupportsSecureRestorableState(_ app: NSApplication) -> Bool {

@@ -32,17 +32,18 @@ class TodoService: TodoServiceProtocol, ObservableObject {
     }
     
     func initTodoList(todos: [Todo]) {
-        self.state.todoItems = todos.filter({!$0.completed}).sorted(by: { $1.createdAt.seconds > $0.createdAt.seconds })
-        
+        let todoList = todos.filter({!$0.completed}).sorted(by: { $1.createdAt.seconds > $0.createdAt.seconds })
+        self.state.todoItems = todoList
+        self.resetTodoList(todos: todoList)
+        self.state.isTodoListInitialized = true
+    }
+    
+    private func resetTodoList(todos: [Todo]) {
         self.state.isHoveringActionButtons = todos.map({_ in false})
         self.state.isHoveringActionButtons.append(false)
         
-        self.state.isEditingTextField = todos.map({_ in false})
-        
         self.delayedTasks = todos.map({_ in nil})
         self.delayedTasks.append(nil)
-        
-        self.state.isTodoListInitialized = true
     }
     
     func sanitizeTodoItems() {

@@ -104,12 +104,12 @@ class AuthService: AuthServiceProtocol, ObservableObject {
                     return
                 }
                 
-                self.delegate?.redirectToApp()
-                
                 let isNewUser = authResult.additionalUserInfo?.isNewUser ?? false
                 if (isNewUser) {
                     self.storeService.addUser(user: authResult.user)
                 }
+                
+                self.delegate?.didRedirectToApp()
             }
         }
     }

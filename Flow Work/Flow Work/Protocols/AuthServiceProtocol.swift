@@ -10,7 +10,7 @@ import Combine
 protocol AuthServiceDelegate: AnyObject {
     func didSignIn()
     func didSignOut()
-    func redirectToApp()
+    func didRedirectToApp()
 }
 
 protocol AuthServiceProtocol {

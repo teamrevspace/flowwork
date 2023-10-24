@@ -23,11 +23,13 @@ class SettingsViewModel: ObservableObject {
     
     @Published var authService: AuthServiceProtocol
     @Published var storeService: StoreServiceProtocol
+    @Published var audioService: AudioServiceProtocol
     
     @Published var authState = AuthState()
     
     private let appService = SMAppService.mainApp
-    @Published var launchAtLogin: Bool = false
+    @Published var launchAtLogin: Bool = SMAppService.mainApp.status == .enabled
+    
     @Published var appVersion: String = Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? "x"
     
     @Published var appBuildNumber: String = Bundle.main.object(forInfoDictionaryKey: "CFBundleVersion") as? String ?? "xx"
@@ -39,6 +41,7 @@ class SettingsViewModel: ObservableObject {
         self.resolver = resolver
         self.authService = resolver.resolve(AuthServiceProtocol.self)!
         self.storeService = resolver.resolve(StoreServiceProtocol.self)!
+        self.audioService = resolver.resolve(AudioServiceProtocol.self)!
         
         authService.statePublisher
             .assign(to: \.authState, on: self)
@@ -47,10 +50,6 @@ class SettingsViewModel: ObservableObject {
     
     func returnToHome() {
         self.delegate?.showHomeView()
-    }
-    
-    func initLaunchAtLogin() {
-        self.launchAtLogin = SMAppService.mainApp.status == .enabled
     }
     
     func handleLaunchAtLoginToggle() {
