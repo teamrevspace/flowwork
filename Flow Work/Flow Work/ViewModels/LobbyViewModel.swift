@@ -29,6 +29,7 @@ class LobbyViewModel: ObservableObject {
     @Published var newSessionName: String = ""
     @Published var newSessionPassword: String = ""
     @Published var showPassword: Bool = false
+    @Published var isSessionListLoading: Bool = true
     
     private let resolver: Resolver
     private var cancellables = Set<AnyCancellable>()
@@ -50,6 +51,7 @@ class LobbyViewModel: ObservableObject {
     
     func fetchSessionList() {
         guard let currentUserId = self.authState.currentUser?.id else { return }
+        self.isSessionListLoading = true
         self.storeService.findSessionsByUserId(userId: currentUserId) { sessions in
             var sessionList = sessions
             let sessionIds = sessions.map { $0.id }.joined(separator: ",")
@@ -66,6 +68,7 @@ class LobbyViewModel: ObservableObject {
                     print(AppError.invalidURLFormat)
                 }
                 self.sessionService.initSessionList(sessions: sessionList)
+                self.isSessionListLoading = false
             }
         }
     }

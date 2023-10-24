@@ -23,10 +23,10 @@ struct PomodoroTimer: View {
                             viewModel.pauseTimer()
                             viewModel.playClickSound()
                         }) {
-                            Image(systemName: "pause.fill")
+                            Image(systemName: "pause.circle.fill")
                                 .resizable()
-                                .frame(width: 15, height: 15)
-                                .foregroundColor(Color("Primary"))
+                                .frame(width: 20, height: 20)
+                                .foregroundColor(Color("Primary").opacity(0.75))
                         }
                         .buttonStyle(PlainButtonStyle())
                     } else {
@@ -34,10 +34,10 @@ struct PomodoroTimer: View {
                             viewModel.startTimer()
                             viewModel.playClickSound()
                         }) {
-                            Image(systemName: "play.fill")
+                            Image(systemName: "play.circle.fill")
                                 .resizable()
-                                .frame(width: 15, height: 15)
-                                .foregroundColor(Color("Primary"))
+                                .frame(width: 20, height: 20)
+                                .foregroundColor(Color("Primary").opacity(0.75))
                         }
                         .buttonStyle(PlainButtonStyle())
                     }
@@ -47,10 +47,10 @@ struct PomodoroTimer: View {
                     viewModel.startTimer()
                     viewModel.playTickSound()
                 }) {
-                    Image(systemName: "arrow.counterclockwise")
+                    Image(systemName: "arrow.counterclockwise.circle.fill")
                         .resizable()
-                        .frame(width: 15, height: 15)
-                        .foregroundColor(Color("Primary"))
+                        .frame(width: 20, height: 20)
+                        .foregroundColor(Color("Primary").opacity(0.75))
                 }
                 .buttonStyle(PlainButtonStyle())
             }

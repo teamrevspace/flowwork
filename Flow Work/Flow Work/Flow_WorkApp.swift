@@ -69,26 +69,12 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
         return true
     }
     
-    @objc func togglePopover(_ sender: AnyObject?) {
-        if self.popover.isShown {
-            closeMenuPopover(sender)
-        } else {
-            openMenuPopover(sender)
+    func applicationWillTerminate(_ aNotification: Notification) {
+        let sessionViewModel = appAssembler.resolver.resolve(SessionViewModel.self)!
+        
+        if let totalSessionsCount = sessionViewModel.totalSessionsCount, totalSessionsCount > 0 {
+            sessionViewModel.restoreSessionGlobal()
         }
-    }
-    
-    func openMenuPopover(_ sender: AnyObject?) {
-        popover.animates = true
-        if let button = self.statusBarItem.button {
-            self.popover.performClose(sender)
-            self.popover.show(relativeTo: button.bounds, of: button, preferredEdge: NSRectEdge.maxY)
-        }
-        eventMonitor?.start()
-    }
-    
-    func closeMenuPopover(_ sender: AnyObject?) {
-        self.popover.performClose(sender)
-        eventMonitor?.stop()
     }
     
     func applicationShouldHandleReopen(_ sender: NSApplication, hasVisibleWindows flag: Bool) -> Bool {
@@ -115,6 +101,28 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
                 }
             }
         }
+    }
+    
+    @objc func togglePopover(_ sender: AnyObject?) {
+        if self.popover.isShown {
+            closeMenuPopover(sender)
+        } else {
+            openMenuPopover(sender)
+        }
+    }
+    
+    func openMenuPopover(_ sender: AnyObject?) {
+        popover.animates = true
+        if let button = self.statusBarItem.button {
+            self.popover.performClose(sender)
+            self.popover.show(relativeTo: button.bounds, of: button, preferredEdge: NSRectEdge.maxY)
+        }
+        eventMonitor?.start()
+    }
+    
+    func closeMenuPopover(_ sender: AnyObject?) {
+        self.popover.performClose(sender)
+        eventMonitor?.stop()
     }
 }
 

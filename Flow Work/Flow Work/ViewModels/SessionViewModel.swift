@@ -33,7 +33,6 @@ class SessionViewModel: ObservableObject {
     @Published var todoState = TodoState()
     
     @Published var totalSessionsCount: Int? = nil
-    @Published var inFocusMode: Bool = false
     
     // MARK: pomodoro mode
     @Published var timeRemaining: Int = Constants.countdownTime
@@ -339,13 +338,11 @@ extension SessionViewModel {
     
     private func updateSession() {
         defaults.set(true, forKey:"session")
-        self.inFocusMode = true
         checkAnyWindows()
     }
     
     private func noSessions() {
         defaults.set(false, forKey:"session")
-        self.inFocusMode = false
         checkAnyWindows()
     }
 }

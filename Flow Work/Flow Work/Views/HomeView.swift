@@ -83,7 +83,7 @@ struct HomeView: View {
                         Image(systemName: "arrow.right.circle.fill")
                             .resizable()
                             .frame(width: 30, height: 30)
-                            .foregroundColor(Color("Primary"))
+                            .foregroundColor(Color("Primary").opacity(0.75))
                     }
                     .buttonStyle(PlainButtonStyle())
                 } else {
