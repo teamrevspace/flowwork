@@ -12,8 +12,9 @@ struct PomodoroTimer: View {
     
     var body: some View {
         HStack {
-            Text(timeString(from: viewModel.timeRemaining))
-                .font(.largeTitle)
+            Text(viewModel.timeString(from: viewModel.timeRemaining))
+                .font(.title)
+                .fontWeight(.bold)
             Spacer()
             if viewModel.isTimerRunning {
                 Button("Pause") {
@@ -28,14 +29,7 @@ struct PomodoroTimer: View {
                 viewModel.resetTimer()
             }
         }
-        .padding()
+        .padding(0)
         .frame(height: 40)
-    }
-    
-    func timeString(from seconds: Int) -> String {
-        let hours = seconds / 3600
-        let minutes = (seconds % 3600) / 60
-        let seconds = (seconds % 3600) % 60
-        return String(format: "%02d:%02d:%02d", hours, minutes, seconds)
     }
 }

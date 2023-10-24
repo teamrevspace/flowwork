@@ -55,8 +55,8 @@ struct SessionView: View {
                         }
                         .buttonStyle(PlainButtonStyle())
                     }
-                    .padding(.horizontal, 15)
-                    .padding(.top, 15)
+                    .padding(.horizontal, 20)
+                    .padding(.top, 20)
                     Group {
                         if (viewModel.todoState.isTodoListInitialized) {
                             ScrollViewReader { scrollView in
@@ -103,7 +103,7 @@ struct SessionView: View {
                                                 .frame(height: 20)
                                                 .id("-1")
                                         }
-                                        .padding(.horizontal, 15)
+                                        .padding(.horizontal, 20)
                                         .onChange(of: self.scrollToId) { newIndex in
                                             if let newIndex = newIndex {
                                                 withAnimation(Animation.linear(duration: Double(viewModel.todoState.todoItems.count) * 0.5)) {
@@ -137,7 +137,7 @@ struct SessionView: View {
                                             showActionButton: !viewModel.todoState.draftTodo.title.isEmpty && !viewModel.todoState.draftTodo.completed
                                         )
                                     }
-                                    .padding(.horizontal, 15)
+                                    .padding(.horizontal, 20)
                                 }
                             }
                         } else {
@@ -150,34 +150,38 @@ struct SessionView: View {
                         }
                     }
                     VStack(spacing: 10) {
-                        switch viewModel.sessionState.selectedMode {
-                        case .lounge:
-                            HStack {}
-                        case .pomodoro:
-                            HStack {
-                                PomodoroTimer(viewModel: viewModel)
-                                Spacer()
+                        Group {
+                            switch viewModel.sessionState.selectedMode {
+                            case .lounge:
+                                HStack {
+                                    //                        MARK: - WebRTC Audio Room
+                                    //                            Button(action: {
+                                    //                                viewModel.createAudioRoom()
+                                    //                            }) {
+                                    //                                Text("Create Audio Room")
+                                    //                            }
+                                    //                            .padding()
+                                    //                            Button(action: {
+                                    //                                viewModel.joinAudioRoom()
+                                    //                            }) {
+                                    //                                Text("Join Audio Room")
+                                    //                            }
+                                    //                            .padding()
+                                    //                        }
+                                    //                    }
+                                    //                    .padding(.horizontal, 20)
+                                    //                    .scrollIndicators(.never)
+                                }
+                            case .pomodoro:
+                                HStack {
+                                    PomodoroTimer(viewModel: viewModel)
+                                }
+                                .padding(.horizontal, 20)
+                            case .focus:
+                                HStack {}
                             }
-                        case .focus:
-                            HStack {}
                         }
-                        //                        MARK: - WebRTC Audio Room
-                        //                            Button(action: {
-                        //                                viewModel.createAudioRoom()
-                        //                            }) {
-                        //                                Text("Create Audio Room")
-                        //                            }
-                        //                            .padding()
-                        //                            Button(action: {
-                        //                                viewModel.joinAudioRoom()
-                        //                            }) {
-                        //                                Text("Join Audio Room")
-                        //                            }
-                        //                            .padding()
-                        //                        }
-                        //                    }
-                        //                    .padding(.horizontal, 15)
-                        //                    .scrollIndicators(.never)
+                        .padding(.horizontal, 20)
                         
                         HStack {
                             ScrollView(.horizontal) {
@@ -200,8 +204,8 @@ struct SessionView: View {
                             }
                         }
                         .frame(height: 30)
-                        .padding(.horizontal, 15)
-                        .padding(.bottom, 15)
+                        .padding(.horizontal, 20)
+                        .padding(.bottom, 20)
                     }
                 }
                 .padding(0)
@@ -223,20 +227,21 @@ struct SessionView: View {
                     case .lounge:
                         break
                     case .pomodoro:
-                        break
+                        viewModel.resetTimer()
                     case .focus:
                         viewModel.saveSessionGlobal()
                     }
                 }
                 .onDisappear() {
                     if (viewModel.todoState.isTodoListInitialized) {
+                        viewModel.todoService.sanitizeTodoItems()
                         viewModel.todoService.checkTodoCompleted(index: todoListCount, completed: false)
                     }
                     switch (viewModel.sessionState.selectedMode) {
                     case .lounge:
                         break
                     case .pomodoro:
-                        break
+                        viewModel.resetTimer()
                     case .focus:
                         viewModel.restoreSessionGlobal()
                     }

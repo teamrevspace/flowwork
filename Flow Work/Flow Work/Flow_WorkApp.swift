@@ -36,10 +36,9 @@ class InvisibleWindow: NSWindow {
 class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
     var popover: NSPopover!
     var statusBarItem: NSStatusItem!
+    var eventMonitor: EventMonitor?
     
-    private var cancellables = Set<AnyCancellable>()
-    
-    func applicationDidFinishLaunching(_ notification: Notification) {
+    private func runApp() {
         FirebaseApp.configure()
         
         let appView = AppView(coordinator: appAssembler.resolver.resolve(AppCoordinator.self)!).edgesIgnoringSafeArea(.top)
@@ -47,7 +46,6 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
         let popover = NSPopover()
         popover.contentSize = NSSize(width: 360, height: 360)
         popover.behavior = .transient
-        popover.animates = true
         popover.contentViewController = BetterHostingController(rootView: appView)
         self.popover = popover
         
@@ -57,32 +55,40 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
                 image.size = NSSize(width: 22, height: 22)
                 button.image = image
             }
+            button.target = self
             button.action = #selector(togglePopover(_:))
         }
     }
     
+    func applicationDidFinishLaunching(_ notification: Notification) {
+        NSApp.setActivationPolicy(.accessory)
+        runApp()
+    }
+    
+    func applicationSupportsSecureRestorableState(_ app: NSApplication) -> Bool {
+        return true
+    }
+    
     @objc func togglePopover(_ sender: AnyObject?) {
-        if let button = self.statusBarItem.button {
-            if self.popover.isShown {
-                self.popover.performClose(sender)
-            } else {
-                self.popover.performClose(sender)
-                self.popover.show(relativeTo: button.bounds, of: button, preferredEdge: NSRectEdge.maxY)
-            }
+        if self.popover.isShown {
+            closeMenuPopover(sender)
+        } else {
+            openMenuPopover(sender)
         }
     }
     
     func openMenuPopover(_ sender: AnyObject?) {
+        popover.animates = true
         if let button = self.statusBarItem.button {
             self.popover.performClose(sender)
             self.popover.show(relativeTo: button.bounds, of: button, preferredEdge: NSRectEdge.maxY)
         }
+        eventMonitor?.start()
     }
     
     func closeMenuPopover(_ sender: AnyObject?) {
-        if let button = self.statusBarItem.button {
-            self.popover.performClose(sender)
-        }
+        self.popover.performClose(sender)
+        eventMonitor?.stop()
     }
     
     func applicationShouldHandleReopen(_ sender: NSApplication, hasVisibleWindows flag: Bool) -> Bool {

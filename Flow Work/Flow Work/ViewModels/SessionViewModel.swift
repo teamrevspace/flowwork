@@ -123,6 +123,7 @@ class SessionViewModel: ObservableObject {
 extension SessionViewModel {
     func startTimer() {
         guard !self.isTimerRunning else { return }
+        playClickSound()
         self.isTimerRunning = true
         timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { _ in
             guard self.isTimerRunning else { return }
@@ -136,13 +137,28 @@ extension SessionViewModel {
     
     func pauseTimer() {
         timer?.invalidate()
+        playClickSound()
         self.isTimerRunning = false
     }
     
     func resetTimer() {
         timer?.invalidate()
+        timer = nil
         timeRemaining = Constants.countdownTime
         self.isTimerRunning = false
+    }
+    
+    private func playClickSound() {
+        if let sound = NSSound(named: "Click") {
+            sound.play()
+        }
+    }
+    
+    func timeString(from seconds: Int) -> String {
+//        let hours = seconds / 3600
+        let minutes = (seconds % 3600) / 60
+        let seconds = (seconds % 3600) % 60
+        return String(format: "%02d:%02d", minutes, seconds)
     }
 }
 

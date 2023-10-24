@@ -6,11 +6,20 @@
 //
 
 import Foundation
+import SwiftUI
 
 enum WorkMode {
     case lounge
     case pomodoro
     case focus
+    
+    var color: Color {
+        switch self {
+        case .lounge: return .blue
+        case .pomodoro: return .red
+        case .focus: return .indigo
+        }
+    }
 }
 
 enum MessageType {
