@@ -9,7 +9,8 @@ import SwiftUI
 
 struct SessionView: View {
     @ObservedObject var viewModel: SessionViewModel
-    @State var scrollToId: String? = nil
+    @State var scrollToIndex: Int? = nil
+    @FocusState private var focusedIndex: Int?
     
     var body: some View {
         let todoListCount = viewModel.todoState.todoItems.count
@@ -97,19 +98,29 @@ struct SessionView: View {
                                                     },
                                                     showActionButton: !viewModel.todoState.todoItems[index].completed
                                                 )
-                                                .id(sessionId)
+                                                .focused($focusedIndex, equals: index)
+                                                .onSubmit {
+                                                    if index < viewModel.todoState.todoItems.count - 1 {
+                                                        focusedIndex = index + 1
+                                                    } else if index == viewModel.todoState.todoItems.count - 1 {
+                                                      focusedIndex = -2
+                                                    } else {
+                                                        focusedIndex = nil
+                                                    }
+                                                }
+                                                .id(index)
                                             }
                                             Spacer()
                                                 .frame(height: 20)
-                                                .id("-1")
+                                                .id(-1)
                                         }
                                         .padding(.horizontal, 20)
-                                        .onChange(of: self.scrollToId) { newIndex in
+                                        .onChange(of: self.scrollToIndex) { newIndex in
                                             if let newIndex = newIndex {
                                                 withAnimation(Animation.linear(duration: Double(viewModel.todoState.todoItems.count) * 0.5)) {
                                                     scrollView.scrollTo(newIndex, anchor: .bottom)
                                                 }
-                                                self.scrollToId = nil
+                                                self.scrollToIndex = nil
                                             }
                                         }
                                     }
@@ -125,17 +136,23 @@ struct SessionView: View {
                                             },
                                             onSubmit: {
                                                 viewModel.addDraftTodo()
-                                                self.scrollToId = "-1"
+                                                if (!viewModel.todoState.draftTodo.title.isEmpty) {
+                                                    self.scrollToIndex = -1
+                                                }
                                             },
                                             onAdd: {
                                                 viewModel.addDraftTodo()
-                                                self.scrollToId = "-1"
+                                                if (!viewModel.todoState.draftTodo.title.isEmpty) {
+                                                    self.scrollToIndex = -1
+                                                }
                                             },
                                             onHoverAction: { isHovering in
                                                 viewModel.todoState.isHoveringAddButton = isHovering
                                             },
                                             showActionButton: !viewModel.todoState.draftTodo.title.isEmpty && !viewModel.todoState.draftTodo.completed
                                         )
+                                        .focused($focusedIndex, equals: -2)
+                                        .id(-2)
                                     }
                                     .padding(.horizontal, 20)
                                 }
@@ -176,7 +193,6 @@ struct SessionView: View {
                                 HStack {
                                     PomodoroTimer(viewModel: viewModel)
                                 }
-                                .padding(.horizontal, 20)
                             case .focus:
                                 HStack {}
                             }

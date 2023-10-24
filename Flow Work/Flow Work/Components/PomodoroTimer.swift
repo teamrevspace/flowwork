@@ -16,20 +16,42 @@ struct PomodoroTimer: View {
                 .font(.title)
                 .fontWeight(.bold)
             Spacer()
-            if viewModel.isTimerRunning {
-                Button("Pause") {
-                    viewModel.pauseTimer()
+            HStack(spacing: 10) {
+                Group {
+                    if viewModel.isTimerRunning {
+                        Button(action: {
+                            viewModel.pauseTimer()
+                        }) {
+                            Image(systemName: "pause.fill")
+                                .resizable()
+                                .frame(width: 15, height: 15)
+                                .foregroundColor(Color("Primary"))
+                        }
+                        .buttonStyle(PlainButtonStyle())
+                    } else {
+                        Button(action: {
+                            viewModel.startTimer()
+                        }) {
+                            Image(systemName: "play.fill")
+                                .resizable()
+                                .frame(width: 15, height: 15)
+                                .foregroundColor(Color("Primary"))
+                        }
+                        .buttonStyle(PlainButtonStyle())
+                    }
                 }
-            } else {
-                Button("Start") {
-                    viewModel.startTimer()
+                Button(action: {
+                    viewModel.resetTimer()
+                }) {
+                    Image(systemName: "arrow.counterclockwise")
+                        .resizable()
+                        .frame(width: 15, height: 15)
+                        .foregroundColor(Color("Primary"))
                 }
-            }
-            Button("Reset") {
-                viewModel.resetTimer()
+                .buttonStyle(PlainButtonStyle())
             }
         }
         .padding(0)
-        .frame(height: 40)
+        .frame(height: 30)
     }
 }
