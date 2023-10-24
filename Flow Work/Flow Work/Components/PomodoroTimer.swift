@@ -25,6 +25,7 @@ struct PomodoroTimer: View {
                         }) {
                             Image(systemName: "pause.circle.fill")
                                 .resizable()
+                                .aspectRatio(contentMode: .fit)
                                 .frame(width: 20, height: 20)
                                 .foregroundColor(Color("Primary").opacity(0.75))
                         }
@@ -36,6 +37,7 @@ struct PomodoroTimer: View {
                         }) {
                             Image(systemName: "play.circle.fill")
                                 .resizable()
+                                .aspectRatio(contentMode: .fit)
                                 .frame(width: 20, height: 20)
                                 .foregroundColor(Color("Primary").opacity(0.75))
                         }
@@ -49,6 +51,7 @@ struct PomodoroTimer: View {
                 }) {
                     Image(systemName: "arrow.counterclockwise.circle.fill")
                         .resizable()
+                        .aspectRatio(contentMode: .fit)
                         .frame(width: 20, height: 20)
                         .foregroundColor(Color("Primary").opacity(0.75))
                 }

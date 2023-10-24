@@ -22,6 +22,7 @@ struct HomeView: View {
                     } else {
                         Image("FlowWorkLogo")
                             .resizable()
+                            .aspectRatio(contentMode: .fit)
                             .frame(width: 30, height: 30)
                             .scaledToFit()
                         Text("Flow Work")
@@ -82,6 +83,7 @@ struct HomeView: View {
                     }) {
                         Image(systemName: "arrow.right.circle.fill")
                             .resizable()
+                            .aspectRatio(contentMode: .fit)
                             .frame(width: 30, height: 30)
                             .foregroundColor(Color("Primary").opacity(0.75))
                     }

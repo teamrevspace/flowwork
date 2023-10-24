@@ -25,6 +25,7 @@ struct WorkModeButton: View {
             HStack(spacing: 5) {
                 Image(systemName: iconName)
                     .resizable()
+                    .aspectRatio(contentMode: .fit)
                     .frame(width: 15, height: 15)
                 Text(title)
                     .font(.headline)

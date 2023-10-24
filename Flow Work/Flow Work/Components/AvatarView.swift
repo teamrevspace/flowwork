@@ -16,6 +16,7 @@ struct AvatarView: View {
             AsyncImage(url: url) { image in
                 image
                     .resizable()
+                    .aspectRatio(contentMode: .fit)
                     .frame(width: 30, height: 30)
                     .foregroundColor(Color.secondary.opacity(0.5))
                     .cornerRadius(.infinity)
@@ -29,6 +30,7 @@ struct AvatarView: View {
         } else {
             Image(systemName: "person.circle.fill")
                 .resizable()
+                .aspectRatio(contentMode: .fit)
                 .frame(width: 30, height: 30)
                 .foregroundColor(Color.secondary.opacity(0.5))
                 .cornerRadius(.infinity)

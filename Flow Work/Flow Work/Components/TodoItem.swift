@@ -47,7 +47,6 @@ struct TodoItem: View {
         
         savePublisher
             .debounce(for: 0.25, scheduler: DispatchQueue.main)
-//            .merge(with: throttleSavePublisher.throttle(for: 2.0, scheduler: DispatchQueue.main, latest: true))
             .sink { _ in
                 onUpdate?()
             }

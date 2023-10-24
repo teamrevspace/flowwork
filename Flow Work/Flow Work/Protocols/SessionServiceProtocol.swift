@@ -26,6 +26,7 @@ protocol SessionServiceProtocol {
     func joinSession(_ sessionId: String)
     func leaveSession(_ sessionId: String)
     func sendMessage(message: Message)
+    func resetMaxRetries()
     
     func updateWorkMode(_ mode: WorkMode)
 }

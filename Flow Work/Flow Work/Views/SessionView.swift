@@ -16,10 +16,18 @@ struct SessionView: View {
     var body: some View {
         let todoListCount = viewModel.todoState.todoItems.count
         VStack {
-            if (viewModel.sessionState.currentSession == nil || !viewModel.authState.isSignedIn) {
+            if (!viewModel.networkService.connected) {
                 VStack(spacing: 10) {
                     Spacer()
-                    ProgressView()
+                    Image(systemName: "icloud.slash.fill")
+                        .resizable()
+                        .aspectRatio(contentMode: .fit)
+                        .frame(width: 30, height: 30)
+                        .foregroundColor(Color.secondary)
+                    Text("No internet connection. Try again later.")
+                        .font(.title2)
+                        .fontWeight(.semibold)
+                        .foregroundColor(Color.secondary)
                     Spacer()
                     HStack {
                         Button(action: {
@@ -27,6 +35,56 @@ struct SessionView: View {
                         }) {
                             HStack {
                                 Text("Back")
+                            }
+                        }
+                    }
+                }
+                .padding()
+                .standardFrame()
+            } else if (viewModel.sessionState.currentSession == nil || !viewModel.authState.isSignedIn) {
+                VStack(spacing: 10) {
+                    Spacer()
+                    if (viewModel.sessionState.maxRetriesReached) {
+                        Image(systemName: "sailboat.fill")
+                            .resizable()
+                            .aspectRatio(contentMode: .fit)
+                            .frame(width: 30, height: 30)
+                            .foregroundColor(Color.secondary)
+                        Text("Disconnected.")
+                            .font(.title2)
+                            .fontWeight(.semibold)
+                            .foregroundColor(Color.secondary)
+                    } else {
+                        Image(systemName: "antenna.radiowaves.left.and.right")
+                            .resizable()
+                            .aspectRatio(contentMode: .fit)
+                            .frame(width: 30, height: 30)
+                            .foregroundColor(Color.secondary)
+                        Text("Connecting to session...")
+                            .font(.title2)
+                            .fontWeight(.semibold)
+                            .foregroundColor(Color.secondary)
+                    }
+                    Spacer()
+                    HStack {
+                        if (viewModel.sessionState.maxRetriesReached) {
+                            Button(action: {
+                                guard let userId = viewModel.authState.currentUser?.id else { return }
+                                viewModel.sessionService.connect(userId)
+                                viewModel.sessionService.resetMaxRetries()
+                                viewModel.leaveSession()
+                            }) {
+                                HStack {
+                                    Text("Reconnect")
+                                }
+                            }
+                        } else {
+                            Button(action: {
+                                viewModel.leaveSession()
+                            }) {
+                                HStack {
+                                    Text("Back")
+                                }
                             }
                         }
                     }
@@ -55,6 +113,7 @@ struct SessionView: View {
                         } label: {
                             Image(systemName: "gearshape.fill")
                                 .resizable()
+                                .aspectRatio(contentMode: .fit)
                                 .frame(width: 15, height: 15)
                         }
                         .buttonStyle(PlainButtonStyle())
@@ -73,7 +132,8 @@ struct SessionView: View {
                                                     todo: $viewModel.todoState.todoItems[index],
                                                     isHoveringAction: viewModel.todoState.isHoveringActionButtons[index],
                                                     onCheck: { value in
-                                                        viewModel.todoService.checkTodoCompleted(index: index, completed: value)
+                                                        viewModel.todoService.checkTodoCompleted(index: index, completed: value) {
+                                                        }
                                                     },
                                                     onUpdate: {
                                                         viewModel.storeService.updateTodo(todo: todo)
@@ -124,7 +184,7 @@ struct SessionView: View {
                                             isEditingDraft: !viewModel.todoState.draftTodo.title.isEmpty,
                                             isHoveringAction: viewModel.todoState.isHoveringAddButton,
                                             onCheck: { value in
-                                                viewModel.todoService.checkTodoCompleted(index: todoListCount, completed: value)
+                                                viewModel.todoService.checkTodoCompleted(index: todoListCount, completed: value) {}
                                             },
                                             onAdd: {
                                                 viewModel.addDraftTodo()
@@ -210,34 +270,7 @@ struct SessionView: View {
                 }
                 .padding(0)
                 .standardFrame()
-                .onChange(of: viewModel.networkService.connected) { value in
-                    guard let userId = viewModel.authState.currentUser?.id else { return }
-                    viewModel.todoState.isTodoListInitialized = false
-                    if (viewModel.networkService.connected) {
-                        viewModel.sessionService.connect(userId)
-                        viewModel.fetchTodoList()
-                    } else {
-                        viewModel.sessionService.disconnect()
-                        viewModel.todoState.isTodoListInitialized = false
-                    }
-                }
-                .onChange(of: viewModel.sessionState.isConnected) { value in
-                    guard let userId = viewModel.authState.currentUser?.id else { return }
-                    viewModel.todoState.isTodoListInitialized = false
-                    if (viewModel.sessionState.isConnected) {
-                        viewModel.sessionService.connect(userId)
-                        viewModel.fetchTodoList()
-                    } else {
-                        viewModel.sessionService.disconnect()
-                        viewModel.todoState.isTodoListInitialized = false
-                    }
-                }
                 .onAppear() {
-                    guard let userId = viewModel.authState.currentUser?.id else { return }
-                    if viewModel.sessionState.maxRetriesReached {
-                        print(userId)
-                        viewModel.sessionService.connect(userId)
-                    }
                     viewModel.fetchTodoList()
                     switch (viewModel.sessionState.selectedMode) {
                     case .lounge:
@@ -254,7 +287,6 @@ struct SessionView: View {
                 .onDisappear() {
                     if (viewModel.todoState.isTodoListInitialized) {
                         viewModel.todoService.sanitizeTodoItems()
-                        viewModel.todoService.checkTodoCompleted(index: todoListCount, completed: false)
                     }
                     switch (viewModel.sessionState.selectedMode) {
                     case .lounge:
@@ -265,6 +297,38 @@ struct SessionView: View {
                         viewModel.restoreSessionGlobal()
                     }
                 }
+            }
+        }
+        .onChange(of: viewModel.networkService.connected) { value in
+            guard let userId = viewModel.authState.currentUser?.id else { return }
+            viewModel.todoState.isTodoListInitialized = false
+            if (viewModel.networkService.connected) {
+                viewModel.sessionService.connect(userId)
+                viewModel.sessionService.resetMaxRetries()
+                viewModel.leaveSession()
+            } else {
+                viewModel.sessionService.disconnect()
+                viewModel.todoState.isTodoListInitialized = false
+            }
+        }
+        .onChange(of: viewModel.sessionState.isConnected) { value in
+            guard let userId = viewModel.authState.currentUser?.id else { return }
+            viewModel.todoState.isTodoListInitialized = false
+            if (viewModel.sessionState.isConnected) {
+                viewModel.sessionService.connect(userId)
+                viewModel.sessionService.resetMaxRetries()
+                viewModel.leaveSession()
+            } else {
+                viewModel.sessionService.disconnect()
+                viewModel.todoState.isTodoListInitialized = false
+            }
+        }
+        .onAppear {
+            guard let userId = viewModel.authState.currentUser?.id else { return }
+            if viewModel.sessionState.maxRetriesReached {
+                viewModel.sessionService.connect(userId)
+                viewModel.sessionService.resetMaxRetries()
+                viewModel.leaveSession()
             }
         }
     }

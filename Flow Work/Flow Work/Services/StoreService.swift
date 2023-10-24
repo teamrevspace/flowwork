@@ -150,7 +150,7 @@ class StoreService: StoreServiceProtocol, ObservableObject {
         db.collection("todos").addDocument(data: data)
     }
     
-    func updateTodo(todo: Todo) -> Void {
+    func updateTodo(todo: Todo) {
         guard let todoId = todo.id else { return }
         var newData: [String: Any] = [
             "title": todo.title,

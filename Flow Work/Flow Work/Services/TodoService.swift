@@ -58,7 +58,7 @@ class TodoService: TodoServiceProtocol, ObservableObject {
         self.state.draftTodo = todo
     }
     
-    func checkTodoCompleted(index: Int, completed: Bool) {
+    func checkTodoCompleted(index: Int, completed: Bool, completion: @escaping () -> Void) {
         self.delayedTasks[index]?.cancel()
         if completed {
             let task = DispatchWorkItem {
@@ -72,7 +72,10 @@ class TodoService: TodoServiceProtocol, ObservableObject {
             }
             self.delayedTasks[index] = task
             
-            DispatchQueue.main.asyncAfter(deadline: .now() + 2, execute: task)
+            DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                task.perform()
+                completion()
+            }
         }
     }
     

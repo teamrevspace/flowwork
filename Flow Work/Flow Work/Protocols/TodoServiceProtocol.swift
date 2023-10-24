@@ -15,5 +15,5 @@ protocol TodoServiceProtocol {
     func initTodoList(todos: [Todo])
     func sanitizeTodoItems()
     func updateDraftTodo(todo: Todo)
-    func checkTodoCompleted(index: Int, completed: Bool)
+    func checkTodoCompleted(index: Int, completed: Bool, completion: @escaping (() -> Void))
 }
