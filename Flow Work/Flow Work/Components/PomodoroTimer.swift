@@ -11,7 +11,7 @@ struct PomodoroTimer: View {
     @ObservedObject var viewModel: SessionViewModel
     
     var body: some View {
-        HStack {
+        HStack(alignment: .center) {
             Text(viewModel.timeString(from: viewModel.timeRemaining))
                 .font(.title)
                 .fontWeight(.bold)
@@ -21,6 +21,7 @@ struct PomodoroTimer: View {
                     if viewModel.isTimerRunning {
                         Button(action: {
                             viewModel.pauseTimer()
+                            viewModel.playClickSound()
                         }) {
                             Image(systemName: "pause.fill")
                                 .resizable()
@@ -31,6 +32,7 @@ struct PomodoroTimer: View {
                     } else {
                         Button(action: {
                             viewModel.startTimer()
+                            viewModel.playClickSound()
                         }) {
                             Image(systemName: "play.fill")
                                 .resizable()
@@ -42,6 +44,7 @@ struct PomodoroTimer: View {
                 }
                 Button(action: {
                     viewModel.resetTimer()
+                    viewModel.playTickSound()
                 }) {
                     Image(systemName: "arrow.counterclockwise")
                         .resizable()

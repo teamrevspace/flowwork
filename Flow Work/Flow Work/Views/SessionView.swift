@@ -244,6 +244,8 @@ struct SessionView: View {
                         break
                     case .pomodoro:
                         viewModel.resetTimer()
+                        viewModel.startTimer()
+                        viewModel.playTickSound()
                     case .focus:
                         viewModel.saveSessionGlobal()
                     }

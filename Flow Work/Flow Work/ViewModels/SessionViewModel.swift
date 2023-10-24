@@ -123,7 +123,6 @@ class SessionViewModel: ObservableObject {
 extension SessionViewModel {
     func startTimer() {
         guard !self.isTimerRunning else { return }
-        playClickSound()
         self.isTimerRunning = true
         timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { _ in
             guard self.isTimerRunning else { return }
@@ -137,7 +136,6 @@ extension SessionViewModel {
     
     func pauseTimer() {
         timer?.invalidate()
-        playClickSound()
         self.isTimerRunning = false
     }
     
@@ -148,7 +146,13 @@ extension SessionViewModel {
         self.isTimerRunning = false
     }
     
-    private func playClickSound() {
+    func playTickSound() {
+        if let sound = NSSound(named: "Tick") {
+            sound.play()
+        }
+    }
+    
+    func playClickSound() {
         if let sound = NSSound(named: "Click") {
             sound.play()
         }
@@ -260,10 +264,10 @@ extension SessionViewModel {
         
         let appDelegate = NSApplication.shared.delegate as? AppDelegate
         appDelegate?.closeMenuPopover(self)
+        playCongaSound()
     }
     
     func restoreSessionGlobal() {
-        
         // Check if apps are to be terminated as opposed to hiding them
         if (terminateApps) {
             for runningApplication in NSWorkspace.shared.runningApplications {
@@ -329,5 +333,11 @@ extension SessionViewModel {
         defaults.set(false, forKey:"session")
         self.inFocusMode = false
         checkAnyWindows()
+    }
+    
+    private func playCongaSound() {
+        if let sound = NSSound(named: "Conga") {
+            sound.play()
+        }
     }
 }

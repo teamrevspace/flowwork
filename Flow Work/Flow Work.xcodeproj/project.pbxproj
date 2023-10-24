@@ -60,9 +60,11 @@
 		11A92ED52AE5B724007F5DF4 /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11A92ED42AE5B724007F5DF4 /* ProfileView.swift */; };
 		11A92ED72AE5B776007F5DF4 /* ProfileViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11A92ED62AE5B776007F5DF4 /* ProfileViewModel.swift */; };
 		11A92EDB2AE6FACB007F5DF4 /* PomodoroTimer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11A92EDA2AE6FACB007F5DF4 /* PomodoroTimer.swift */; };
-		11A92EDE2AE70B0E007F5DF4 /* Click.wav in Resources */ = {isa = PBXBuildFile; fileRef = 11A92EDD2AE70B0E007F5DF4 /* Click.wav */; };
 		11A92EE02AE761A6007F5DF4 /* WorkModeButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11A92EDF2AE761A6007F5DF4 /* WorkModeButton.swift */; };
 		11A92EE42AE77FE9007F5DF4 /* EventMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11A92EE32AE77FE9007F5DF4 /* EventMonitor.swift */; };
+		11AD39392AE7970E00833426 /* Conga.wav in Resources */ = {isa = PBXBuildFile; fileRef = 11AD39382AE7970E00833426 /* Conga.wav */; };
+		11AD393B2AE79A2E00833426 /* Click.wav in Resources */ = {isa = PBXBuildFile; fileRef = 11AD393A2AE79A2E00833426 /* Click.wav */; };
+		11AD393F2AE79AD700833426 /* Tick.wav in Resources */ = {isa = PBXBuildFile; fileRef = 11AD393E2AE79AD700833426 /* Tick.wav */; };
 		11C839ED2AD7AC9300DE62D2 /* AvatarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11C839EC2AD7AC9300DE62D2 /* AvatarView.swift */; };
 		11E5AD2B2ADD84C7004670F0 /* FText.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11E5AD2A2ADD84C7004670F0 /* FText.swift */; };
 		11E5AD2D2ADECB9B004670F0 /* TodoService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11E5AD2C2ADECB9B004670F0 /* TodoService.swift */; };
@@ -141,9 +143,11 @@
 		11A92ED42AE5B724007F5DF4 /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
 		11A92ED62AE5B776007F5DF4 /* ProfileViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewModel.swift; sourceTree = "<group>"; };
 		11A92EDA2AE6FACB007F5DF4 /* PomodoroTimer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PomodoroTimer.swift; sourceTree = "<group>"; };
-		11A92EDD2AE70B0E007F5DF4 /* Click.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = Click.wav; sourceTree = "<group>"; };
 		11A92EDF2AE761A6007F5DF4 /* WorkModeButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkModeButton.swift; sourceTree = "<group>"; };
 		11A92EE32AE77FE9007F5DF4 /* EventMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventMonitor.swift; sourceTree = "<group>"; };
+		11AD39382AE7970E00833426 /* Conga.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = Conga.wav; sourceTree = "<group>"; };
+		11AD393A2AE79A2E00833426 /* Click.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = Click.wav; sourceTree = "<group>"; };
+		11AD393E2AE79AD700833426 /* Tick.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = Tick.wav; sourceTree = "<group>"; };
 		11C839EC2AD7AC9300DE62D2 /* AvatarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AvatarView.swift; sourceTree = "<group>"; };
 		11E5AD2A2ADD84C7004670F0 /* FText.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FText.swift; sourceTree = "<group>"; };
 		11E5AD2C2ADECB9B004670F0 /* TodoService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodoService.swift; sourceTree = "<group>"; };
@@ -228,7 +232,9 @@
 		114AFDE22AC765B700AB9A8B /* Flow Work */ = {
 			isa = PBXGroup;
 			children = (
-				11A92EDD2AE70B0E007F5DF4 /* Click.wav */,
+				11AD39382AE7970E00833426 /* Conga.wav */,
+				11AD393E2AE79AD700833426 /* Tick.wav */,
+				11AD393A2AE79A2E00833426 /* Click.wav */,
 				11A92ECC2AE56D9B007F5DF4 /* GoogleService-Info.plist */,
 				11A92EC82AE55ED8007F5DF4 /* Flow-Work-Info.plist */,
 				11A92EAA2AE4481A007F5DF4 /* States */,
@@ -476,9 +482,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				114AFDEB2AC765B800AB9A8B /* Preview Assets.xcassets in Resources */,
+				11AD393F2AE79AD700833426 /* Tick.wav in Resources */,
 				114AFDE82AC765B800AB9A8B /* Assets.xcassets in Resources */,
 				11A92ECD2AE56D9B007F5DF4 /* GoogleService-Info.plist in Resources */,
-				11A92EDE2AE70B0E007F5DF4 /* Click.wav in Resources */,
+				11AD39392AE7970E00833426 /* Conga.wav in Resources */,
+				11AD393B2AE79A2E00833426 /* Click.wav in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
