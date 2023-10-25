@@ -165,7 +165,6 @@ class SessionViewModel: ObservableObject {
         if let currentSessionId = self.sessionState.currentSession?.id {
             self.sessionService.joinSession(currentSessionId)
         }
-        self.delegate?.showLobbyView()
     }
     
     func setUpdateStatus(_ isUpdating: Bool) -> Void {
@@ -193,9 +192,7 @@ class SessionViewModel: ObservableObject {
 
 // MARK: lounge mode implementation
 extension SessionViewModel {
-    func playDoorSound() {
-        self.audioService.playSound(.door)
-    }
+    // TODO: add webrtc feature
 }
 
 // MARK: pomodoro mode implementation

@@ -84,9 +84,6 @@ class SessionService: SessionServiceProtocol, ObservableObject {
         webSocketTask = nil
         DispatchQueue.main.async {
             self.state.hasJoinedSession = false
-            self.state.currentSessionUsers = nil
-            self.state.currentSession = nil
-            self.state.availableSessions = []
             self.state.isConnected = false
         }
     }
@@ -274,12 +271,10 @@ extension SessionService {
 extension SessionService {
     private func handleSocketResponse(_ response: SocketResponse) {
         DispatchQueue.main.async {
-            if response.topic.starts(with: "coworking_session:") && response.event == "phx_join" && response.payload.status == "ok" {
+            if response.topic.starts(with: "coworking_session:") && response.event == "phx_join" && response.payload?.status == "ok" {
                 self.state.hasJoinedSession = true
-            } else if response.topic.starts(with: "coworking_session:") && response.event == "phx_close" && response.payload.status == "ok"{
+            } else if response.topic.starts(with: "coworking_session:") && response.event == "phx_close" {
                 self.state.hasJoinedSession = false
-                self.state.currentSessionUsers = nil
-                self.state.currentSession = nil
             }
         }
     }
@@ -326,7 +321,6 @@ extension SessionService {
     private func handleErrorResponse(_ response: ErrorResponse) {
         DispatchQueue.main.async {
             if response.payload.status == "error" {
-                self.state.currentSession = nil
                 print(AppError.sessionNotFound)
                 self.delegate?.sessionNotFound()
             }
@@ -351,6 +345,8 @@ extension MessageType {
             self = .lobbyResponse(messageObject)
         } else if let messageObject = try? decoder.decode(ErrorResponse.self, from: data) {
             self = .errorResponse(messageObject)
+        } else if let messageObject = try? decoder.decode(SocketResponse.self, from: data) {
+            self = .socketResponse(messageObject)
         } else {
             self = .unknown(data)
         }

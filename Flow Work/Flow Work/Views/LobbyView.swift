@@ -45,6 +45,7 @@ struct CreateSessionView: View {
         VStack {
             TextField("Session name", text:  $viewModel.newSessionName)
                 .textFieldStyle(RoundedBorderTextFieldStyle())
+            
             HStack{
                 Group {
                     if viewModel.showPassword {
@@ -66,22 +67,18 @@ struct CreateSessionView: View {
             }
             Spacer()
             HStack(spacing: 10) {
-                Button(action: {
+                FButton(text: "Back") {
                     viewModel.returnToHome()
-                }) {
-                    Text("Back")
                 }
-                Button(action: {
+                FButton(text: "Create") {
                     if (viewModel.authState.isSignedIn && !viewModel.newSessionName.isEmpty) {
                         let userIds = [self.viewModel.authState.currentUser!.id]
                         viewModel.createSession(userIds: userIds)
                     }
-                }) {
-                    Text("Create")
                 }
             }
         }
-        .padding()
+        .padding(10)
     }
 }
 
@@ -96,54 +93,53 @@ struct JoinSessionView: View {
                 .onSubmit {
                     viewModel.joinSession(viewModel.joinSessionCode)
                 }
-            if viewModel.isSessionListLoading {
-                Spacer()
-                ProgressView()
-                Spacer()
-            } else {
-                List(viewModel.sessionState.availableSessions) { session in
-                    HStack {
-                        SessionItem(session: session)
-                            .foregroundColor(selectedSessionId == session.id ? Color.white : Color.primary)
-                            .padding(.init(top: 5, leading: 10, bottom: 5, trailing: 10))
-                            .contentShape(Rectangle())
-                            .background(selectedSessionId == session.id ? Color.blue : Color.clear)
-                            .gesture(TapGesture(count: 2).onEnded {
-                                viewModel.joinSession(session.id)
-                            })
-                            .simultaneousGesture(TapGesture().onEnded {
-                                selectedSessionId = session.id
-                            })
-                            .contextMenu {
-                                Button(action: {
-                                    if (viewModel.authState.isSignedIn) {
-                                        self.viewModel.storeService.removeUserFromSession(userId: viewModel.authState.currentUser!.id, sessionId: session.id)
+            
+            Group {
+                if viewModel.isSessionListLoading {
+                    Spacer()
+                    ProgressView()
+                    Spacer()
+                } else {
+                    List(viewModel.sessionState.availableSessions) { session in
+                        HStack {
+                            SessionItem(session: session)
+                                .foregroundColor(selectedSessionId == session.id ? Color.white : Color.primary)
+                                .padding(.init(top: 5, leading: 10, bottom: 5, trailing: 10))
+                                .contentShape(Rectangle())
+                                .background(selectedSessionId == session.id ? Color.blue : Color.clear)
+                                .gesture(TapGesture(count: 2).onEnded {
+                                    viewModel.joinSession(session.id)
+                                })
+                                .simultaneousGesture(TapGesture().onEnded {
+                                    selectedSessionId = session.id
+                                })
+                                .contextMenu {
+                                    Button(action: {
+                                        if (viewModel.authState.isSignedIn) {
+                                            self.viewModel.storeService.removeUserFromSession(userId: viewModel.authState.currentUser!.id, sessionId: session.id)
+                                        }
+                                    }) {
+                                        Text("Remove")
                                     }
-                                }) {
-                                    Text("Remove")
                                 }
-                            }
+                        }
                     }
+                    .padding(0)
+                    .frame(minHeight: 200)
+                    .cornerRadius(5)
+                    .listStyle(.plain)
                 }
-                .padding(0)
-                .frame(minHeight: 200)
-                .cornerRadius(5)
-                .listStyle(.plain)
             }
             
             HStack(spacing: 10) {
-                Button(action: {
+                FButton(text: "Back") {
                     viewModel.returnToHome()
-                }) {
-                    Text("Back")
                 }
-                Button(action: {
+                FButton(text: "Join") {
                     viewModel.joinSession(selectedSessionId)
-                }) {
-                    Text("Join")
                 }
             }
         }
-        .padding()
+        .padding(10)
     }
 }

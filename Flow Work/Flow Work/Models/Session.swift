@@ -101,7 +101,7 @@ struct SessionResponseFields: Decodable {
 
 struct SocketResponse: Decodable {
     var ref: String?
-    var payload: SocketResponsePayload
+    var payload: SocketResponsePayload?
     var topic: String
     var event: String
 }

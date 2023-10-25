@@ -21,6 +21,7 @@ class LobbyViewModel: ObservableObject {
     @Published var authService: AuthServiceProtocol
     @Published var storeService: StoreServiceProtocol
     @Published var apiService: APIServiceProtocol
+    @Published var audioService: AudioServiceProtocol
     
     @Published var authState = AuthState()
     @Published var sessionState = SessionState()
@@ -40,6 +41,7 @@ class LobbyViewModel: ObservableObject {
         self.authService = resolver.resolve(AuthServiceProtocol.self)!
         self.storeService = resolver.resolve(StoreServiceProtocol.self)!
         self.apiService = resolver.resolve(APIServiceProtocol.self)!
+        self.audioService = resolver.resolve(AudioServiceProtocol.self)!
         
         authService.statePublisher
             .assign(to: \.authState, on: self)
@@ -106,6 +108,7 @@ class LobbyViewModel: ObservableObject {
         }
         
         self.sessionService.joinSession(sessionId)
+        self.audioService.playSound(.door)
     }
     
     func returnToHome() {

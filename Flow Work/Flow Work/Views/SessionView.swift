@@ -29,18 +29,14 @@ struct SessionView: View {
                         .foregroundColor(Color.secondary)
                     Spacer()
                     HStack {
-                        Button(action: {
+                        FButton(text: "Back") {
                             viewModel.leaveSession()
-                        }) {
-                            HStack {
-                                Text("Back")
-                            }
                         }
                     }
                 }
                 .padding()
                 .standardFrame()
-            } else if (viewModel.sessionState.currentSession == nil || !viewModel.authState.isSignedIn) {
+            } else if (!viewModel.sessionState.hasJoinedSession) {
                 VStack(spacing: 10) {
                     Spacer()
                     if (viewModel.sessionState.maxRetriesReached) {
@@ -59,7 +55,7 @@ struct SessionView: View {
                             .aspectRatio(contentMode: .fit)
                             .frame(width: 30, height: 30)
                             .foregroundColor(Color.secondary)
-                        Text("Connecting to session...")
+                        Text("Joining...")
                             .font(.title2)
                             .fontWeight(.semibold)
                             .foregroundColor(Color.secondary)
@@ -78,12 +74,8 @@ struct SessionView: View {
                                 }
                             }
                         } else {
-                            Button(action: {
+                            FButton(text: "Back") {
                                 viewModel.leaveSession()
-                            }) {
-                                HStack {
-                                    Text("Back")
-                                }
                             }
                         }
                     }
@@ -279,11 +271,8 @@ struct SessionView: View {
                                     }
                                 }
                             }
-                            Button(action: {
+                            FButton(image: "hand.wave.fill", text: "Leave quietly") {
                                 viewModel.leaveSession()
-                            }) {
-                                Image(systemName: "rectangle.portrait.and.arrow.right")
-                                Text("Leave Session")
                             }
                         }
                         .frame(height: 30)
@@ -297,7 +286,7 @@ struct SessionView: View {
                     viewModel.fetchTodoList()
                     switch (viewModel.sessionState.selectedMode) {
                     case .lounge:
-                        viewModel.playDoorSound()
+                        break
                     case .pomodoro:
                         viewModel.resetTimer()
                         viewModel.startTimer()
