@@ -9,3 +9,10 @@ export enum ResponseStatus {
   NotFound,
   InvalidFormat,
 }
+
+export interface Session {
+  description: string,
+  name: string,
+  password: string,
+  userIds: Array<string>
+}

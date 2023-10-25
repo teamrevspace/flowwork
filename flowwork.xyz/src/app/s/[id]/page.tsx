@@ -1,5 +1,7 @@
 "use client"
 
+import { Session } from "@/types";
+import axios from "axios";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
@@ -17,15 +19,12 @@ export default function JoinSessionPage({ params }: { params: { id: string } }) 
   }, [ params.id, router ])
 
   useEffect(() => {
-    fetch(`https://api.flowwork.xyz/api/sessions?session_id=${params.id}`)
-      .then(res => {
-        if (!res.ok) {
+    axios.get<Session>(`https://api.flowwork.xyz/api/sessions?session_id=${params.id}`)
+      .then((res) => {
+        if (!res.data) {
           throw new Error('Network failed ' + res.statusText);
         }
-        return res.json();
-      })
-      .then(res => {
-        if (res.status === 'success') {
+        if (res.status === 200) {
           setSessionName(res.data.name)
         } else {
           setSessionName(null)
