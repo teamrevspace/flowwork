@@ -46,7 +46,8 @@ defmodule FlowStream.MixProject do
       {:tesla, "~> 1.7.0"},
       {:jose, "~> 1.11.6"},
       {:joken, "~> 2.6.0"},
-      {:hackney, "~> 1.20"}
+      {:hackney, "~> 1.20"},
+      {:cors_plug, "~> 3.0"}
     ]
   end
 

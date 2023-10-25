@@ -3,6 +3,7 @@ defmodule FlowStreamWeb.Router do
 
   pipeline :api do
     plug :accepts, ["json"]
+    plug CORSPlug, origin: "https://flowwork.xyz"
   end
 
   scope "/api", FlowStreamWeb do
