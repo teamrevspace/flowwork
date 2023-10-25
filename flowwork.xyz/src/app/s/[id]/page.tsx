@@ -35,7 +35,7 @@ export default function JoinSessionPage({ params }: { params: { id: string } }) 
         setSessionName(undefined)
         console.error('API error:', error);
       });
-  }, [ joinSession, params.id, router ])
+  }, [ params.id, router ])
 
   return (
     <div className="h-screen w-full flex flex-col bg-white px-6">
