@@ -7,30 +7,7 @@ defmodule Firestore do
 
   plug(Tesla.Middleware.Retry, delay: 100, max_retries: 5, should_retry: &should_retry/1)
 
-  def create_session(%{"name" => name, "userIds" => userIds} = payload) do
-    userIds = Enum.map(userIds, fn userId ->
-      %{"stringValue" => userId}
-    end)
-    fields = %{
-      "name" => %{"stringValue" => name},
-      "userIds" => %{"arrayValue" => %{"values" => userIds}}
-    }
-
-    description = Map.get(payload, "description", "")
-    fields = Map.put(fields, "description", %{"stringValue" => description})
-
-    password = Map.get(payload, "password", "")
-    fields = Map.put(fields, "password", %{"stringValue" => password})
-
-    session_data = %{"fields" => fields}
-    firestore_post("/sessions", session_data)
-  end
-
-  def join_session(id) do
-    firestore_get("/sessions/#{id}")
-  end
-
-  defp firestore_get(path) do
+  def get_document(path) do
     url = "#{@firestore_url}#{path}"
     headers = [{"Content-Type", "application/json"}]
 
@@ -46,7 +23,7 @@ defmodule Firestore do
     end
   end
 
-  defp firestore_post(path, data) do
+  def post_document(path, data) do
     url = "#{@firestore_url}#{path}"
     headers = [{"Content-Type", "application/json"}]
     body = Jason.encode!(data)

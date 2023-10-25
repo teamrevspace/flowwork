@@ -64,7 +64,7 @@ defmodule FlowStreamWeb.CoworkingSessionChannel do
 
   @impl true
   def handle_in("create_session", payload, socket) do
-    case Firestore.create_session(payload) do
+    case create_session(payload) do
       {:ok, session} ->
         {:reply, {:ok, session}, socket}
 
@@ -78,7 +78,7 @@ defmodule FlowStreamWeb.CoworkingSessionChannel do
   def handle_in("join_session", _payload, socket) do
     session_id = socket.assigns.session_id
 
-    case Firestore.join_session(session_id) do
+    case join_session(session_id) do
       {:ok, session} ->
         {:reply, {:ok, session}, socket}
 
@@ -86,6 +86,29 @@ defmodule FlowStreamWeb.CoworkingSessionChannel do
         error_message = "Failed to join session: #{inspect(error)}"
         {:reply, {:error, error_message}, socket}
     end
+  end
+
+  defp create_session(%{"name" => name, "userIds" => userIds} = payload) do
+    userIds = Enum.map(userIds, fn userId ->
+      %{"stringValue" => userId}
+    end)
+    fields = %{
+      "name" => %{"stringValue" => name},
+      "userIds" => %{"arrayValue" => %{"values" => userIds}}
+    }
+
+    description = Map.get(payload, "description", "")
+    fields = Map.put(fields, "description", %{"stringValue" => description})
+
+    password = Map.get(payload, "password", "")
+    fields = Map.put(fields, "password", %{"stringValue" => password})
+
+    session_data = %{"fields" => fields}
+    Firestore.post_document("/sessions", session_data)
+  end
+
+  defp join_session(id) do
+    Firestore.get_document("/sessions/#{id}")
   end
 
   # Add authorization logic here as required.
