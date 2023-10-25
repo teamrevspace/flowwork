@@ -10,7 +10,6 @@ import SwiftUI
 struct SessionView: View {
     @ObservedObject var viewModel: SessionViewModel
     @State private var scrollToIndex: Int? = nil
-    @State private var isUpdating: Bool = false
     @FocusState private var focusedIndex: Int?
     
     var body: some View {
@@ -102,6 +101,13 @@ struct SessionView: View {
                             .font(.title2)
                             .lineLimit(1)
                             .truncationMode(.tail)
+                        Image(systemName: "cloud.fill")
+                            .resizable()
+                            .aspectRatio(contentMode: .fit)
+                            .frame(width: 15, height: 15)
+                            .foregroundColor(Color.secondary)
+                            .opacity(viewModel.isUpdating ? 1 : 0)
+                            .animation(Animation.default, value: viewModel.isUpdating)
                         Spacer()
                         Menu {
                             Button(action: {
@@ -136,19 +142,21 @@ struct SessionView: View {
                                                         }
                                                     },
                                                     onUpdate: {
+                                                        viewModel.setUpdateStatus(false)
                                                         viewModel.storeService.updateTodo(todo: todo)
                                                     },
                                                     onDelete: {
-                                                        guard !isUpdating else { return }
-                                                        isUpdating = true
+                                                        guard !viewModel.isUpdating else { return }
+                                                        viewModel.setUpdateStatus(true)
                                                         viewModel.storeService.removeTodo(todoId: todo.id!) {
-                                                            isUpdating = false
+                                                            viewModel.setUpdateStatus(false)
                                                         }
                                                     },
                                                     onHoverAction: { isHovering in
                                                         viewModel.todoState.isHoveringActionButtons[index] = isHovering
                                                     },
-                                                    showActionButton: !todo.completed
+                                                    showActionButton: !todo.completed,
+                                                    setUpdateStatus: viewModel.setUpdateStatus
                                                 )
                                                 .focused($focusedIndex, equals: index)
                                                 .onSubmit {
@@ -187,8 +195,9 @@ struct SessionView: View {
                                                 viewModel.todoService.checkTodoCompleted(index: todoListCount, completed: value) {}
                                             },
                                             onAdd: {
-                                                viewModel.addDraftTodo()
-                                                self.scrollToIndex = -1
+                                                viewModel.addDraftTodo() {
+                                                    self.scrollToIndex = -1
+                                                }
                                             },
                                             onHoverAction: { isHovering in
                                                 viewModel.todoState.isHoveringAddButton = isHovering

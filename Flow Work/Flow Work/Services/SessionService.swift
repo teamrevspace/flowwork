@@ -255,6 +255,7 @@ class SessionService: SessionServiceProtocol, ObservableObject {
                     self.state.isConnected = false
                 } else {
                     self.state.isConnected = true
+                    print("connected")
                 }
             }
         }

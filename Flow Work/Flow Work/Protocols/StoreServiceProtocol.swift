@@ -18,7 +18,7 @@ protocol StoreServiceProtocol {
     func findTodosByUserId(userId: String, completion: @escaping ([Todo]) -> Void)
     func addTodo(todo: Todo) -> Void
     func removeTodo(todoId: String, completion: @escaping () -> Void)
-    func updateTodo(todo: Todo) -> Void
+    func updateTodo(todo: Todo)
     func stopLobbyListener()
     func addRTCOfferToRoom(rtcOffer: RTCOffer, roomId: String)
     func addRTCAnswerToRoom(rtcAnswer: RTCAnswer, roomId: String)

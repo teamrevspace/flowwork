@@ -18,6 +18,7 @@ struct TodoItem: View {
     var onDelete: (() -> Void)?
     var onHoverAction: (Bool) -> Void
     var showActionButton: Bool
+    var setUpdateStatus: ((Bool) -> Void)?
     
     @State private var isEditing: Bool = false
     
@@ -33,7 +34,8 @@ struct TodoItem: View {
          onUpdate: (() -> Void)? = nil,
          onDelete: (() -> Void)? = nil,
          onHoverAction: @escaping (Bool) -> Void,
-         showActionButton: Bool) {
+         showActionButton: Bool,
+         setUpdateStatus: ((Bool) -> Void)? = nil) {
         
         self._todo = todo
         self.isEditingDraft = isEditingDraft
@@ -44,9 +46,11 @@ struct TodoItem: View {
         self.onDelete = onDelete
         self.onHoverAction = onHoverAction
         self.showActionButton = showActionButton
+        self.setUpdateStatus = setUpdateStatus
         
         savePublisher
-            .debounce(for: 0.25, scheduler: DispatchQueue.main)
+            .debounce(for: 1.0, scheduler: DispatchQueue.main)
+            .merge(with: throttleSavePublisher.throttle(for: 1.0, scheduler: DispatchQueue.main, latest: true))
             .sink { _ in
                 onUpdate?()
             }
@@ -95,6 +99,7 @@ struct TodoItem: View {
                 .foregroundColor(todo.completed ? Color("Primary").opacity(0.5) : Color("Primary"))
                 .frame(maxWidth: .infinity)
                 .onChange(of: todo.title) { _ in
+                    setUpdateStatus?(true)
                     isEditing = true
                 }
                 .onReceive(Just(todo.title)) { _ in

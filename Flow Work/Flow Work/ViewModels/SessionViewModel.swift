@@ -36,6 +36,7 @@ class SessionViewModel: ObservableObject {
     @Published var todoState = TodoState()
     
     @Published var totalSessionsCount: Int? = nil
+    @Published var isUpdating: Bool = false
     
     // MARK: pomodoro mode
     @Published var timeRemaining: Int = Constants.countdownTime
@@ -85,7 +86,7 @@ class SessionViewModel: ObservableObject {
         pasteBoard.setString(textToCopy, forType: .string)
     }
     
-    func addDraftTodo() {
+    func addDraftTodo(completion: @escaping () -> Void) {
         if (!self.todoState.draftTodo.title.isEmpty) {
             guard let currentUserId = self.authState.currentUser?.id else { return }
             var newTodo = self.todoState.draftTodo
@@ -93,6 +94,7 @@ class SessionViewModel: ObservableObject {
             self.todoService.updateDraftTodo(todo: Todo())
             self.storeService.addTodo(todo: newTodo)
             self.todoState.isHoveringActionButtons.append(false)
+            completion()
         }
     }
     
@@ -108,6 +110,10 @@ class SessionViewModel: ObservableObject {
             self.sessionService.joinSession(currentSessionId)
         }
         self.delegate?.showLobbyView()
+    }
+    
+    func setUpdateStatus(_ isUpdating: Bool) -> Void {
+        self.isUpdating = isUpdating
     }
     
     func createAudioRoom() {
