@@ -7,12 +7,23 @@
         ],
         "components": [
           {
+            "#": "no_universal_links",
+            "exclude": true,
+            "comment": "Matches any URL whose fragment equals no_universal_links and instructs the system not to open it as a universal link"
+          },
+          {
             "/": "/download",
             "exclude": true,
             "comment": "Matches any URL whose path starts with /download"
           },
           {
+            "/": "/privacy",
+            "exclude": true,
+            "comment": "Matches any URL whose path starts with /privacy"
+          },
+          {
             "/": "/s/*",
+            "exclude": true,
             "comment": "Matches any URL whose path starts with /s/"
           }
         ]
