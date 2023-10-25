@@ -194,9 +194,8 @@ struct SessionView: View {
                                                     viewModel.checkTodoCompleted(index: todoListCount, completed: value)
                                                 },
                                                 onAdd: {
-                                                    viewModel.addDraftTodo() {
-                                                        self.scrollToIndex = -1
-                                                    }
+                                                    viewModel.addDraftTodo()
+                                                    self.scrollToIndex = -1
                                                 },
                                                 onHoverAction: { isHovering in
                                                     viewModel.todoState.isHoveringAddButton = isHovering

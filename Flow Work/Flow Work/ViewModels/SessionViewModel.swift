@@ -107,17 +107,6 @@ class SessionViewModel: ObservableObject {
             .store(in: &cancellables)
     }
     
-    //    func updateStatus() {
-    //        updateQueue += 1
-    //        self.setUpdateStatus(true)
-    //        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-    //            self.updateQueue -= 1
-    //            if self.updateQueue == 0 {
-    //                self.setUpdateStatus(false)
-    //            }
-    //        }
-    //    }
-    
     func syncToCloud(_ onCloudSync: (() -> Void)?) {
         self.setUpdateStatus(true)
         self.savePublisher.send(onCloudSync)
@@ -151,18 +140,17 @@ class SessionViewModel: ObservableObject {
         }
     }
     
-    func addDraftTodo(completion: @escaping () -> Void) {
+    func addDraftTodo() {
         if (!self.todoState.draftTodo.title.isEmpty) {
+            self.setUpdateStatus(true)
             guard let currentUserId = self.authState.currentUser?.id else { return }
             var newTodo = self.todoState.draftTodo
             newTodo.userIds = [currentUserId]
             self.todoService.updateDraftTodo(todo: Todo())
-            self.setUpdateStatus(true)
+            self.todoState.isHoveringActionButtons.append(false)
             self.storeService.addTodo(todo: newTodo) {
                 self.setUpdateStatus(false)
             }
-            self.todoState.isHoveringActionButtons.append(false)
-            completion()
         }
     }
     
