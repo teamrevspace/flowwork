@@ -11,7 +11,12 @@ import Swinject
 import AppKit
 
 private struct Constants {
-    static let countdownTime = 25 * 60 // 25 minutes in seconds
+    static let pomodoroTime = 25 * 60 // 25 minutes in seconds
+    static let shortBreakTime = 5 * 60 // 5 minutes in seconds
+}
+
+enum TimerType {
+    case pomodoro, shortBreak
 }
 
 protocol SessionViewModelDelegate: AnyObject {
@@ -38,8 +43,11 @@ class SessionViewModel: ObservableObject {
     @Published var totalSessionsCount: Int? = nil
     @Published var isUpdating: Bool = false
     
+    // MARK: task grouping feature
+    
     // MARK: pomodoro mode
-    @Published var timeRemaining: Int = Constants.countdownTime
+    @Published var timerType: TimerType = .pomodoro
+    @Published var timeRemaining: Int = Constants.pomodoroTime
     @Published var isTimerRunning: Bool = false
     private var timer: Timer?
     
@@ -48,6 +56,12 @@ class SessionViewModel: ObservableObject {
     private let ignoreSystemWindows: Bool = false
     private let terminateApps: Bool = false
     private let keepRunningAppOpen: Bool = false
+    
+    // MARK: todo sync
+    private var updateQueue: Int = 0
+    
+    @Published var savePublisher = PassthroughSubject<(() -> Void)?, Never>()
+    private let throttleSavePublisher = PassthroughSubject<(() -> Void)?, Never>()
     
     private let resolver: Resolver
     private var cancellables = Set<AnyCancellable>()
@@ -71,6 +85,8 @@ class SessionViewModel: ObservableObject {
         todoService.statePublisher
             .assign(to: \.todoState, on: self)
             .store(in: &cancellables)
+        
+        setupCloudSync()
     }
     
     func fetchTodoList() {
@@ -80,10 +96,59 @@ class SessionViewModel: ObservableObject {
         }
     }
     
+    func setupCloudSync() {
+        savePublisher
+            .debounce(for: 0.5, scheduler: DispatchQueue.main)
+            .merge(with: throttleSavePublisher.throttle(for: 1.0, scheduler: RunLoop.main, latest: true))
+            .sink { onCloudSync in
+                onCloudSync?()
+                self.setUpdateStatus(false)
+            }
+            .store(in: &cancellables)
+    }
+    
+    //    func updateStatus() {
+    //        updateQueue += 1
+    //        self.setUpdateStatus(true)
+    //        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+    //            self.updateQueue -= 1
+    //            if self.updateQueue == 0 {
+    //                self.setUpdateStatus(false)
+    //            }
+    //        }
+    //    }
+    
+    func syncToCloud(_ onCloudSync: (() -> Void)?) {
+        self.setUpdateStatus(true)
+        self.savePublisher.send(onCloudSync)
+    }
+    
     func copyToClipboard(textToCopy: String) {
         let pasteBoard = NSPasteboard.general
         pasteBoard.clearContents()
         pasteBoard.setString(textToCopy, forType: .string)
+    }
+    
+    func checkTodoCompleted(index: Int, completed: Bool) {
+        
+        self.todoService.checkTodoCompleted(index: index, completed: completed) {
+            self.setUpdateStatus(false)
+        }
+    }
+    
+    func updateTodo(todo: Todo) {
+        self.setUpdateStatus(true)
+        self.storeService.updateTodo(todo: todo) {
+            self.setUpdateStatus(false)
+        }
+    }
+    
+    func removeTodo(todoId: String?) {
+        guard let todoId = todoId else { return }
+        self.setUpdateStatus(true)
+        self.storeService.removeTodo(todoId: todoId) {
+            self.setUpdateStatus(false)
+        }
     }
     
     func addDraftTodo(completion: @escaping () -> Void) {
@@ -92,7 +157,10 @@ class SessionViewModel: ObservableObject {
             var newTodo = self.todoState.draftTodo
             newTodo.userIds = [currentUserId]
             self.todoService.updateDraftTodo(todo: Todo())
-            self.storeService.addTodo(todo: newTodo)
+            self.setUpdateStatus(true)
+            self.storeService.addTodo(todo: newTodo) {
+                self.setUpdateStatus(false)
+            }
             self.todoState.isHoveringActionButtons.append(false)
             completion()
         }
@@ -149,12 +217,34 @@ extension SessionViewModel {
         self.isTimerRunning = true
         timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { _ in
             guard self.isTimerRunning else { return }
-            if self.timeRemaining > 0 {
+            if self.timeRemaining > 1 {
                 self.timeRemaining -= 1
+                
+                if self.timeRemaining <= 5 {
+                    self.playTickingSound()
+                }
             } else {
-                self.resetTimer()
+                self.playDingSound()
+                self.switchTimerType()
             }
         }
+    }
+    
+    private func switchTimerType() {
+        timer?.invalidate()
+        timer = nil
+        
+        switch timerType {
+        case .pomodoro:
+            self.timerType = .shortBreak
+            self.timeRemaining = Constants.shortBreakTime
+        case .shortBreak:
+            self.timerType = .pomodoro
+            self.timeRemaining = Constants.pomodoroTime
+        }
+        self.delegate?.didRedirectToApp()
+        self.isTimerRunning = false
+        self.startTimer()
     }
     
     func pauseTimer() {
@@ -165,7 +255,15 @@ extension SessionViewModel {
     func resetTimer() {
         timer?.invalidate()
         timer = nil
-        timeRemaining = Constants.countdownTime
+        
+        switch timerType {
+        case .pomodoro:
+            timerType = .pomodoro
+            timeRemaining = Constants.pomodoroTime
+        case .shortBreak:
+            timerType = .shortBreak
+            timeRemaining = Constants.shortBreakTime
+        }
         self.isTimerRunning = false
     }
     
@@ -177,8 +275,16 @@ extension SessionViewModel {
         self.audioService.playSound(.click)
     }
     
+    private func playTickingSound() {
+        self.audioService.playSound(.ticking)
+    }
+    
+    private func playDingSound() {
+        self.audioService.playSound(.ding)
+    }
+    
     func timeString(from seconds: Int) -> String {
-//        let hours = seconds / 3600
+        //        let hours = seconds / 3600
         let minutes = (seconds % 3600) / 60
         let seconds = (seconds % 3600) % 60
         return String(format: "%02d:%02d", minutes, seconds)

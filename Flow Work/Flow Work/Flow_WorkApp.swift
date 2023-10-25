@@ -64,7 +64,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
         
         coordinator.$shouldShowPopover
             .sink { [weak self] shouldShow in
-                if shouldShow {
+                if !(self?.popover.isShown ?? false) && shouldShow {
                     self?.openMenuPopover(nil)
                     coordinator.resetPopoverFlag()
                 }

@@ -131,83 +131,99 @@ struct SessionView: View {
                     .padding(.top, 20)
                     Group {
                         if (viewModel.todoState.isTodoListInitialized) {
-                            ScrollViewReader { scrollView in
-                                VStack {
-                                    ScrollView(.vertical) {
-                                        LazyVStack(alignment: .leading) {
-                                            ForEach(0..<viewModel.todoState.todoItems.count, id: \.self) { index in
-                                                let todo = viewModel.todoState.todoItems[index]
-                                                TodoItem(
-                                                    todo: $viewModel.todoState.todoItems[index],
-                                                    isHoveringAction: viewModel.todoState.isHoveringActionButtons[index],
-                                                    onCheck: { value in
-                                                        viewModel.todoService.checkTodoCompleted(index: index, completed: value) {
+                            if (viewModel.timerType == .pomodoro) {
+                                ScrollViewReader { scrollView in
+                                    VStack {
+                                        ScrollView(.vertical) {
+                                            LazyVStack(alignment: .leading) {
+                                                ForEach(0..<viewModel.todoState.todoItems.count, id: \.self) { index in
+                                                    let todo = viewModel.todoState.todoItems[index]
+                                                    TodoItem(
+                                                        viewModel: viewModel,
+                                                        todo: $viewModel.todoState.todoItems[index],
+                                                        isHoveringAction: viewModel.todoState.isHoveringActionButtons[index],
+                                                        onCheck: { value in
+                                                            viewModel.checkTodoCompleted(index: index, completed: value)
+                                                        },
+                                                        onUpdate: {
+                                                            viewModel.updateTodo(todo: todo)
+                                                        },
+                                                        onDelete: {
+                                                            viewModel.removeTodo(todoId: todo.id)
+                                                        },
+                                                        onHoverAction: { isHovering in
+                                                            viewModel.todoState.isHoveringActionButtons[index] = isHovering
+                                                        },
+                                                        showActionButton: !todo.completed
+                                                    )
+                                                    .focused($focusedIndex, equals: index)
+                                                    .onSubmit {
+                                                        if index < viewModel.todoState.todoItems.count - 1 {
+                                                            focusedIndex = index + 1
+                                                        } else if index == viewModel.todoState.todoItems.count - 1 {
+                                                            focusedIndex = -2
+                                                        } else {
+                                                            focusedIndex = nil
                                                         }
-                                                    },
-                                                    onUpdate: {
-                                                        viewModel.storeService.updateTodo(todo: todo)
-                                                    },
-                                                    onDelete: {
-                                                        print(index)
-                                                        viewModel.storeService.removeTodo(todoId: todo.id!)
-                                                    },
-                                                    onHoverAction: { isHovering in
-                                                        viewModel.todoState.isHoveringActionButtons[index] = isHovering
-                                                    },
-                                                    showActionButton: !todo.completed,
-                                                    setUpdateStatus: viewModel.setUpdateStatus
-                                                )
-                                                .focused($focusedIndex, equals: index)
-                                                .onSubmit {
-                                                    if index < viewModel.todoState.todoItems.count - 1 {
-                                                        focusedIndex = index + 1
-                                                    } else if index == viewModel.todoState.todoItems.count - 1 {
-                                                      focusedIndex = -2
-                                                    } else {
-                                                        focusedIndex = nil
                                                     }
+                                                    .id(index)
                                                 }
-                                                .id(index)
+                                                Spacer()
+                                                    .frame(height: 20)
+                                                    .id(-1)
                                             }
-                                            Spacer()
-                                                .frame(height: 20)
-                                                .id(-1)
+                                            .padding(.horizontal, 20)
+                                            .onChange(of: self.scrollToIndex) { newIndex in
+                                                if let newIndex = newIndex {
+                                                    withAnimation(Animation.linear(duration: Double(viewModel.todoState.todoItems.count) * 0.5)) {
+                                                        scrollView.scrollTo(newIndex, anchor: .bottom)
+                                                    }
+                                                    self.scrollToIndex = nil
+                                                }
+                                            }
+                                        }
+                                        .frame(minHeight: 180)
+                                        Divider()
+                                        VStack {
+                                            TodoItem(
+                                                viewModel: viewModel,
+                                                todo: $viewModel.todoState.draftTodo,
+                                                isEditingDraft: !viewModel.todoState.draftTodo.title.isEmpty,
+                                                isHoveringAction: viewModel.todoState.isHoveringAddButton,
+                                                onCheck: { value in
+                                                    viewModel.checkTodoCompleted(index: todoListCount, completed: value)
+                                                },
+                                                onAdd: {
+                                                    viewModel.addDraftTodo() {
+                                                        self.scrollToIndex = -1
+                                                    }
+                                                },
+                                                onHoverAction: { isHovering in
+                                                    viewModel.todoState.isHoveringAddButton = isHovering
+                                                },
+                                                showActionButton: !viewModel.todoState.draftTodo.title.isEmpty && !viewModel.todoState.draftTodo.completed
+                                            )
+                                            .focused($focusedIndex, equals: -2)
+                                            .id(-2)
                                         }
                                         .padding(.horizontal, 20)
-                                        .onChange(of: self.scrollToIndex) { newIndex in
-                                            if let newIndex = newIndex {
-                                                withAnimation(Animation.linear(duration: Double(viewModel.todoState.todoItems.count) * 0.5)) {
-                                                    scrollView.scrollTo(newIndex, anchor: .bottom)
-                                                }
-                                                self.scrollToIndex = nil
-                                            }
-                                        }
                                     }
-                                    .frame(minHeight: 180)
-                                    Divider()
-                                    VStack {
-                                        TodoItem(
-                                            todo: $viewModel.todoState.draftTodo,
-                                            isEditingDraft: !viewModel.todoState.draftTodo.title.isEmpty,
-                                            isHoveringAction: viewModel.todoState.isHoveringAddButton,
-                                            onCheck: { value in
-                                                viewModel.todoService.checkTodoCompleted(index: todoListCount, completed: value) {}
-                                            },
-                                            onAdd: {
-                                                viewModel.addDraftTodo() {
-                                                    self.scrollToIndex = -1
-                                                }
-                                            },
-                                            onHoverAction: { isHovering in
-                                                viewModel.todoState.isHoveringAddButton = isHovering
-                                            },
-                                            showActionButton: !viewModel.todoState.draftTodo.title.isEmpty && !viewModel.todoState.draftTodo.completed
-                                        )
-                                        .focused($focusedIndex, equals: -2)
-                                        .id(-2)
-                                    }
-                                    .padding(.horizontal, 20)
                                 }
+                            } else {
+                                VStack {
+                                    Spacer()
+                                    Image(systemName: "cup.and.saucer.fill")
+                                        .resizable()
+                                        .aspectRatio(contentMode: .fit)
+                                        .frame(width: 30, height: 30)
+                                        .foregroundColor(Color.secondary)
+                                    Text("Take a break")
+                                        .font(.title2)
+                                        .fontWeight(.semibold)
+                                        .foregroundColor(Color.secondary)
+                                    Spacer()
+                                }
+                                .padding(.vertical, 10)
                             }
                         } else {
                             VStack {

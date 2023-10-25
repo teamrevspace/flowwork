@@ -10,6 +10,8 @@ enum SoundFx: String, CaseIterable {
     case tick = "Tick"
     case click = "Click"
     case conga = "Conga"
+    case ticking = "Ticking"
+    case ding = "Ding"
     
     var fileName: String {
         return self.rawValue

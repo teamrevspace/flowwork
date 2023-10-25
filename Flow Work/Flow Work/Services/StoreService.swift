@@ -133,7 +133,7 @@ class StoreService: StoreServiceProtocol, ObservableObject {
             })
     }
     
-    func addTodo(todo: Todo) -> Void {
+    func addTodo(todo: Todo, completion: @escaping (() -> Void)) {
         var data: [String: Any] = [
             "title": todo.title,
             "completed": todo.completed,
@@ -146,11 +146,11 @@ class StoreService: StoreServiceProtocol, ObservableObject {
         if (todo.completed) {
             data.updateValue(FieldValue.serverTimestamp(), forKey: "completedAt")
         }
-        
         db.collection("todos").addDocument(data: data)
+        completion()
     }
     
-    func updateTodo(todo: Todo) {
+    func updateTodo(todo: Todo, completion: @escaping (() -> Void)) {
         guard let todoId = todo.id else { return }
         var newData: [String: Any] = [
             "title": todo.title,
@@ -165,10 +165,12 @@ class StoreService: StoreServiceProtocol, ObservableObject {
             newData.updateValue(FieldValue.serverTimestamp(), forKey: "completedAt")
         }
         db.collection("todos").document(todoId).updateData(newData)
+        completion()
     }
     
-    func removeTodo(todoId: String) {
+    func removeTodo(todoId: String, completion: @escaping (() -> Void)) {
         db.collection("todos").document(todoId).delete()
+        completion()
     }
     
     func stopLobbyListener() {

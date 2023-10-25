@@ -9,6 +9,8 @@ import SwiftUI
 import Combine
 
 struct TodoItem: View {
+    @ObservedObject var viewModel: SessionViewModel
+    
     @Binding var todo: Todo
     var isEditingDraft: Bool?
     var isHoveringAction: Bool
@@ -18,56 +20,8 @@ struct TodoItem: View {
     var onDelete: (() -> Void)?
     var onHoverAction: (Bool) -> Void
     var showActionButton: Bool
-    var setUpdateStatus: ((Bool) -> Void)?
     
     @State private var isEditing: Bool = false
-    @State private var updateQueue: Int = 0
-    
-    private let savePublisher = PassthroughSubject<Void, Never>()
-    private let throttleSavePublisher = PassthroughSubject<Void, Never>()
-    private var cancellables: Set<AnyCancellable> = []
-    
-    init(todo: Binding<Todo>,
-         isEditingDraft: Bool = false,
-         isHoveringAction: Bool = false,
-         onCheck: @escaping (Bool) -> Void,
-         onAdd: (() -> Void)? = nil,
-         onUpdate: (() -> Void)? = nil,
-         onDelete: (() -> Void)? = nil,
-         onHoverAction: @escaping (Bool) -> Void,
-         showActionButton: Bool,
-         setUpdateStatus: ((Bool) -> Void)? = nil) {
-        
-        self._todo = todo
-        self.isEditingDraft = isEditingDraft
-        self.isHoveringAction = isHoveringAction
-        self.onCheck = onCheck
-        self.onAdd = onAdd
-        self.onUpdate = onUpdate
-        self.onDelete = onDelete
-        self.onHoverAction = onHoverAction
-        self.showActionButton = showActionButton
-        self.setUpdateStatus = setUpdateStatus
-        
-        savePublisher
-            .debounce(for: 1.0, scheduler: DispatchQueue.main)
-            .merge(with: throttleSavePublisher.throttle(for: 1.0, scheduler: DispatchQueue.main, latest: true))
-            .sink { _ in
-                onUpdate?()
-            }
-            .store(in: &cancellables)
-    }
-    
-    func updateStatus() {
-        updateQueue += 1
-        self.setUpdateStatus?(true)
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-            self.updateQueue -= 1
-            if self.updateQueue == 0 {
-                self.setUpdateStatus?(false)
-            }
-        }
-    }
     
     var body: some View {
         HStack(alignment: .top) {
@@ -75,7 +29,6 @@ struct TodoItem: View {
                 Toggle("", isOn: $todo.completed)
                     .onChange(of: todo.completed) { value in
                         withAnimation {
-                            updateStatus()
                             onCheck(value)
                         }
                     }
@@ -85,9 +38,7 @@ struct TodoItem: View {
                 Button(action: {
                     isEditing = false
                     withAnimation {
-                        updateStatus()
                         onAdd?()
-                        onUpdate?()
                     }
                 }) {
                     HStack {
@@ -112,23 +63,20 @@ struct TodoItem: View {
                 .foregroundColor(todo.completed ? Color("Primary").opacity(0.5) : Color("Primary"))
                 .frame(maxWidth: .infinity)
                 .onChange(of: todo.title) { _ in
-                    isEditing = true
+                    if (todo.id != nil) {
+                        isEditing = true
+                    }
                 }
                 .onReceive(Just(todo.title)) { _ in
                     if (isEditing) {
-                        updateStatus()
-                        savePublisher.send(())
+                        viewModel.syncToCloud(onUpdate)
                         isEditing = false
                     }
                 }
                 .onSubmit {
                     isEditing = false
                     withAnimation {
-                        if (todo.id == nil) {
-                            updateStatus()
-                        }
                         onAdd?()
-                        onUpdate?()
                     }
                 }
             
@@ -137,7 +85,6 @@ struct TodoItem: View {
                     isEditing = false
                     withAnimation {
                         onDelete?()
-                        updateStatus()
                     }
                 }) {
                     Image(systemName: "xmark")
