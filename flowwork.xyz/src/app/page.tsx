@@ -8,8 +8,7 @@ import Image from 'next/image';
 
 import Airtable from 'airtable';
 import { ResponseStatus } from '@/types';
-import Link from 'next/link';
-import { redirect, useRouter } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 
 // Airtable API
 Airtable.configure({
@@ -98,6 +97,7 @@ export default function Home() {
       } else {
         setStatus(ResponseStatus.AlreadyExists);
         setEmail('');
+        downloadApp();
         setLoading(false);
       }
     } else {
@@ -132,11 +132,12 @@ export default function Home() {
           <h2 className='text-[#999999] text-xl font-medium'>Cowork with friends in real time,<br />find your flow, and get sh*t done.</h2>
           <div className="flex flex-row gap-x-3">
             {(status === ResponseStatus.SuccessfullyAdded || status === ResponseStatus.AlreadyExists) ? (
-              <p className="flex items-center justify-center text-[#3a3a3a] h-[52px]">
-                Download will start shortly. If it doesn&apos;t,&nbsp;<button onClick={(e) => {
+              <p className="flex items-center justify-center text-[#5a5a5a] h-[52px]">
+                <span>Click&nbsp;</span><button onClick={(e) => {
                   e.preventDefault()
                   downloadApp()
-                }} className="text-electric-blue">{`click here`}</button>.
+                }} className="text-electric-blue">{`here`}</button>
+                <span>&nbsp;to download on Mac (in public beta)</span>
               </p>
             ) : (
               <>

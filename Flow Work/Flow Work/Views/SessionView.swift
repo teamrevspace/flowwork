@@ -286,7 +286,7 @@ struct SessionView: View {
                     viewModel.fetchTodoList()
                     switch (viewModel.sessionState.selectedMode) {
                     case .lounge:
-                        break
+                        viewModel.playDoorSound()
                     case .pomodoro:
                         viewModel.resetTimer()
                         viewModel.startTimer()

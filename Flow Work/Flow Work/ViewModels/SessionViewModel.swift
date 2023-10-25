@@ -42,8 +42,11 @@ class SessionViewModel: ObservableObject {
     
     @Published var totalSessionsCount: Int? = nil
     @Published var isUpdating: Bool = false
+    private var sessionPassword: String? = nil
     
     // MARK: task grouping feature
+    @Published var selectedCategory: String = "All"
+    @Published var newCategoryName: String = ""
     
     // MARK: pomodoro mode
     @Published var timerType: TimerType = .pomodoro
@@ -154,6 +157,16 @@ class SessionViewModel: ObservableObject {
         }
     }
     
+    func getSession(sessionId: String) {
+        storeService.findSessionBySessionId(sessionId: sessionId) { session in
+            self.sessionPassword = session?.password
+        }
+    }
+    
+    func verifyPassword(enteredPassword: String, forSession session: Session) -> Bool {
+        return enteredPassword == session.password
+    }
+    
     func leaveSession() {
         if let currentSessionId = self.sessionState.currentSession?.id {
             self.sessionService.leaveSession(currentSessionId)
@@ -250,6 +263,10 @@ extension SessionViewModel {
             timeRemaining = Constants.shortBreakTime
         }
         self.isTimerRunning = false
+    }
+    
+    func playDoorSound() {
+        self.audioService.playSound(.door)
     }
     
     func playTickSound() {

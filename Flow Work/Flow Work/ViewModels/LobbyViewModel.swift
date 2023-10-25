@@ -108,7 +108,6 @@ class LobbyViewModel: ObservableObject {
         }
         
         self.sessionService.joinSession(sessionId)
-        self.audioService.playSound(.door)
     }
     
     func returnToHome() {

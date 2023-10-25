@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useCallback, useEffect } from "react";
+import { useCallback } from "react";
 
 export default function JoinSessionPage({ params }: { params: { id: string } }) {
   const router = useRouter();
@@ -14,10 +14,6 @@ export default function JoinSessionPage({ params }: { params: { id: string } }) 
   const joinSession = useCallback(async () => {
     router.push(`flowwork://join?sessionId=${params.id}`)
   }, [params.id, router])
-
-  useEffect(() => {
-    joinSession()
-  }, [params.id, joinSession])
 
   return (
     <div className="h-screen w-full flex flex-col bg-white px-6">
