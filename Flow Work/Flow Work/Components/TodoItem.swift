@@ -136,8 +136,8 @@ struct TodoItem: View {
                 Button(action: {
                     isEditing = false
                     withAnimation {
-                        updateStatus()
                         onDelete?()
+                        updateStatus()
                     }
                 }) {
                     Image(systemName: "xmark")

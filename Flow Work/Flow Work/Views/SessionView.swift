@@ -96,19 +96,22 @@ struct SessionView: View {
                         Circle()
                             .frame(width: 10, height: 10)
                             .foregroundColor(viewModel.networkService.connected ? (viewModel.sessionState.isConnected ? .green : .yellow) : .gray)
-                        Text("\(viewModel.sessionState.currentSession!.name)")
-                            .fontWeight(.bold)
-                            .font(.title2)
-                            .lineLimit(1)
-                            .truncationMode(.tail)
-                        Image(systemName: "cloud.fill")
-                            .resizable()
-                            .aspectRatio(contentMode: .fit)
-                            .frame(width: 15, height: 15)
-                            .foregroundColor(Color.secondary)
-                            .opacity(viewModel.isUpdating ? 1 : 0)
-                            .animation(Animation.default, value: viewModel.isUpdating)
-                        Spacer()
+                        HStack() {
+                            Text("\(viewModel.sessionState.currentSession!.name)")
+                                .fontWeight(.bold)
+                                .font(.title2)
+                                .lineLimit(1)
+                                .truncationMode(.tail)
+                            Image(systemName: "cloud.fill")
+                                .resizable()
+                                .aspectRatio(contentMode: .fit)
+                                .frame(width: 15, height: 15)
+                                .foregroundColor(Color.secondary)
+                                .opacity(viewModel.isUpdating ? 1 : 0)
+                                .animation(Animation.default, value: viewModel.isUpdating)
+                            Spacer()
+                        }
+                        .frame(maxWidth: .infinity)
                         Menu {
                             Button(action: {
                                 viewModel.copyToClipboard(textToCopy: "https://flowwork.xyz/s/\(viewModel.sessionState.currentSession!.id)")
@@ -145,6 +148,7 @@ struct SessionView: View {
                                                         viewModel.storeService.updateTodo(todo: todo)
                                                     },
                                                     onDelete: {
+                                                        print(index)
                                                         viewModel.storeService.removeTodo(todoId: todo.id!)
                                                     },
                                                     onHoverAction: { isHovering in
