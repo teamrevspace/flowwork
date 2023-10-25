@@ -142,15 +142,10 @@ struct SessionView: View {
                                                         }
                                                     },
                                                     onUpdate: {
-                                                        viewModel.setUpdateStatus(false)
                                                         viewModel.storeService.updateTodo(todo: todo)
                                                     },
                                                     onDelete: {
-                                                        guard !viewModel.isUpdating else { return }
-                                                        viewModel.setUpdateStatus(true)
-                                                        viewModel.storeService.removeTodo(todoId: todo.id!) {
-                                                            viewModel.setUpdateStatus(false)
-                                                        }
+                                                        viewModel.storeService.removeTodo(todoId: todo.id!)
                                                     },
                                                     onHoverAction: { isHovering in
                                                         viewModel.todoState.isHoveringActionButtons[index] = isHovering

@@ -21,6 +21,7 @@ struct TodoItem: View {
     var setUpdateStatus: ((Bool) -> Void)?
     
     @State private var isEditing: Bool = false
+    @State private var updateQueue: Int = 0
     
     private let savePublisher = PassthroughSubject<Void, Never>()
     private let throttleSavePublisher = PassthroughSubject<Void, Never>()
@@ -57,12 +58,24 @@ struct TodoItem: View {
             .store(in: &cancellables)
     }
     
+    func updateStatus() {
+        updateQueue += 1
+        self.setUpdateStatus?(true)
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+            self.updateQueue -= 1
+            if self.updateQueue == 0 {
+                self.setUpdateStatus?(false)
+            }
+        }
+    }
+    
     var body: some View {
-        HStack {
+        HStack(alignment: .top) {
             if (todo.id != nil) {
                 Toggle("", isOn: $todo.completed)
                     .onChange(of: todo.completed) { value in
                         withAnimation {
+                            updateStatus()
                             onCheck(value)
                         }
                     }
@@ -70,10 +83,11 @@ struct TodoItem: View {
                     .labelsHidden()
             } else {
                 Button(action: {
-                    onUpdate?()
                     isEditing = false
                     withAnimation {
+                        updateStatus()
                         onAdd?()
+                        onUpdate?()
                     }
                 }) {
                     HStack {
@@ -92,18 +106,17 @@ struct TodoItem: View {
                 }
             }
             
-            TextField("Add new to-do here", text: $todo.title)
-                .lineLimit(1)
-                .truncationMode(.tail)
+            TextField("Add new to-do here", text: $todo.title, axis: .vertical)
+                .lineLimit(todo.id == nil ? 3 : nil)
                 .textFieldStyle(PlainTextFieldStyle())
                 .foregroundColor(todo.completed ? Color("Primary").opacity(0.5) : Color("Primary"))
                 .frame(maxWidth: .infinity)
                 .onChange(of: todo.title) { _ in
-                    setUpdateStatus?(true)
                     isEditing = true
                 }
                 .onReceive(Just(todo.title)) { _ in
                     if (isEditing) {
+                        updateStatus()
                         savePublisher.send(())
                         isEditing = false
                     }
@@ -111,6 +124,9 @@ struct TodoItem: View {
                 .onSubmit {
                     isEditing = false
                     withAnimation {
+                        if (todo.id == nil) {
+                            updateStatus()
+                        }
                         onAdd?()
                         onUpdate?()
                     }
@@ -120,6 +136,7 @@ struct TodoItem: View {
                 Button(action: {
                     isEditing = false
                     withAnimation {
+                        updateStatus()
                         onDelete?()
                     }
                 }) {

@@ -17,7 +17,7 @@ protocol StoreServiceProtocol {
     func removeUserFromSession(userId: String, sessionId: String) -> Void
     func findTodosByUserId(userId: String, completion: @escaping ([Todo]) -> Void)
     func addTodo(todo: Todo) -> Void
-    func removeTodo(todoId: String, completion: @escaping () -> Void)
+    func removeTodo(todoId: String)
     func updateTodo(todo: Todo)
     func stopLobbyListener()
     func addRTCOfferToRoom(rtcOffer: RTCOffer, roomId: String)

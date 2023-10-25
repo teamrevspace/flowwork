@@ -167,9 +167,8 @@ class StoreService: StoreServiceProtocol, ObservableObject {
         db.collection("todos").document(todoId).updateData(newData)
     }
     
-    func removeTodo(todoId: String, completion: @escaping () -> Void) {
+    func removeTodo(todoId: String) {
         db.collection("todos").document(todoId).delete()
-        completion()
     }
     
     func stopLobbyListener() {
