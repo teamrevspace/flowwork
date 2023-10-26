@@ -11,8 +11,8 @@ export enum ResponseStatus {
 }
 
 export interface Session {
-  description: string,
-  name: string,
-  password: string,
-  userIds: Array<string>
+  description: string;
+  name: string;
+  password: string;
+  userIds: Array<string>;
 }

@@ -1,5 +1,5 @@
-import { redirect } from "next/navigation"
+import { redirect } from 'next/navigation';
 
 export default function DownloadPage() {
-  redirect("https://testflight.apple.com/join/R7lKtZdJ");
+  redirect('https://testflight.apple.com/join/R7lKtZdJ');
 }
