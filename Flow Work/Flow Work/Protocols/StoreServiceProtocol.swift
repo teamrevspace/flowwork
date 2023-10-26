@@ -11,15 +11,24 @@ import WebRTC
 protocol StoreServiceProtocol {
     func addUser(user: Firebase.User) -> Void
     func findUsersByUserIds(userIds: [String], completion: @escaping ([User]) -> Void)
+    
     func findSessionBySessionId(sessionId: String, completion: @escaping (Session?) -> Void)
     func findSessionsByUserId(userId: String, completion: @escaping ([Session]) -> Void)
     func addUserToSession(userId: String, sessionId: String) -> Void
     func removeUserFromSession(userId: String, sessionId: String) -> Void
+    
     func findTodosByUserId(userId: String, completion: @escaping ([Todo]) -> Void)
     func addTodo(todo: Todo, completion: @escaping (() -> Void))
     func removeTodo(todoId: String, completion: @escaping (() -> Void))
     func updateTodo(todo: Todo, completion: @escaping (() -> Void))
+    
+    func findCategoriesByUserId(userId: String, completion: @escaping ([Category]) -> Void)
+    func addCategory(category: Category, completion: @escaping (() -> Void))
+    func removeCategory(categoryId: String, completion: @escaping (() -> Void))
+    func updateCategory(category: Category, completion: @escaping (() -> Void))
+    
     func stopLobbyListener()
+    
     func addRTCOfferToRoom(rtcOffer: RTCOffer, roomId: String)
     func addRTCAnswerToRoom(rtcAnswer: RTCAnswer, roomId: String)
     func findRTCAnswerByRoomId(roomId: String, completion: @escaping (RTCSessionDescription?) -> Void)

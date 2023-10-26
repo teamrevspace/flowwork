@@ -21,6 +21,8 @@ class StoreService: StoreServiceProtocol, ObservableObject {
         self.resolver = resolver
     }
     
+    // MARK: users collection
+    
     func addUser(user: Firebase.User) -> Void {
         db.collection("users").document(user.uid).setData([
             "id": user.uid,
@@ -57,6 +59,8 @@ class StoreService: StoreServiceProtocol, ObservableObject {
         }
     }
     
+    // MARK: sessions collection
+    
     func findSessionBySessionId(sessionId: String, completion: @escaping (Session?) -> Void) {
         db.collection("sessions").document(sessionId).getDocument { (document, error) in
             guard let document = document, document.exists else {
@@ -72,7 +76,6 @@ class StoreService: StoreServiceProtocol, ObservableObject {
             let password = data?["password"] as? String
             let session = Session(id: docId, name: name, description: description, password: password, userIds: userIds)
             completion(session)
-            
         }
     }
     
@@ -111,6 +114,8 @@ class StoreService: StoreServiceProtocol, ObservableObject {
         ])
     }
     
+    // MARK: todos collection
+    
     func findTodosByUserId(userId: String, completion: @escaping ([Todo]) -> Void) {
         db.collection("todos").whereField("userIds", arrayContains: userId)
             .addSnapshotListener({(snapshot, error) in
@@ -125,9 +130,10 @@ class StoreService: StoreServiceProtocol, ObservableObject {
                     let title = data["title"] as? String ?? ""
                     let completed = data["completed"] as? Bool ?? false
                     let createdAt = data["createdAt"] as? Timestamp ?? Timestamp()
-                    let userIds = data["userIds"] as? [String]
                     let updatedAt = data["updatedAt"] as? Timestamp
-                    return Todo(id: docId, title: title, completed: completed, createdAt: createdAt, userIds: userIds, updatedAt: updatedAt)
+                    let userIds = data["userIds"] as? [String]
+                    let categoryIds = data["categoryIds"] as? [String]
+                    return Todo(id: docId, title: title, completed: completed, createdAt: createdAt, updatedAt: updatedAt, userIds: userIds, categoryIds: categoryIds)
                 })
                 completion(todos)
             })
@@ -173,10 +179,61 @@ class StoreService: StoreServiceProtocol, ObservableObject {
         completion()
     }
     
+    // MARK: categories collection
+    
+    func findCategoriesByUserId(userId: String, completion: @escaping ([Category]) -> Void) {
+        db.collection("categories").whereField("userIds", arrayContains: userId)
+            .addSnapshotListener({(snapshot, error) in
+                guard let documents = snapshot?.documents else {
+                    completion([])
+                    return
+                }
+                
+                let categories = documents.map({docSnapshot -> Category in
+                    let data = docSnapshot.data()
+                    let docId = docSnapshot.documentID
+                    let title = data["title"] as? String ?? ""
+                    let createdAt = data["createdAt"] as? Timestamp ?? Timestamp()
+                    let updatedAt = data["updatedAt"] as? Timestamp
+                    let userIds = data["userIds"] as? [String]
+                    return Category(id: docId, title: title, createdAt: createdAt, updatedAt: updatedAt, userIds: userIds)
+                })
+                completion(categories)
+            })
+    }
+    
+    func addCategory(category: Category, completion: @escaping (() -> Void)) {
+        var data: [String: Any] = [
+            "title": category.title,
+            "createdAt": FieldValue.serverTimestamp(),
+        ]
+        db.collection("categories").addDocument(data: data)
+        completion()
+    }
+    
+    func removeCategory(categoryId: String, completion: @escaping (() -> Void)) {
+        db.collection("categories").document(categoryId).delete()
+        completion()
+    }
+    
+    func updateCategory(category: Category, completion: @escaping (() -> Void)) {
+        guard let categoryId = category.id else { return }
+        var newData: [String: Any] = [
+            "title": category.title,
+            "updatedAt": FieldValue.serverTimestamp()
+        ]
+        db.collection("categories").document(categoryId).updateData(newData)
+        completion()
+    }
+    
+    // MARK: miscellaneous
+    
     func stopLobbyListener() {
         lobbyListener?.remove()
         lobbyListener = nil
     }
+    
+    // MARK: rooms collection
     
     func addRTCOfferToRoom(rtcOffer: RTCOffer, roomId: String) {
         let data: [String: Any] = [

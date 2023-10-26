@@ -5,7 +5,6 @@
 //  Created by Allen Lin on 10/19/23.
 //
 
-import Foundation
 import Firebase
 
 struct Todo: Identifiable {
@@ -14,6 +13,7 @@ struct Todo: Identifiable {
     var completed: Bool = false
     var completedAt: Timestamp?
     var createdAt: Timestamp = Timestamp()
-    var userIds: [String]?
     var updatedAt: Timestamp?
+    var userIds: [String]?
+    var categoryIds: [String]?
 }

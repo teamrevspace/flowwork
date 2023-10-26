@@ -72,6 +72,7 @@
 		11AD39502AE94F1E00833426 /* Ding.wav in Resources */ = {isa = PBXBuildFile; fileRef = 11AD394F2AE94F1E00833426 /* Ding.wav */; };
 		11AD39522AE963E000833426 /* Ticking.wav in Resources */ = {isa = PBXBuildFile; fileRef = 11AD39512AE963E000833426 /* Ticking.wav */; };
 		11AD39542AE9772600833426 /* FButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11AD39532AE9772600833426 /* FButton.swift */; };
+		11AD39562AEAB72600833426 /* Category.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11AD39552AEAB72600833426 /* Category.swift */; };
 		11C839ED2AD7AC9300DE62D2 /* AvatarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11C839EC2AD7AC9300DE62D2 /* AvatarView.swift */; };
 		11E5AD2B2ADD84C7004670F0 /* FText.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11E5AD2A2ADD84C7004670F0 /* FText.swift */; };
 		11E5AD2D2ADECB9B004670F0 /* TodoService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11E5AD2C2ADECB9B004670F0 /* TodoService.swift */; };
@@ -162,6 +163,7 @@
 		11AD394F2AE94F1E00833426 /* Ding.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = Ding.wav; sourceTree = "<group>"; };
 		11AD39512AE963E000833426 /* Ticking.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = Ticking.wav; sourceTree = "<group>"; };
 		11AD39532AE9772600833426 /* FButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FButton.swift; sourceTree = "<group>"; };
+		11AD39552AEAB72600833426 /* Category.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Category.swift; sourceTree = "<group>"; };
 		11C839EC2AD7AC9300DE62D2 /* AvatarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AvatarView.swift; sourceTree = "<group>"; };
 		11E5AD2A2ADD84C7004670F0 /* FText.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FText.swift; sourceTree = "<group>"; };
 		11E5AD2C2ADECB9B004670F0 /* TodoService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodoService.swift; sourceTree = "<group>"; };
@@ -300,6 +302,7 @@
 				11E5AD3B2AE268B2004670F0 /* RTC.swift */,
 				11AD39492AE865C200833426 /* Audio.swift */,
 				11E5AD302AE1E70B004670F0 /* Todo.swift */,
+				11AD39552AEAB72600833426 /* Category.swift */,
 				11A92ED22AE56F01007F5DF4 /* API.swift */,
 			);
 			path = Models;
@@ -561,6 +564,7 @@
 				116D19092ACFD75300CB4F1D /* LobbyViewModel.swift in Sources */,
 				11A92EDB2AE6FACB007F5DF4 /* PomodoroTimer.swift in Sources */,
 				11AD39482AE8656900833426 /* AudioService.swift in Sources */,
+				11AD39562AEAB72600833426 /* Category.swift in Sources */,
 				116D18FF2ACFD2D200CB4F1D /* Session.swift in Sources */,
 				11E5AD312AE1E70B004670F0 /* Todo.swift in Sources */,
 				114AFDE62AC765B700AB9A8B /* AppView.swift in Sources */,
