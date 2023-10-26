@@ -15,6 +15,7 @@
 		110C43122AD0997A00201CD5 /* SessionViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 110C43112AD0997A00201CD5 /* SessionViewModel.swift */; };
 		110C43182AD20BC500201CD5 /* NIOWebSocket in Frameworks */ = {isa = PBXBuildFile; productRef = 110C43172AD20BC500201CD5 /* NIOWebSocket */; };
 		1124D0E02AEAC3DC001D774F /* CategoryState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1124D0DF2AEAC3DC001D774F /* CategoryState.swift */; };
+		1124D0E22AEB5520001D774F /* CategoryItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1124D0E12AEB5520001D774F /* CategoryItem.swift */; };
 		1147A0CF2AD8D0B900D6C615 /* ViewModelAssembly.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1147A0CE2AD8D0B900D6C615 /* ViewModelAssembly.swift */; };
 		1147A0D12AD8D48E00D6C615 /* SessionServiceProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1147A0D02AD8D48E00D6C615 /* SessionServiceProtocol.swift */; };
 		1147A0D32AD8DC4500D6C615 /* StoreService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1147A0D22AD8DC4500D6C615 /* StoreService.swift */; };
@@ -107,6 +108,7 @@
 		110C430D2AD052FF00201CD5 /* SessionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionView.swift; sourceTree = "<group>"; };
 		110C43112AD0997A00201CD5 /* SessionViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionViewModel.swift; sourceTree = "<group>"; };
 		1124D0DF2AEAC3DC001D774F /* CategoryState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryState.swift; sourceTree = "<group>"; };
+		1124D0E12AEB5520001D774F /* CategoryItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryItem.swift; sourceTree = "<group>"; };
 		1147A0CE2AD8D0B900D6C615 /* ViewModelAssembly.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewModelAssembly.swift; sourceTree = "<group>"; };
 		1147A0D02AD8D48E00D6C615 /* SessionServiceProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionServiceProtocol.swift; sourceTree = "<group>"; };
 		1147A0D22AD8DC4500D6C615 /* StoreService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreService.swift; sourceTree = "<group>"; };
@@ -410,6 +412,7 @@
 				11C839EC2AD7AC9300DE62D2 /* AvatarView.swift */,
 				11E5AD2A2ADD84C7004670F0 /* FText.swift */,
 				11E5AD322AE21F28004670F0 /* SessionItem.swift */,
+				1124D0E12AEB5520001D774F /* CategoryItem.swift */,
 				11A92EE32AE77FE9007F5DF4 /* EventMonitor.swift */,
 				11A92E862AE4154A007F5DF4 /* TodoItem.swift */,
 				11A92EBF2AE4F7C5007F5DF4 /* AccountMenu.swift */,
@@ -554,6 +557,7 @@
 				11E5AD2F2AE1E52D004670F0 /* TodoServiceProtocol.swift in Sources */,
 				116D191D2ACFE4FA00CB4F1D /* HomeViewModel.swift in Sources */,
 				11AD394A2AE865C200833426 /* Audio.swift in Sources */,
+				1124D0E22AEB5520001D774F /* CategoryItem.swift in Sources */,
 				1106E6DD2AD8CC830026600A /* ServiceAssembly.swift in Sources */,
 				1147A0CF2AD8D0B900D6C615 /* ViewModelAssembly.swift in Sources */,
 				11A92EE42AE77FE9007F5DF4 /* EventMonitor.swift in Sources */,
@@ -738,7 +742,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 10;
+				CURRENT_PROJECT_VERSION = 11;
 				DEVELOPMENT_ASSET_PATHS = "\"Flow Work/Preview Content\"";
 				DEVELOPMENT_TEAM = 7574Y67WJ7;
 				ENABLE_HARDENED_RUNTIME = YES;
@@ -772,7 +776,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 10;
+				CURRENT_PROJECT_VERSION = 11;
 				DEVELOPMENT_ASSET_PATHS = "\"Flow Work/Preview Content\"";
 				DEVELOPMENT_TEAM = 7574Y67WJ7;
 				ENABLE_HARDENED_RUNTIME = YES;
@@ -807,7 +811,7 @@
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 10;
+				CURRENT_PROJECT_VERSION = 11;
 				DEVELOPMENT_ASSET_PATHS = "\"Flow Work Helper/Preview Content\"";
 				DEVELOPMENT_TEAM = 7574Y67WJ7;
 				ENABLE_HARDENED_RUNTIME = YES;
@@ -843,7 +847,7 @@
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 10;
+				CURRENT_PROJECT_VERSION = 11;
 				DEVELOPMENT_ASSET_PATHS = "\"Flow Work Helper/Preview Content\"";
 				DEVELOPMENT_TEAM = 7574Y67WJ7;
 				ENABLE_HARDENED_RUNTIME = YES;

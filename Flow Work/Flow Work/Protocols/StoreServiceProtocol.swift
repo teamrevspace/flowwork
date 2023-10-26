@@ -18,6 +18,7 @@ protocol StoreServiceProtocol {
     func removeUserFromSession(userId: String, sessionId: String) -> Void
     
     func findTodosByUserId(userId: String, completion: @escaping ([Todo]) -> Void)
+    func findTodosByCategoryId(categoryId: String, completion: @escaping ([Todo]) -> Void)
     func addTodo(todo: Todo, completion: @escaping (() -> Void))
     func removeTodo(todoId: String, completion: @escaping (() -> Void))
     func updateTodo(todo: Todo, completion: @escaping (() -> Void))
@@ -26,6 +27,7 @@ protocol StoreServiceProtocol {
     func addCategory(category: Category, completion: @escaping (() -> Void))
     func removeCategory(categoryId: String, completion: @escaping (() -> Void))
     func updateCategory(category: Category, completion: @escaping (() -> Void))
+    func removeUserFromCategory(userId: String, categoryId: String) -> Void
     
     func stopLobbyListener()
     

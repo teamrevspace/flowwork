@@ -114,16 +114,14 @@ struct JoinSessionView: View {
                                     selectedSessionId = session.id
                                 })
                                 .contextMenu {
-                                    Button(action: {
-                                        if (viewModel.authState.isSignedIn) {
-                                            self.viewModel.storeService.removeUserFromSession(userId: viewModel.authState.currentUser!.id, sessionId: session.id)
-                                        }
-                                    }) {
-                                        Text("Remove")
+                                    Button("Remove") {
+                                        guard let userId = viewModel.authState.currentUser?.id else { return }
+                                        self.viewModel.storeService.removeUserFromSession(userId: userId, sessionId: session.id)
                                     }
                                 }
                         }
                     }
+                    .background(Color.clear)
                     .padding(0)
                     .frame(minHeight: 200)
                     .cornerRadius(5)

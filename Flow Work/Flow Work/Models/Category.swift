@@ -10,7 +10,7 @@ import Firebase
 struct Category: Identifiable {
     var id: String?
     var title: String = ""
-    var createdAt: Timestamp?
+    var createdAt: Timestamp = Timestamp()
     var updatedAt: Timestamp?
     var userIds: [String]?
 }

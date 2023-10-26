@@ -139,12 +139,35 @@ class StoreService: StoreServiceProtocol, ObservableObject {
             })
     }
     
+    func findTodosByCategoryId(categoryId: String, completion: @escaping ([Todo]) -> Void) {
+        db.collection("todos").whereField("categoryIds", arrayContains: categoryId)
+            .addSnapshotListener({(snapshot, error) in
+                guard let documents = snapshot?.documents else {
+                    completion([])
+                    return
+                }
+                
+                let todos = documents.map({docSnapshot -> Todo in
+                    let data = docSnapshot.data()
+                    let docId = docSnapshot.documentID
+                    let title = data["title"] as? String ?? ""
+                    let completed = data["completed"] as? Bool ?? false
+                    let createdAt = data["createdAt"] as? Timestamp ?? Timestamp()
+                    let updatedAt = data["updatedAt"] as? Timestamp
+                    let userIds = data["userIds"] as? [String]
+                    let categoryIds = data["categoryIds"] as? [String]
+                    return Todo(id: docId, title: title, completed: completed, createdAt: createdAt, updatedAt: updatedAt, userIds: userIds, categoryIds: categoryIds)
+                })
+                completion(todos)
+            })
+    }
+    
     func addTodo(todo: Todo, completion: @escaping (() -> Void)) {
         var data: [String: Any] = [
             "title": todo.title,
             "completed": todo.completed,
-            "createdAt": FieldValue.serverTimestamp(),
-            "userIds": todo.userIds ?? []
+            "userIds": todo.userIds ?? [],
+            "createdAt": FieldValue.serverTimestamp()
         ]
         if (todo.userIds != nil) {
             data.updateValue(todo.userIds!, forKey: "userIds")
@@ -203,11 +226,15 @@ class StoreService: StoreServiceProtocol, ObservableObject {
     }
     
     func addCategory(category: Category, completion: @escaping (() -> Void)) {
-        var data: [String: Any] = [
+        var newData: [String: Any] = [
             "title": category.title,
-            "createdAt": FieldValue.serverTimestamp(),
+            "userIds": category.userIds ?? [],
+            "createdAt": FieldValue.serverTimestamp()
         ]
-        db.collection("categories").addDocument(data: data)
+        if (category.userIds != nil) {
+            newData.updateValue(category.userIds!, forKey: "userIds")
+        }
+        db.collection("categories").addDocument(data: newData)
         completion()
     }
     
@@ -220,10 +247,20 @@ class StoreService: StoreServiceProtocol, ObservableObject {
         guard let categoryId = category.id else { return }
         var newData: [String: Any] = [
             "title": category.title,
+            "userIds": category.userIds ?? [],
             "updatedAt": FieldValue.serverTimestamp()
         ]
+        if (category.userIds != nil) {
+            newData.updateValue(category.userIds!, forKey: "userIds")
+        }
         db.collection("categories").document(categoryId).updateData(newData)
         completion()
+    }
+    
+    func removeUserFromCategory(userId: String, categoryId: String) {
+        db.collection("categories").document(categoryId).updateData([
+            "userIds": FieldValue.arrayRemove([userId])
+        ])
     }
     
     // MARK: miscellaneous

@@ -39,6 +39,7 @@ class SessionViewModel: ObservableObject {
     @Published var authState = AuthState()
     @Published var sessionState = SessionState()
     @Published var todoState = TodoState()
+    @Published var categoryState = CategoryState()
     
     @Published var totalSessionsCount: Int? = nil
     @Published var isUpdating: Bool = false
@@ -68,6 +69,7 @@ class SessionViewModel: ObservableObject {
     
     private let resolver: Resolver
     private var cancellables = Set<AnyCancellable>()
+    private var checkTodoWorkItems: [String: DispatchWorkItem] = [:]
     
     init(resolver: Resolver) {
         self.resolver = resolver
@@ -88,6 +90,9 @@ class SessionViewModel: ObservableObject {
         todoService.todoStatePublisher
             .assign(to: \.todoState, on: self)
             .store(in: &cancellables)
+        todoService.categoryStatePublisher
+            .assign(to: \.categoryState, on: self)
+            .store(in: &cancellables)
         
         setupCloudSync()
     }
@@ -99,17 +104,29 @@ class SessionViewModel: ObservableObject {
         }
     }
     
+    func filterTodoListByCategoryId(categoryId: String?) {
+        guard let currentUserId = self.authState.currentUser?.id else { return }
+        if let categoryId = categoryId, categoryId != currentUserId {
+            self.storeService.findTodosByCategoryId(categoryId: categoryId) { todos in
+                self.todoService.initTodoList(todos: todos)
+            }
+        } else {
+            self.fetchTodoList()
+        }
+    }
+    
     func fetchCategoryList() {
         guard let currentUserId = self.authState.currentUser?.id else { return }
         self.storeService.findCategoriesByUserId(userId: currentUserId) { categories in
             self.todoService.initCategoryList(categories: categories)
+            self.categoryState.selectedCategoryId = currentUserId
         }
     }
     
     func setupCloudSync() {
         savePublisher
             .debounce(for: 0.5, scheduler: DispatchQueue.main)
-            .merge(with: throttleSavePublisher.throttle(for: 1.0, scheduler: RunLoop.main, latest: true))
+            .merge(with: throttleSavePublisher.throttle(for: 1.0, scheduler: DispatchQueue.main, latest: true))
             .sink { onCloudSync in
                 onCloudSync?()
                 self.setUpdateStatus(false)
@@ -129,10 +146,20 @@ class SessionViewModel: ObservableObject {
     }
     
     func checkTodoCompleted(todo: Todo, completed: Bool) {
-        var newTodo = todo
-        newTodo.completed = completed
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-            self.updateTodo(todo: newTodo)
+        guard let todoId = todo.id else { return }
+        
+        checkTodoWorkItems[todoId]?.cancel()
+        
+        if completed {
+            let workItem = DispatchWorkItem {
+                var updatedTodo = todo
+                updatedTodo.completed = completed
+                self.updateTodo(todo: updatedTodo)
+            }
+            
+            checkTodoWorkItems[todoId] = workItem
+            
+            DispatchQueue.main.asyncAfter(deadline: .now() + 2, execute: workItem)
         }
     }
     
@@ -160,6 +187,19 @@ class SessionViewModel: ObservableObject {
             self.todoService.updateDraftTodo(todo: Todo())
             self.todoState.isHoveringActionButtons.append(false)
             self.storeService.addTodo(todo: newTodo) {
+                self.setUpdateStatus(false)
+            }
+        }
+    }
+    
+    func addDraftCategory() {
+        if (!self.categoryState.draftCategory.title.isEmpty) {
+            self.setUpdateStatus(true)
+            guard let currentUserId = self.authState.currentUser?.id else { return }
+            var newCategory = self.categoryState.draftCategory
+            newCategory.userIds = [currentUserId]
+            self.todoService.updateDraftCategory(category: Category())
+            self.storeService.addCategory(category: newCategory) {
                 self.setUpdateStatus(false)
             }
         }

@@ -10,5 +10,6 @@ import Foundation
 struct CategoryState {
     var categoryItems: [Category] = []
     var draftCategory: Category = Category()
+    var selectedCategoryId: String? = nil
     var isCategoryListInitialized: Bool = false
 }

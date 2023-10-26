@@ -26,14 +26,17 @@ struct TodoItem: View {
     var body: some View {
         HStack(alignment: .top) {
             if (todo.id != nil) {
-                Toggle("", isOn: $todo.completed)
-                    .onChange(of: todo.completed) { value in
+                Toggle("", isOn: Binding(
+                    get: { todo.completed },
+                    set: { newValue in
                         withAnimation {
-                            onCheck(value)
+                            todo.completed = newValue
+                            onCheck(newValue)
                         }
                     }
-                    .padding(1.5)
-                    .labelsHidden()
+                ))
+                .padding(1.5)
+                .labelsHidden()
             } else {
                 Button(action: {
                     isEditing = false
