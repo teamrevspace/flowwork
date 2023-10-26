@@ -66,6 +66,11 @@ defmodule FlowStreamWeb.CoworkingSessionChannel do
   def handle_in("create_session", payload, socket) do
     case create_session(payload) do
       {:ok, session} ->
+        Posthog.capture("user_created_session", %{
+          distinct_id: socket.assigns.current_user,
+          properties: payload
+        })
+
         {:reply, {:ok, session}, socket}
 
       {:error, error} ->
@@ -80,6 +85,13 @@ defmodule FlowStreamWeb.CoworkingSessionChannel do
 
     case join_session(session_id) do
       {:ok, session} ->
+        Posthog.capture("user_joined_session", %{
+          distinct_id: socket.assigns.current_user,
+          properties: %{
+            session_id: session_id
+          }
+        })
+
         {:reply, {:ok, session}, socket}
 
       {:error, error} ->
@@ -89,9 +101,11 @@ defmodule FlowStreamWeb.CoworkingSessionChannel do
   end
 
   defp create_session(%{"name" => name, "userIds" => userIds} = payload) do
-    userIds = Enum.map(userIds, fn userId ->
-      %{"stringValue" => userId}
-    end)
+    userIds =
+      Enum.map(userIds, fn userId ->
+        %{"stringValue" => userId}
+      end)
+
     fields = %{
       "name" => %{"stringValue" => name},
       "userIds" => %{"arrayValue" => %{"values" => userIds}}

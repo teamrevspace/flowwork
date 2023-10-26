@@ -98,4 +98,11 @@ if config_env() == :prod do
   #     config :swoosh, :api_client, Swoosh.ApiClient.Hackney
   #
   # See https://hexdocs.pm/swoosh/Swoosh.html#module-installation for details.
+
+  config :posthog,
+    api_url: System.get_env("POSTHOG_API_URL") || "https://app.posthog.com",
+    api_key: System.get_env("POSTHOG_API_KEY") ||
+      raise """
+      environment variable POSTHOG_API_KEY is missing.
+      """
 end
