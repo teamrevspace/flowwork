@@ -1,4 +1,4 @@
-defmodule FlowStreamWeb.FlyReplayMiddleware do
+defmodule FlowStreamWeb.Plugs.FlyReplayMiddleware do
   @behaviour Plug
 
   import Plug.Conn
