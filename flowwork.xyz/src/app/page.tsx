@@ -63,9 +63,7 @@ export default function Home() {
 
   const checkExists = async (email: string) => {
     // email field id = fldw5UVSKhcgCWyWL
-    const records = await masterTable
-      .select({ filterByFormula: `fldw5UVSKhcgCWyWL = "${email}"` })
-      .firstPage();
+    const records = await masterTable.select({ filterByFormula: `fldw5UVSKhcgCWyWL = "${email}"` }).firstPage();
 
     if (records.length > 0) {
       setStatus(ResponseStatus.AlreadyExists);
@@ -121,37 +119,25 @@ export default function Home() {
     <div className='flex h-full min-h-screen w-full flex-col bg-white lg:h-screen'>
       <Head>
         <title>Flow Work</title>
-        <meta
-          name='description'
-          content={`A social productivity tool designed to help you find your flow.`}
-        />
+        <meta name='description' content={`A social productivity tool designed to help you find your flow.`} />
         <link rel='icon' href='/favicon.ico' />
       </Head>
 
-      <div
-        id='nav'
-        className='flex w-full flex-row justify-between px-12 py-8'
-      ></div>
+      <div id='nav' className='flex w-full flex-row justify-between px-12 py-8'></div>
       <div
         id='main'
         className='mx-auto flex h-full w-full flex-col items-center justify-center gap-12 sm:px-8 lg:flex-row'
       >
-        <div
-          id='hero'
-          className='flex flex-col gap-y-5 px-6 sm:min-w-[24rem] sm:px-0'
-        >
+        <div id='hero' className='flex flex-col gap-y-5 px-6 sm:min-w-[24rem] sm:px-0'>
           <img className='h-24 w-24 sm:h-32 sm:w-32' src='/logo.png' />
-          <h1 className='text-6xl font-bold text-[#001122] sm:text-7xl'>
-            Flow Work
-          </h1>
+          <h1 className='text-6xl font-bold text-[#001122] sm:text-7xl'>Flow Work</h1>
           <h2 className='text-xl font-medium text-[#999999]'>
             Cowork with friends in real time,
             <br />
             find your flow, and get sh*t done.
           </h2>
           <div className='flex flex-row gap-x-3'>
-            {status === ResponseStatus.SuccessfullyAdded ||
-            status === ResponseStatus.AlreadyExists ? (
+            {status === ResponseStatus.SuccessfullyAdded || status === ResponseStatus.AlreadyExists ? (
               <p className='flex h-[52px] items-center justify-center text-[#5a5a5a]'>
                 <span>Click&nbsp;</span>
                 <button
@@ -184,12 +170,9 @@ export default function Home() {
                   aria-label='Email address'
                   className={clsx(
                     'block w-full max-w-[360px] appearance-none rounded-xl border border-transparent bg-[#f2f2f2] px-6 py-3 leading-5 text-[#222222] shadow ring-1 ring-silver placeholder:text-black placeholder:text-opacity-25 focus:outline-none focus:ring-2',
-                    (status === ResponseStatus.AddFailed ||
-                      status === ResponseStatus.InvalidFormat) &&
+                    (status === ResponseStatus.AddFailed || status === ResponseStatus.InvalidFormat) &&
                       'focus:ring-red-500',
-                    (status === ResponseStatus.Waiting ||
-                      status === ResponseStatus.Ready) &&
-                      'focus:ring-electric-blue'
+                    (status === ResponseStatus.Waiting || status === ResponseStatus.Ready) && 'focus:ring-electric-blue'
                   )}
                   placeholder='name@email.com'
                 />
@@ -200,13 +183,7 @@ export default function Home() {
                 >
                   {loading ? (
                     <div className='flex h-7 w-full items-center justify-center'>
-                      <Image
-                        className='animate-spin'
-                        width={24}
-                        height={24}
-                        src='spinner.svg'
-                        alt={'Loading...'}
-                      />
+                      <Image className='animate-spin' width={24} height={24} src='spinner.svg' alt={'Loading...'} />
                     </div>
                   ) : (
                     'Download'
@@ -230,18 +207,10 @@ export default function Home() {
           </video>
         </div>
       </div>
-      <div
-        id='footer'
-        className='flex w-full flex-grow flex-row items-end justify-between px-12 py-8'
-      >
+      <div id='footer' className='flex w-full flex-grow flex-row items-end justify-between px-12 py-8'>
         <p className='font-medium text-metallic-gray'>
           © 2023{' '}
-          <a
-            href='https://rev.school'
-            target='_blank'
-            referrerPolicy='no-referrer'
-            className='hover:underline'
-          >
+          <a href='https://rev.school' target='_blank' referrerPolicy='no-referrer' className='hover:underline'>
             rev
           </a>
         </p>

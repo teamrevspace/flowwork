@@ -10,11 +10,7 @@ export const metadata: Metadata = {
     'Flow Work is an open-source productivity app for Mac designed to help you and your team dive into collaborative, virtual coworking sessions in real time. It’s teamwork, made super easy.',
 };
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang='en'>
       <body className={inter.className}>{children}</body>

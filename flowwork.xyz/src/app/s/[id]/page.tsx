@@ -6,14 +6,8 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useCallback, useEffect, useState } from 'react';
 
-export default function JoinSessionPage({
-  params,
-}: {
-  params: { id: string };
-}) {
-  const [sessionName, setSessionName] = useState<string | null | undefined>(
-    undefined
-  );
+export default function JoinSessionPage({ params }: { params: { id: string } }) {
+  const [sessionName, setSessionName] = useState<string | null | undefined>(undefined);
   const [networkError, setNetworkError] = useState(false);
   const router = useRouter();
 
