@@ -31,6 +31,12 @@ defmodule FlowStreamWeb.UserSocket do
   end
 
   @impl true
+  def connect(%{"user_id" => _user_id, "fly_instance_id" => fly_instance_id} = params, socket) do
+    socket = assign(socket, :fly_instance_id, fly_instance_id)
+    connect(params, socket)
+  end
+
+  @impl true
   def connect(_params, _socket) do
     {:error, :missing_user_id}
   end
