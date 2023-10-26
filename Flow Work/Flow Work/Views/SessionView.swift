@@ -13,76 +13,8 @@ struct SessionView: View {
     @FocusState private var focusedIndex: Int?
     
     var body: some View {
-        let todoListCount = viewModel.todoState.todoItems.count
         VStack {
-            if (!viewModel.networkService.connected) {
-                VStack(spacing: 10) {
-                    Spacer()
-                    Image(systemName: "icloud.slash.fill")
-                        .resizable()
-                        .aspectRatio(contentMode: .fit)
-                        .frame(width: 30, height: 30)
-                        .foregroundColor(Color.secondary)
-                    Text("No internet connection. Try again later.")
-                        .font(.title2)
-                        .fontWeight(.semibold)
-                        .foregroundColor(Color.secondary)
-                    Spacer()
-                    HStack {
-                        FButton(text: "Back") {
-                            viewModel.leaveSession()
-                        }
-                    }
-                }
-                .padding()
-                .standardFrame()
-            } else if (!viewModel.sessionState.hasJoinedSession) {
-                VStack(spacing: 10) {
-                    Spacer()
-                    if (viewModel.sessionState.maxRetriesReached) {
-                        Image(systemName: "sailboat.fill")
-                            .resizable()
-                            .aspectRatio(contentMode: .fit)
-                            .frame(width: 30, height: 30)
-                            .foregroundColor(Color.secondary)
-                        Text("Disconnected.")
-                            .font(.title2)
-                            .fontWeight(.semibold)
-                            .foregroundColor(Color.secondary)
-                    } else {
-                        Image(systemName: "antenna.radiowaves.left.and.right")
-                            .resizable()
-                            .aspectRatio(contentMode: .fit)
-                            .frame(width: 30, height: 30)
-                            .foregroundColor(Color.secondary)
-                        Text("Joining...")
-                            .font(.title2)
-                            .fontWeight(.semibold)
-                            .foregroundColor(Color.secondary)
-                    }
-                    Spacer()
-                    HStack {
-                        if (viewModel.sessionState.maxRetriesReached) {
-                            Button(action: {
-                                guard let userId = viewModel.authState.currentUser?.id else { return }
-                                viewModel.sessionService.resetMaxRetries()
-                                viewModel.sessionService.connect(userId)
-                                viewModel.rejoinSession()
-                            }) {
-                                HStack {
-                                    Text("Reconnect")
-                                }
-                            }
-                        } else {
-                            FButton(text: "Back") {
-                                viewModel.leaveSession()
-                            }
-                        }
-                    }
-                }
-                .padding()
-                .standardFrame()
-            } else {
+            if (viewModel.sessionState.hasJoinedSession) {
                 VStack {
                     HStack(spacing: 10) {
                         Circle()
@@ -94,13 +26,21 @@ struct SessionView: View {
                                 .font(.title2)
                                 .lineLimit(1)
                                 .truncationMode(.tail)
-                            Image(systemName: "cloud.fill")
-                                .resizable()
-                                .aspectRatio(contentMode: .fit)
-                                .frame(width: 15, height: 15)
-                                .foregroundColor(Color.secondary)
-                                .opacity(viewModel.isUpdating ? 1 : 0)
-                                .animation(Animation.default, value: viewModel.isUpdating)
+                            if (viewModel.networkService.connected) {
+                                Image(systemName: "cloud.fill")
+                                    .resizable()
+                                    .aspectRatio(contentMode: .fit)
+                                    .frame(width: 15, height: 15)
+                                    .foregroundColor(Color.secondary)
+                                    .opacity(viewModel.isUpdating ? 1 : 0)
+                                    .animation(Animation.default, value: viewModel.isUpdating)
+                            } else {
+                                Image(systemName: "icloud.slash.fill")
+                                    .resizable()
+                                    .aspectRatio(contentMode: .fit)
+                                    .frame(width: 15, height: 15)
+                                    .foregroundColor(Color.secondary)
+                            }
                             Spacer()
                         }
                         .frame(maxWidth: .infinity)
@@ -260,18 +200,24 @@ struct SessionView: View {
                         .padding(.horizontal, 20)
                         
                         HStack {
-                            ScrollView(.horizontal) {
-                                LazyHStack {
-                                    ForEach(viewModel.sessionState.currentSessionUsers ?? []) { user in
-                                        Menu {
-                                            Text("\(user.name)")
-                                        } label: {
-                                            AvatarView(avatarURL: user.avatarURL)
+                            if (!viewModel.networkService.connected || !viewModel.sessionState.isConnected) {
+                                AvatarView(avatarURL: viewModel.authState.currentUser?.avatarURL)
+                                    .opacity(0.5)
+                            } else  {
+                                ScrollView(.horizontal) {
+                                    LazyHStack {
+                                        ForEach(viewModel.sessionState.currentSessionUsers ?? []) { user in
+                                            Menu {
+                                                Text("\(user.name)")
+                                            } label: {
+                                                AvatarView(avatarURL: user.avatarURL)
+                                            }
+                                            .buttonStyle(PlainButtonStyle())
                                         }
-                                        .buttonStyle(PlainButtonStyle())
                                     }
                                 }
                             }
+                            Spacer()
                             FButton(image: "hand.wave.fill", text: "Leave quietly") {
                                 viewModel.leaveSession()
                             }
@@ -310,30 +256,73 @@ struct SessionView: View {
                         viewModel.restoreSessionGlobal()
                     }
                 }
+            } else {
+                VStack(spacing: 10) {
+                    Spacer()
+                    if (!viewModel.networkService.connected) {
+                        Image(systemName: "icloud.slash.fill")
+                            .resizable()
+                            .aspectRatio(contentMode: .fit)
+                            .frame(width: 30, height: 30)
+                            .foregroundColor(Color.secondary)
+                        Text("No internet connection. Try again later.")
+                            .font(.title2)
+                            .fontWeight(.semibold)
+                            .foregroundColor(Color.secondary)
+                    } else if (viewModel.sessionState.maxRetriesReached) {
+                        Image(systemName: "sailboat.fill")
+                            .resizable()
+                            .aspectRatio(contentMode: .fit)
+                            .frame(width: 30, height: 30)
+                            .foregroundColor(Color.secondary)
+                        Text("Disconnected.")
+                            .font(.title2)
+                            .fontWeight(.semibold)
+                            .foregroundColor(Color.secondary)
+                    } else {
+                        Image(systemName: "antenna.radiowaves.left.and.right")
+                            .resizable()
+                            .aspectRatio(contentMode: .fit)
+                            .frame(width: 30, height: 30)
+                            .foregroundColor(Color.secondary)
+                        Text("Joining...")
+                            .font(.title2)
+                            .fontWeight(.semibold)
+                            .foregroundColor(Color.secondary)
+                    }
+                    Spacer()
+                    HStack {
+                        FButton(text: "Back") {
+                            viewModel.leaveSession()
+                        }
+                        if (viewModel.sessionState.maxRetriesReached) {
+                            FButton(text: "Reconnect") {
+                                guard let userId = viewModel.authState.currentUser?.id else { return }
+                                viewModel.sessionService.resetMaxRetries()
+                                viewModel.sessionService.connect(userId)
+                                viewModel.rejoinSession()
+                            }
+                        }
+                    }
+                }
+                .padding()
+                .standardFrame()
             }
         }
         .onChange(of: viewModel.networkService.connected) { value in
             guard let userId = viewModel.authState.currentUser?.id else { return }
-            viewModel.todoState.isTodoListInitialized = false
             if (viewModel.networkService.connected) {
                 viewModel.sessionService.resetMaxRetries()
                 viewModel.sessionService.connect(userId)
                 viewModel.rejoinSession()
-            } else {
-                viewModel.sessionService.disconnect()
-                viewModel.todoState.isTodoListInitialized = false
             }
         }
-        .onChange(of: viewModel.sessionState.isConnected) { value in
+        .onChange(of: viewModel.sessionState.isConnected ) { value in
             guard let userId = viewModel.authState.currentUser?.id else { return }
-            viewModel.todoState.isTodoListInitialized = false
             if (viewModel.sessionState.isConnected) {
                 viewModel.sessionService.resetMaxRetries()
                 viewModel.sessionService.connect(userId)
                 viewModel.rejoinSession()
-            } else {
-                viewModel.sessionService.disconnect()
-                viewModel.todoState.isTodoListInitialized = false
             }
         }
         .onAppear {

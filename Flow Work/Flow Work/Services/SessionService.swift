@@ -83,8 +83,8 @@ class SessionService: SessionServiceProtocol, ObservableObject {
         webSocketTask?.cancel(with: .goingAway, reason: nil)
         webSocketTask = nil
         DispatchQueue.main.async {
-            self.state.hasJoinedSession = false
             self.state.isConnected = false
+            self.state.currentSessionUsers = nil
         }
     }
     
@@ -241,8 +241,12 @@ class SessionService: SessionServiceProtocol, ObservableObject {
     
     
     private func schedulePing() {
+        pingTimer?.invalidate()
+        pingTimer = nil
+        
         pingTimer = Timer.scheduledTimer(withTimeInterval: 10, repeats: true) { [weak self] _ in
-            self?.sendPing()}
+            self?.sendPing()
+        }
     }
     
     private func sendPing() {
@@ -274,7 +278,7 @@ extension SessionService {
             if response.topic.starts(with: "coworking_session:") && response.event == "phx_join" && response.payload?.status == "ok" {
                 self.state.hasJoinedSession = true
             } else if response.topic.starts(with: "coworking_session:") && response.event == "phx_close" {
-                self.state.hasJoinedSession = false
+                self.state.currentSessionUsers = nil
             }
         }
     }

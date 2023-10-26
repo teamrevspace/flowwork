@@ -85,7 +85,7 @@ class SessionViewModel: ObservableObject {
         sessionService.statePublisher
             .assign(to: \.sessionState, on: self)
             .store(in: &cancellables)
-        todoService.statePublisher
+        todoService.todoStatePublisher
             .assign(to: \.todoState, on: self)
             .store(in: &cancellables)
         
@@ -96,6 +96,13 @@ class SessionViewModel: ObservableObject {
         guard let currentUserId = self.authState.currentUser?.id else { return }
         self.storeService.findTodosByUserId(userId: currentUserId) { todos in
             self.todoService.initTodoList(todos: todos)
+        }
+    }
+    
+    func fetchCategoryList() {
+        guard let currentUserId = self.authState.currentUser?.id else { return }
+        self.storeService.findCategoriesByUserId(userId: currentUserId) { categories in
+            self.todoService.initCategoryList(categories: categories)
         }
     }
     

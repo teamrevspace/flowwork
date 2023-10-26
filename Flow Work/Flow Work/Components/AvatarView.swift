@@ -13,28 +13,38 @@ struct AvatarView: View {
     
     var body: some View {
         if let url = avatarURL {
-            AsyncImage(url: url) { image in
-                image
-                    .resizable()
-                    .aspectRatio(contentMode: .fit)
-                    .frame(width: 30, height: 30)
-                    .foregroundColor(Color.secondary.opacity(0.5))
-                    .cornerRadius(.infinity)
-                    .aspectRatio(contentMode: .fit)
-            } placeholder: {
-                ProgressView()
-                    .frame(width: 30, height: 30)
-                    .foregroundColor(Color.secondary.opacity(0.5))
-                    .cornerRadius(.infinity)
+            AsyncImage(url: url) { phase in
+                if let image = phase.image  {
+                    image
+                        .resizable()
+                        .aspectRatio(contentMode: .fit)
+                        .frame(width: 30, height: 30)
+                        .foregroundColor(Color.secondary.opacity(0.5))
+                        .cornerRadius(.infinity)
+                        .aspectRatio(contentMode: .fit)
+                } else if phase.error != nil {
+                    PlaceholderAvatar()
+                } else {
+                    ProgressView()
+                        .frame(width: 30, height: 30)
+                        .foregroundColor(Color.secondary.opacity(0.5))
+                        .cornerRadius(.infinity)
+                }
             }
         } else {
-            Image(systemName: "person.circle.fill")
-                .resizable()
-                .aspectRatio(contentMode: .fit)
-                .frame(width: 30, height: 30)
-                .foregroundColor(Color.secondary.opacity(0.5))
-                .cornerRadius(.infinity)
-                .aspectRatio(contentMode: .fit)
+            PlaceholderAvatar()
         }
+    }
+}
+
+struct PlaceholderAvatar: View {
+    var body: some View {
+        Image(systemName: "person.circle.fill")
+            .resizable()
+            .aspectRatio(contentMode: .fit)
+            .frame(width: 30, height: 30)
+            .foregroundColor(Color.secondary.opacity(0.5))
+            .cornerRadius(.infinity)
+            .aspectRatio(contentMode: .fit)
     }
 }

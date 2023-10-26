@@ -8,7 +8,6 @@
 struct TodoState {
     var todoItems: [Todo] = []
     var draftTodo: Todo = Todo()
-    var isEditingDraftTodo: Bool = false
     var isTodoListInitialized: Bool = false
     var isHoveringAddButton: Bool = false
     var isHoveringActionButtons: [Bool] = []

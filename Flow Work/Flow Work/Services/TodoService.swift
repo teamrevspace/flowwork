@@ -11,15 +11,19 @@ import Combine
 import Firebase
 
 class TodoService: TodoServiceProtocol, ObservableObject {
-    @Published private var state = TodoState()
+    @Published private var todoState = TodoState()
+    @Published private var categoryState = CategoryState()
     
     @Published var storeService: StoreServiceProtocol
     @Published var authService: AuthServiceProtocol
     
     private let resolver: Resolver
     
-    var statePublisher: AnyPublisher<TodoState, Never> {
-        $state.eraseToAnyPublisher()
+    var todoStatePublisher: AnyPublisher<TodoState, Never> {
+        $todoState.eraseToAnyPublisher()
+    }
+    var categoryStatePublisher: AnyPublisher<CategoryState, Never> {
+        $categoryState.eraseToAnyPublisher()
     }
     
     init(resolver: Resolver) {
@@ -31,24 +35,30 @@ class TodoService: TodoServiceProtocol, ObservableObject {
     
     func initTodoList(todos: [Todo]) {
         let todoList = todos.filter({!$0.completed}).sorted(by: { $1.createdAt.seconds > $0.createdAt.seconds })
-        self.state.todoItems = todoList
+        self.todoState.todoItems = todoList
         self.resetTodoList(todos: todoList)
-        self.state.isTodoListInitialized = true
+        self.todoState.isTodoListInitialized = true
     }
     
     private func resetTodoList(todos: [Todo]) {
-        self.state.isHoveringActionButtons = Array(repeating: false, count: todos.count + 1)
+        self.todoState.isHoveringActionButtons = Array(repeating: false, count: todos.count + 1)
     }
     
     func sanitizeTodoItems() {
-        if (self.state.todoItems.count > 1) {
-            self.state.todoItems = self.state.todoItems.enumerated().filter { (index, item) in
+        if (self.todoState.todoItems.count > 1) {
+            self.todoState.todoItems = self.todoState.todoItems.enumerated().filter { (index, item) in
                 return !item.title.isEmpty
             }.map { $0.element }
         }
     }
     
     func updateDraftTodo(todo: Todo) {
-        self.state.draftTodo = todo
+        self.todoState.draftTodo = todo
+    }
+    
+    func initCategoryList(categories: [Category]) {
+        let categoryList = categories
+        self.categoryState.categoryItems = categoryList
+        self.categoryState.isCategoryListInitialized = true
     }
 }

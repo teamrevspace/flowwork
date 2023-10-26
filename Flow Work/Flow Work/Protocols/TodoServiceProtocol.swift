@@ -9,9 +9,12 @@ import Foundation
 import Combine
 
 protocol TodoServiceProtocol {
-    var statePublisher: AnyPublisher<TodoState, Never> { get }
+    var todoStatePublisher: AnyPublisher<TodoState, Never> { get }
+    var categoryStatePublisher: AnyPublisher<CategoryState, Never> { get }
     
     func initTodoList(todos: [Todo])
     func sanitizeTodoItems()
     func updateDraftTodo(todo: Todo)
+    
+    func initCategoryList(categories: [Category])
 }

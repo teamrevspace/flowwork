@@ -33,10 +33,8 @@ class NetworkService: NetworkServiceProtocol, ObservableObject {
         monitor.pathUpdateHandler = { path in
             if path.status == .satisfied {
                 self.connected = true
-                self.delegate?.didConnect()
             } else {
                 self.connected = false
-                self.delegate?.didDisconnect()
             }
         }
         monitor.start(queue: queue)
