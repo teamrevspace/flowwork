@@ -135,7 +135,7 @@ struct SessionView: View {
                                                         todo: $viewModel.todoState.todoItems[index],
                                                         isHoveringAction: viewModel.todoState.isHoveringActionButtons[index],
                                                         onCheck: { value in
-                                                            viewModel.checkTodoCompleted(index: index, completed: value)
+                                                            viewModel.checkTodoCompleted(todo: todo, completed: value)
                                                         },
                                                         onUpdate: {
                                                             viewModel.updateTodo(todo: todo)
@@ -177,13 +177,14 @@ struct SessionView: View {
                                         .frame(minHeight: 180)
                                         Divider()
                                         VStack {
+                                            let draftTodo = viewModel.todoState.draftTodo
                                             TodoItem(
                                                 viewModel: viewModel,
                                                 todo: $viewModel.todoState.draftTodo,
-                                                isEditingDraft: !viewModel.todoState.draftTodo.title.isEmpty,
+                                                isEditingDraft: !draftTodo.title.isEmpty,
                                                 isHoveringAction: viewModel.todoState.isHoveringAddButton,
                                                 onCheck: { value in
-                                                    viewModel.checkTodoCompleted(index: todoListCount, completed: value)
+                                                    viewModel.checkTodoCompleted(todo: draftTodo, completed: value)
                                                 },
                                                 onAdd: {
                                                     viewModel.addDraftTodo()
@@ -192,7 +193,7 @@ struct SessionView: View {
                                                 onHoverAction: { isHovering in
                                                     viewModel.todoState.isHoveringAddButton = isHovering
                                                 },
-                                                showActionButton: !viewModel.todoState.draftTodo.title.isEmpty && !viewModel.todoState.draftTodo.completed
+                                                showActionButton: !draftTodo.title.isEmpty && !draftTodo.completed
                                             )
                                             .focused($focusedIndex, equals: -2)
                                             .id(-2)

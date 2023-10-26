@@ -52,7 +52,7 @@ class SessionViewModel: ObservableObject {
     @Published var timerType: TimerType = .pomodoro
     @Published var timeRemaining: Int = Constants.pomodoroTime
     @Published var isTimerRunning: Bool = false
-    private var timer: Timer?
+    private var pomodoroTimer: Timer?
     
     // MARK: focus mode
     private let defaults = UserDefaults.standard
@@ -121,10 +121,11 @@ class SessionViewModel: ObservableObject {
         pasteBoard.setString(textToCopy, forType: .string)
     }
     
-    func checkTodoCompleted(index: Int, completed: Bool) {
-        
-        self.todoService.checkTodoCompleted(index: index, completed: completed) {
-            self.setUpdateStatus(false)
+    func checkTodoCompleted(todo: Todo, completed: Bool) {
+        var newTodo = todo
+        newTodo.completed = completed
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+            self.updateTodo(todo: newTodo)
         }
     }
     
@@ -213,7 +214,7 @@ extension SessionViewModel {
     func startTimer() {
         guard !self.isTimerRunning else { return }
         self.isTimerRunning = true
-        timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { _ in
+        pomodoroTimer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { _ in
             guard self.isTimerRunning else { return }
             if self.timeRemaining > 1 {
                 self.timeRemaining -= 1
@@ -229,8 +230,8 @@ extension SessionViewModel {
     }
     
     private func switchTimerType() {
-        timer?.invalidate()
-        timer = nil
+        pomodoroTimer?.invalidate()
+        pomodoroTimer = nil
         
         switch timerType {
         case .pomodoro:
@@ -246,13 +247,13 @@ extension SessionViewModel {
     }
     
     func pauseTimer() {
-        timer?.invalidate()
+        pomodoroTimer?.invalidate()
         self.isTimerRunning = false
     }
     
     func resetTimer() {
-        timer?.invalidate()
-        timer = nil
+        pomodoroTimer?.invalidate()
+        pomodoroTimer = nil
         
         switch timerType {
         case .pomodoro:

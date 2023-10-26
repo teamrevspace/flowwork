@@ -16,8 +16,6 @@ class TodoService: TodoServiceProtocol, ObservableObject {
     @Published var storeService: StoreServiceProtocol
     @Published var authService: AuthServiceProtocol
     
-    @Published var delayedTasks: [DispatchWorkItem?] = []
-    
     private let resolver: Resolver
     
     var statePublisher: AnyPublisher<TodoState, Never> {
@@ -39,11 +37,7 @@ class TodoService: TodoServiceProtocol, ObservableObject {
     }
     
     private func resetTodoList(todos: [Todo]) {
-        self.state.isHoveringActionButtons = todos.map({_ in false})
-        self.state.isHoveringActionButtons.append(false)
-        
-        self.delayedTasks = todos.map({_ in nil})
-        self.delayedTasks.append(nil)
+        self.state.isHoveringActionButtons = Array(repeating: false, count: todos.count + 1)
     }
     
     func sanitizeTodoItems() {
@@ -57,27 +51,4 @@ class TodoService: TodoServiceProtocol, ObservableObject {
     func updateDraftTodo(todo: Todo) {
         self.state.draftTodo = todo
     }
-    
-    func checkTodoCompleted(index: Int, completed: Bool, completion: @escaping (() -> Void)) {
-        self.delayedTasks[index]?.cancel()
-        if completed {
-            let task = DispatchWorkItem {
-                if (index >= self.state.todoItems.count) {
-                    self.state.draftTodo.completed = completed
-                    return
-                }
-                var updatedTodo = self.state.todoItems[index]
-                updatedTodo.completed = completed
-                self.storeService.updateTodo(todo: updatedTodo) {
-                    completion()
-                }
-            }
-            self.delayedTasks[index] = task
-            
-            DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
-                task.perform()
-            }
-        }
-    }
-    
 }
