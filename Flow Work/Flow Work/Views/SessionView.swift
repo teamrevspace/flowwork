@@ -7,19 +7,32 @@
 
 import SwiftUI
 
+private struct Constants {
+    static let sidebarWidth: CGFloat = 180
+}
+
 struct SessionView: View {
     @ObservedObject var viewModel: SessionViewModel
     
     @State private var scrollToTodoIndex: Int? = nil
-    @State private var scrollToCategoryIndex: Int? = nil
-    
     @FocusState private var focusedTodoIndex: Int?
-    @FocusState private var focusedCategoryIndex: Int?
     
     @State private var isHoveringSidebarButton: Bool = false
     
     var body: some View {
         ZStack {
+            Color.clear
+                .contentShape(Rectangle())
+                .opacity(viewModel.isSidebarVisible ? 1 : 0)
+                .onTapGesture {
+                    withAnimation {
+                        viewModel.isSidebarVisible.toggle()
+                        viewModel.isEditingDraftCategory = false
+                        viewModel.todoService.updateDraftCategory(category: Category())
+                    }
+                }
+                .zIndex(9)
+            
             VStack {
                 if (viewModel.sessionState.hasJoinedSession) {
                     VStack {
@@ -28,6 +41,8 @@ struct SessionView: View {
                                 Button(action: {
                                     withAnimation {
                                         viewModel.isSidebarVisible.toggle()
+                                        viewModel.isEditingDraftCategory = false
+                                        viewModel.todoService.updateDraftCategory(category: Category())
                                     }
                                 }) {
                                     HStack(spacing: 5) {
@@ -42,21 +57,47 @@ struct SessionView: View {
                                 .buttonStyle(PlainButtonStyle())
                                 .background(self.isHoveringSidebarButton ? Color.secondary.opacity(0.25) : Color.secondary.opacity(0.1))
                                 .cornerRadius(5)
-                                .padding(.horizontal, 5)
                                 .onHover { isHovering in
                                     self.isHoveringSidebarButton = isHovering
                                 }
                                 Spacer()
                             }
+                            .padding(.horizontal, 5)
                             Menu {
                                 Button(action: {
-                                    viewModel.copyToClipboard(textToCopy: "https://flowwork.xyz/s/\(viewModel.sessionState.currentSession!.id)")
+                                    viewModel.sessionService.updateWorkMode(.lounge)
                                 }) {
-                                    Image(systemName: "doc.on.doc")
-                                    Text("Copy Invite Link")
+                                    Image(systemName: "sofa.fill")
+                                    Text("Lounge Mode")
                                 }
+                                .disabled(viewModel.sessionState.selectedMode == .lounge)
+                                
+                                Button(action: {
+                                    viewModel.sessionService.updateWorkMode(.pomodoro)
+                                }) {
+                                    Image(systemName: "deskclock.fill")
+                                    Text("Pomodoro Mode")
+                                }
+                                .disabled(viewModel.sessionState.selectedMode == .pomodoro)
+                                
+                                Button(action: {
+                                    viewModel.sessionService.updateWorkMode(.focus)
+                                }) {
+                                    Image(systemName: "moon.fill")
+                                    Text("Focus Mode")
+                                }
+                                .disabled(viewModel.sessionState.selectedMode == .focus)
                             } label: {
-                                SmallIcon(image: "gearshape.fill")
+                                HStack(spacing: 5) {
+                                    SmallIcon(image: viewModel.sessionState.selectedMode == .lounge ? "sofa.fill" : viewModel.sessionState.selectedMode == .pomodoro ? "deskclock.fill" : "moon.fill")
+                                    Text(viewModel.sessionState.selectedMode == .lounge ? "Lounge" : viewModel.sessionState.selectedMode == .pomodoro ? "Pomodoro" : "Focus")
+                                        .font(.body)
+                                        .fontWeight(.medium)
+                                }
+                                .padding(5)
+                                .background(viewModel.sessionState.selectedMode == .lounge ? Color.blue.opacity(0.25) : viewModel.sessionState.selectedMode == .pomodoro ? Color.red.opacity(0.25) : Color.indigo.opacity(0.25))
+                                .contentShape(Rectangle())
+                                .cornerRadius(5)
                             }
                             .buttonStyle(PlainButtonStyle())
                         }
@@ -70,6 +111,7 @@ struct SessionView: View {
                                 .font(.title2)
                                 .lineLimit(1)
                                 .truncationMode(.tail)
+                            
                             if (viewModel.networkService.connected) {
                                 SmallIcon(image: "cloud.fill")
                                     .opacity(viewModel.isCloudSyncing ? 0.75 : 0)
@@ -77,7 +119,20 @@ struct SessionView: View {
                             } else {
                                 SmallIcon(image: "icloud.slash.fill")
                             }
+                            
                             Spacer()
+                            
+                            Menu {
+                                Button(action: {
+                                    viewModel.copyToClipboard(textToCopy: "https://flowwork.xyz/s/\(viewModel.sessionState.currentSession!.id)")
+                                }) {
+                                    Image(systemName: "doc.on.doc")
+                                    Text("Copy Invite Link")
+                                }
+                            } label: {
+                                SmallIcon(image: "gearshape.fill")
+                            }
+                            .buttonStyle(PlainButtonStyle())
                         }
                         
                         .padding(.horizontal, 20)
@@ -88,27 +143,28 @@ struct SessionView: View {
                                         ScrollView(.vertical) {
                                             LazyVStack(alignment: .leading) {
                                                 ForEach(0..<viewModel.todoState.todoItems.count, id: \.self) { index in
-                                                    let todo = viewModel.todoState.todoItems[index]
-                                                    TodoItem(
-                                                        viewModel: viewModel,
-                                                        todo: $viewModel.todoState.todoItems[index],
-                                                        isHoveringAction: viewModel.todoState.isHoveringActionButtons[index],
-                                                        onHoverAction: { isHovering in
-                                                            viewModel.todoState.isHoveringActionButtons[index] = isHovering
-                                                        },
-                                                        showActionButton: !todo.completed
-                                                    )
-                                                    .focused($focusedTodoIndex, equals: index)
-                                                    .onSubmit {
-                                                        if index < viewModel.todoState.todoItems.count - 1 {
-                                                            focusedTodoIndex = index + 1
-                                                        } else if index == viewModel.todoState.todoItems.count - 1 {
-                                                            focusedTodoIndex = -2
-                                                        } else {
-                                                            focusedTodoIndex = nil
+                                                    if index < viewModel.todoState.todoItems.count {
+                                                        TodoItem(
+                                                            viewModel: viewModel,
+                                                            todo: $viewModel.todoState.todoItems[index],
+                                                            isHoveringAction: viewModel.todoState.isHoveringActionButtons[index],
+                                                            onHoverAction: { isHovering in
+                                                                viewModel.todoState.isHoveringActionButtons[index] = isHovering
+                                                            },
+                                                            showActionButton: !viewModel.todoState.todoItems[index].completed
+                                                        )
+                                                        .focused($focusedTodoIndex, equals: index)
+                                                        .onSubmit {
+                                                            if index < viewModel.todoState.todoItems.count - 1 {
+                                                                focusedTodoIndex = index + 1
+                                                            } else if index == viewModel.todoState.todoItems.count - 1 {
+                                                                focusedTodoIndex = -2
+                                                            } else {
+                                                                focusedTodoIndex = nil
+                                                            }
                                                         }
+                                                        .id(index)
                                                     }
-                                                    .id(index)
                                                 }
                                                 Spacer()
                                                     .frame(height: 20)
@@ -256,24 +312,15 @@ struct SessionView: View {
                         if !viewModel.categoryState.isCategoryListInitialized {
                             viewModel.fetchCategoryList()
                         }
-                        switch (viewModel.sessionState.selectedMode) {
-                        case .lounge:
-                            viewModel.playDoorSound()
-                        case .pomodoro:
-                            viewModel.resetTimer()
-                            viewModel.startTimer()
-                            viewModel.playWindUpSound()
-                        case .focus:
-                            viewModel.saveSessionGlobal()
-                            viewModel.playCongaSound()
-                        }
+                        viewModel.launchSession()
+                    }
+                    .onChange(of: viewModel.sessionState.selectedMode) { workMode in
+                        viewModel.launchSession()
                     }
                     .onChange(of: viewModel.categoryState.selectedCategory?.id) { [oldCategory = viewModel.categoryState.selectedCategory] newCategoryId in
                         focusedTodoIndex = nil
-                        focusedCategoryIndex = nil
                         viewModel.isEditingDraftCategory = false
                         scrollToTodoIndex = nil
-                        scrollToCategoryIndex = nil
                         viewModel.todoState.isTodoListInitialized = false
                         if (oldCategory?.id != newCategoryId) {
                             viewModel.fetchTodoList(categoryId: newCategoryId)
@@ -311,7 +358,7 @@ struct SessionView: View {
                     .standardFrame()
                 }
             }
-            SideBarView(viewModel: viewModel)
+            SidebarView(viewModel: viewModel)
         }
         .onChange(of: viewModel.networkService.connected) { value in
             guard let userId = viewModel.authState.currentUser?.id else { return }
@@ -353,11 +400,12 @@ struct SessionView: View {
 }
 
 
-struct SideBarView: View {
+struct SidebarView: View {
     @ObservedObject var viewModel: SessionViewModel
-
+    
     @FocusState private var focusedCategoryIndex: Int?
     @State private var scrollToCategoryIndex: Int? = nil
+    
     @State private var isHoveringSidebarButton: Bool = false
     
     var body: some View {
@@ -365,6 +413,8 @@ struct SideBarView: View {
             Button(action: {
                 withAnimation {
                     viewModel.isSidebarVisible.toggle()
+                    viewModel.isEditingDraftCategory = false
+                    viewModel.todoService.updateDraftCategory(category: Category())
                 }
             }) {
                 Image(systemName: "chevron.left.2")
@@ -406,32 +456,33 @@ struct SideBarView: View {
                                                 }
                                             )
                                             .contextMenu {
-                                                Button("Removed") {
+                                                Button("Remove") {
                                                     viewModel.storeService.removeUserFromCategory(userId: userId, categoryId: category.id ?? userId)
                                                 }
                                             }
                                         }
-                                        if (viewModel.isEditingDraftCategory) {
-                                            TextField("New list", text: $viewModel.categoryState.draftCategory.title, axis: .vertical)
-                                                .padding(5)
-                                                .textFieldStyle(PlainTextFieldStyle())
-                                                .listRowBackground(Color.clear)
-                                                .foregroundColor(Color("Primary"))
-                                                .frame(maxWidth: .infinity, alignment: .leading)
-                                                .fixedSize(horizontal: false, vertical: true)
-                                                .contentShape(Rectangle())
-                                                .onSubmit {
+                                        TextField("New list", text: $viewModel.categoryState.draftCategory.title, axis: .vertical)
+                                            .padding(5)
+                                            .textFieldStyle(PlainTextFieldStyle())
+                                            .listRowBackground(Color.clear)
+                                            .foregroundColor(Color("Primary"))
+                                            .frame(maxWidth: .infinity, alignment: .leading)
+                                            .opacity(viewModel.isEditingDraftCategory ? 1 : 0)
+                                            .fixedSize(horizontal: false, vertical: true)
+                                            .contentShape(Rectangle())
+                                            .onSubmit {
+                                                if (viewModel.isEditingDraftCategory) {
                                                     viewModel.isEditingDraftCategory = false
                                                     self.scrollToCategoryIndex = -1
                                                     withAnimation {
                                                         viewModel.addDraftCategory()
                                                     }
                                                 }
-                                                .focused($focusedCategoryIndex, equals: -2)
-                                                .id(-2)
-                                        }
+                                            }
+                                            .focused($focusedCategoryIndex, equals: -2)
+                                            .id(-2)
                                         Spacer()
-                                            .frame(height: 30)
+                                        //                                            .frame(height: 30)
                                             .id(-1)
                                     }
                                 }
@@ -460,7 +511,7 @@ struct SideBarView: View {
             Divider()
             HStack {
                 FButton(image: "plus", text: "New List") {
-                    viewModel.isEditingDraftCategory = true
+                    viewModel.isEditingDraftCategory.toggle()
                     self.focusedCategoryIndex = -2
                     self.scrollToCategoryIndex = -2
                 }
@@ -472,8 +523,8 @@ struct SideBarView: View {
         .padding(.vertical, 20)
         .padding(.horizontal, 15)
         .background(.ultraThinMaterial, in: Rectangle())
-        .frame(width: 180)
-        .offset(x: viewModel.isSidebarVisible ? -90 : -360)
+        .frame(width: Constants.sidebarWidth)
+        .offset(x: viewModel.isSidebarVisible ? -(Constants.sidebarWidth / 2) : -(Constants.sidebarWidth * 2))
         .zIndex(10)
     }
 }

@@ -100,6 +100,20 @@ class SessionViewModel: ObservableObject {
         self.rejoinSession()
     }
     
+    func launchSession() {
+        switch (self.sessionState.selectedMode) {
+        case .lounge:
+            self.audioService.playSound(.door)
+        case .pomodoro:
+            self.resetTimer()
+            self.startTimer()
+            self.playWindUpSound()
+        case .focus:
+            self.saveSessionGlobal()
+            self.audioService.playSound(.conga)
+        }
+    }
+    
     func fetchTodoList(categoryId: String?) {
         guard let currentUserId = self.authState.currentUser?.id else { return }
         if (!self.todoState.isTodoListInitialized) {
@@ -151,9 +165,12 @@ class SessionViewModel: ObservableObject {
         
         if completed {
             let workItem = DispatchWorkItem {
+                self.setCloudSyncStatus(true)
                 var updatedTodo = todo
                 updatedTodo.completed = completed
-                self.updateTodo(todo: updatedTodo)
+                self.storeService.updateTodo(todo: updatedTodo) {
+                    self.setCloudSyncStatus(false)
+                }
             }
             
             checkTodoWorkItems[todoId] = workItem
@@ -268,10 +285,10 @@ extension SessionViewModel {
                 self.timeRemaining -= 1
                 
                 if self.timeRemaining <= 5 {
-                    self.playTickingSound()
+                    self.audioService.playSound(.ticking)
                 }
             } else {
-                self.playDingSound()
+                self.audioService.playSound(.ding)
                 self.skipTimer()
             }
         }
@@ -308,10 +325,6 @@ extension SessionViewModel {
         self.isTimerRunning = false
     }
     
-    func playDoorSound() {
-        self.audioService.playSound(.door)
-    }
-    
     func playTickSound() {
         self.audioService.playSound(.tick)
     }
@@ -322,14 +335,6 @@ extension SessionViewModel {
     
     func playWindUpSound() {
         self.audioService.playSound(.windup)
-    }
-    
-    private func playTickingSound() {
-        self.audioService.playSound(.ticking)
-    }
-    
-    private func playDingSound() {
-        self.audioService.playSound(.ding)
     }
     
     func timeString(from seconds: Int) -> String {
@@ -436,7 +441,9 @@ extension SessionViewModel {
         defaults.set(String(totalSessions), forKey: "totalSessions")
         updateSession()
         
-        self.delegate?.didRedirectToApp()
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+            self.delegate?.didRedirectToApp()
+        }
     }
     
     func restoreSessionGlobal() {
@@ -461,11 +468,9 @@ extension SessionViewModel {
             }
         }
         
-        self.delegate?.didRedirectToApp()
-    }
-    
-    func playCongaSound() {
-        self.audioService.playSound(.conga)
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+            self.delegate?.didRedirectToApp()
+        }
     }
     
     private func checkAnyWindows() {
