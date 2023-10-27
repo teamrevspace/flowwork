@@ -71,9 +71,9 @@ struct CreateSessionView: View {
                     viewModel.returnToHome()
                 }
                 FButton(text: "Create") {
-                    if (viewModel.authState.isSignedIn && !viewModel.newSessionName.isEmpty) {
-                        let userIds = [self.viewModel.authState.currentUser!.id]
-                        viewModel.createSession(userIds: userIds)
+                    if (!viewModel.newSessionName.isEmpty) {
+                        guard let currentUserId = viewModel.authState.currentUser?.id else { return }
+                        viewModel.createSession(userIds: [currentUserId])
                     }
                 }
             }
@@ -116,7 +116,7 @@ struct JoinSessionView: View {
                                 .contextMenu {
                                     Button("Remove") {
                                         guard let userId = viewModel.authState.currentUser?.id else { return }
-                                        self.viewModel.storeService.removeUserFromSession(userId: userId, sessionId: session.id)
+                                        viewModel.storeService.removeUserFromSession(userId: userId, sessionId: session.id)
                                     }
                                 }
                         }

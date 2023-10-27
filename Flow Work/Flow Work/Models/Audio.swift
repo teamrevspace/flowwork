@@ -7,11 +7,12 @@
 
 enum SoundFx: String, CaseIterable {
     case door = "Door"
-    case tick = "Tick"
     case click = "Click"
-    case conga = "Conga"
+    case tick = "Tick"
+    case windup = "WindUp"
     case ticking = "Ticking"
     case ding = "Ding"
+    case conga = "Conga"
     
     var fileName: String {
         return self.rawValue

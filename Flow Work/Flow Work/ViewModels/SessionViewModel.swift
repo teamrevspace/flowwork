@@ -42,7 +42,9 @@ class SessionViewModel: ObservableObject {
     @Published var categoryState = CategoryState()
     
     @Published var totalSessionsCount: Int? = nil
-    @Published var isUpdating: Bool = false
+    @Published var isCloudSyncing: Bool = false
+    @Published var isSidebarVisible: Bool = false
+    @Published var isEditingDraftCategory: Bool = false
     private var sessionPassword: String? = nil
     
     // MARK: pomodoro mode
@@ -126,13 +128,13 @@ class SessionViewModel: ObservableObject {
             .debounce(for: 1.0, scheduler: DispatchQueue.main)
             .sink { onCloudSync in
                 onCloudSync?()
-                self.setUpdateStatus(false)
+                self.setCloudSyncStatus(false)
             }
             .store(in: &cancellables)
     }
     
     func syncToCloud(_ onCloudSync: (() -> Void)?) {
-        self.setUpdateStatus(true)
+        self.setCloudSyncStatus(true)
         self.savePublisher.send(onCloudSync)
     }
     
@@ -161,23 +163,23 @@ class SessionViewModel: ObservableObject {
     }
     
     func updateTodo(todo: Todo) {
-        self.setUpdateStatus(true)
+        self.setCloudSyncStatus(true)
         self.storeService.updateTodo(todo: todo) {
-            self.setUpdateStatus(false)
+            self.setCloudSyncStatus(false)
         }
     }
     
     func removeTodo(todoId: String?) {
         guard let todoId = todoId else { return }
-        self.setUpdateStatus(true)
+        self.setCloudSyncStatus(true)
         self.storeService.removeTodo(todoId: todoId) {
-            self.setUpdateStatus(false)
+            self.setCloudSyncStatus(false)
         }
     }
     
     func addDraftTodo() {
         if (!self.todoState.draftTodo.title.isEmpty) {
-            self.setUpdateStatus(true)
+            self.setCloudSyncStatus(true)
             guard let currentUserId = self.authState.currentUser?.id else { return }
             var newTodo = self.todoState.draftTodo
             newTodo.userIds = [currentUserId]
@@ -186,20 +188,20 @@ class SessionViewModel: ObservableObject {
             self.todoService.updateDraftTodo(todo: Todo())
             self.todoState.isHoveringActionButtons.append(false)
             self.storeService.addTodo(todo: newTodo) {
-                self.setUpdateStatus(false)
+                self.setCloudSyncStatus(false)
             }
         }
     }
     
     func addDraftCategory() {
         if (!self.categoryState.draftCategory.title.isEmpty) {
-            self.setUpdateStatus(true)
+            self.setCloudSyncStatus(true)
             guard let currentUserId = self.authState.currentUser?.id else { return }
             var newCategory = self.categoryState.draftCategory
             newCategory.userIds = [currentUserId]
             self.todoService.updateDraftCategory(category: Category())
             self.storeService.addCategory(category: newCategory) {
-                self.setUpdateStatus(false)
+                self.setCloudSyncStatus(false)
             }
         }
     }
@@ -227,8 +229,8 @@ class SessionViewModel: ObservableObject {
         }
     }
     
-    func setUpdateStatus(_ isUpdating: Bool) -> Void {
-        self.isUpdating = isUpdating
+    func setCloudSyncStatus(_ isCloudSyncing: Bool) -> Void {
+        self.isCloudSyncing = isCloudSyncing
     }
     
     func createAudioRoom() {
@@ -270,12 +272,12 @@ extension SessionViewModel {
                 }
             } else {
                 self.playDingSound()
-                self.switchTimerType()
+                self.skipTimer()
             }
         }
     }
     
-    private func switchTimerType() {
+    func skipTimer() {
         pomodoroTimer?.invalidate()
         pomodoroTimer = nil
         
@@ -301,14 +303,8 @@ extension SessionViewModel {
         pomodoroTimer?.invalidate()
         pomodoroTimer = nil
         
-        switch timerType {
-        case .pomodoro:
-            timerType = .pomodoro
-            timeRemaining = Constants.pomodoroTime
-        case .shortBreak:
-            timerType = .shortBreak
-            timeRemaining = Constants.shortBreakTime
-        }
+        self.timerType = .pomodoro
+        self.timeRemaining = Constants.pomodoroTime
         self.isTimerRunning = false
     }
     
@@ -322,6 +318,10 @@ extension SessionViewModel {
     
     func playClickSound() {
         self.audioService.playSound(.click)
+    }
+    
+    func playWindUpSound() {
+        self.audioService.playSound(.windup)
     }
     
     private func playTickingSound() {

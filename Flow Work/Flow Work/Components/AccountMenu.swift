@@ -14,24 +14,18 @@ struct AccountMenu: View {
         Menu {
             Text("Hi \(viewModel.authState.currentUser?.name ?? "there")!")
             if viewModel.authState.isSignedIn {
-                Button(action: {
+                Button("Profile") {
                     viewModel.goToProfile()
-                }) {
-                    Text("Profile")
                 }
             }
-            Button(action: {
+            Button("Settings") {
                 viewModel.goToSettings()
-            }) {
-                Text("Settings")
             }
-            Button(action: {
+            Button("Quit App") {
                 NSApp.terminate(nil)
-            }) {
-                Text("Quit App")
             }
         } label: {
-            AvatarView(avatarURL: viewModel.authState.currentUser?.avatarURL)
+            Avatar(avatarURL: viewModel.authState.currentUser?.avatarURL)
         }
         .buttonStyle(PlainButtonStyle())
     }

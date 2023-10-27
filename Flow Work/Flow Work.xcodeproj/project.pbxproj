@@ -16,6 +16,9 @@
 		110C43182AD20BC500201CD5 /* NIOWebSocket in Frameworks */ = {isa = PBXBuildFile; productRef = 110C43172AD20BC500201CD5 /* NIOWebSocket */; };
 		1124D0E02AEAC3DC001D774F /* CategoryState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1124D0DF2AEAC3DC001D774F /* CategoryState.swift */; };
 		1124D0E22AEB5520001D774F /* CategoryItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1124D0E12AEB5520001D774F /* CategoryItem.swift */; };
+		1124D0E42AEC40A1001D774F /* LargeIcon.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1124D0E32AEC40A1001D774F /* LargeIcon.swift */; };
+		1124D0E62AEC410C001D774F /* LargeText.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1124D0E52AEC410C001D774F /* LargeText.swift */; };
+		1124D0E82AEC41AF001D774F /* SmallIcon.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1124D0E72AEC41AF001D774F /* SmallIcon.swift */; };
 		1147A0CF2AD8D0B900D6C615 /* ViewModelAssembly.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1147A0CE2AD8D0B900D6C615 /* ViewModelAssembly.swift */; };
 		1147A0D12AD8D48E00D6C615 /* SessionServiceProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1147A0D02AD8D48E00D6C615 /* SessionServiceProtocol.swift */; };
 		1147A0D32AD8DC4500D6C615 /* StoreService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1147A0D22AD8DC4500D6C615 /* StoreService.swift */; };
@@ -40,6 +43,7 @@
 		116D19172ACFDE4D00CB4F1D /* StandardFrameModifer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 116D19162ACFDE4D00CB4F1D /* StandardFrameModifer.swift */; };
 		116D19192ACFDEF800CB4F1D /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 116D19182ACFDEF800CB4F1D /* HomeView.swift */; };
 		116D191D2ACFE4FA00CB4F1D /* HomeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 116D191C2ACFE4FA00CB4F1D /* HomeViewModel.swift */; };
+		11716A0D2AEC4D7D00E50BE4 /* WindUp.wav in Resources */ = {isa = PBXBuildFile; fileRef = 11716A0C2AEC4D7D00E50BE4 /* WindUp.wav */; };
 		11A92E872AE4154A007F5DF4 /* TodoItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11A92E862AE4154A007F5DF4 /* TodoItem.swift */; };
 		11A92E912AE4404B007F5DF4 /* Flow_Work_HelperApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11A92E902AE4404B007F5DF4 /* Flow_Work_HelperApp.swift */; };
 		11A92E982AE4404D007F5DF4 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 11A92E972AE4404D007F5DF4 /* Preview Assets.xcassets */; };
@@ -75,7 +79,7 @@
 		11AD39522AE963E000833426 /* Ticking.wav in Resources */ = {isa = PBXBuildFile; fileRef = 11AD39512AE963E000833426 /* Ticking.wav */; };
 		11AD39542AE9772600833426 /* FButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11AD39532AE9772600833426 /* FButton.swift */; };
 		11AD39562AEAB72600833426 /* Category.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11AD39552AEAB72600833426 /* Category.swift */; };
-		11C839ED2AD7AC9300DE62D2 /* AvatarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11C839EC2AD7AC9300DE62D2 /* AvatarView.swift */; };
+		11C839ED2AD7AC9300DE62D2 /* Avatar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11C839EC2AD7AC9300DE62D2 /* Avatar.swift */; };
 		11E5AD2B2ADD84C7004670F0 /* FText.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11E5AD2A2ADD84C7004670F0 /* FText.swift */; };
 		11E5AD2D2ADECB9B004670F0 /* TodoService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11E5AD2C2ADECB9B004670F0 /* TodoService.swift */; };
 		11E5AD2F2AE1E52D004670F0 /* TodoServiceProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11E5AD2E2AE1E52D004670F0 /* TodoServiceProtocol.swift */; };
@@ -109,6 +113,9 @@
 		110C43112AD0997A00201CD5 /* SessionViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionViewModel.swift; sourceTree = "<group>"; };
 		1124D0DF2AEAC3DC001D774F /* CategoryState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryState.swift; sourceTree = "<group>"; };
 		1124D0E12AEB5520001D774F /* CategoryItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryItem.swift; sourceTree = "<group>"; };
+		1124D0E32AEC40A1001D774F /* LargeIcon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LargeIcon.swift; sourceTree = "<group>"; };
+		1124D0E52AEC410C001D774F /* LargeText.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LargeText.swift; sourceTree = "<group>"; };
+		1124D0E72AEC41AF001D774F /* SmallIcon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SmallIcon.swift; sourceTree = "<group>"; };
 		1147A0CE2AD8D0B900D6C615 /* ViewModelAssembly.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewModelAssembly.swift; sourceTree = "<group>"; };
 		1147A0D02AD8D48E00D6C615 /* SessionServiceProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionServiceProtocol.swift; sourceTree = "<group>"; };
 		1147A0D22AD8DC4500D6C615 /* StoreService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreService.swift; sourceTree = "<group>"; };
@@ -130,6 +137,7 @@
 		116D19162ACFDE4D00CB4F1D /* StandardFrameModifer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StandardFrameModifer.swift; sourceTree = "<group>"; };
 		116D19182ACFDEF800CB4F1D /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
 		116D191C2ACFE4FA00CB4F1D /* HomeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewModel.swift; sourceTree = "<group>"; };
+		11716A0C2AEC4D7D00E50BE4 /* WindUp.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = WindUp.wav; sourceTree = "<group>"; };
 		11A92E862AE4154A007F5DF4 /* TodoItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodoItem.swift; sourceTree = "<group>"; };
 		11A92E8E2AE4404B007F5DF4 /* Flow Work Helper.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Flow Work Helper.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		11A92E902AE4404B007F5DF4 /* Flow_Work_HelperApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Flow_Work_HelperApp.swift; sourceTree = "<group>"; };
@@ -168,7 +176,7 @@
 		11AD39512AE963E000833426 /* Ticking.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = Ticking.wav; sourceTree = "<group>"; };
 		11AD39532AE9772600833426 /* FButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FButton.swift; sourceTree = "<group>"; };
 		11AD39552AEAB72600833426 /* Category.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Category.swift; sourceTree = "<group>"; };
-		11C839EC2AD7AC9300DE62D2 /* AvatarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AvatarView.swift; sourceTree = "<group>"; };
+		11C839EC2AD7AC9300DE62D2 /* Avatar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Avatar.swift; sourceTree = "<group>"; };
 		11E5AD2A2ADD84C7004670F0 /* FText.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FText.swift; sourceTree = "<group>"; };
 		11E5AD2C2ADECB9B004670F0 /* TodoService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodoService.swift; sourceTree = "<group>"; };
 		11E5AD2E2AE1E52D004670F0 /* TodoServiceProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodoServiceProtocol.swift; sourceTree = "<group>"; };
@@ -400,6 +408,7 @@
 				11AD394F2AE94F1E00833426 /* Ding.wav */,
 				11AD393E2AE79AD700833426 /* Tick.wav */,
 				11AD39442AE7FCF400833426 /* Conga.wav */,
+				11716A0C2AEC4D7D00E50BE4 /* WindUp.wav */,
 				11AD39422AE7A05400833426 /* Door.wav */,
 				11AD393A2AE79A2E00833426 /* Click.wav */,
 			);
@@ -409,7 +418,7 @@
 		11C839EB2AD7AC8800DE62D2 /* Components */ = {
 			isa = PBXGroup;
 			children = (
-				11C839EC2AD7AC9300DE62D2 /* AvatarView.swift */,
+				11C839EC2AD7AC9300DE62D2 /* Avatar.swift */,
 				11E5AD2A2ADD84C7004670F0 /* FText.swift */,
 				11E5AD322AE21F28004670F0 /* SessionItem.swift */,
 				1124D0E12AEB5520001D774F /* CategoryItem.swift */,
@@ -419,6 +428,9 @@
 				11A92EDA2AE6FACB007F5DF4 /* PomodoroTimer.swift */,
 				11A92EDF2AE761A6007F5DF4 /* WorkModeButton.swift */,
 				11AD39532AE9772600833426 /* FButton.swift */,
+				1124D0E32AEC40A1001D774F /* LargeIcon.swift */,
+				1124D0E52AEC410C001D774F /* LargeText.swift */,
+				1124D0E72AEC41AF001D774F /* SmallIcon.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -520,6 +532,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				114AFDEB2AC765B800AB9A8B /* Preview Assets.xcassets in Resources */,
+				11716A0D2AEC4D7D00E50BE4 /* WindUp.wav in Resources */,
 				11AD393F2AE79AD700833426 /* Tick.wav in Resources */,
 				11AD39522AE963E000833426 /* Ticking.wav in Resources */,
 				114AFDE82AC765B800AB9A8B /* Assets.xcassets in Resources */,
@@ -555,6 +568,7 @@
 				1147A0D32AD8DC4500D6C615 /* StoreService.swift in Sources */,
 				11E5AD372AE2563B004670F0 /* RoomServiceProtocol.swift in Sources */,
 				11E5AD2F2AE1E52D004670F0 /* TodoServiceProtocol.swift in Sources */,
+				1124D0E42AEC40A1001D774F /* LargeIcon.swift in Sources */,
 				116D191D2ACFE4FA00CB4F1D /* HomeViewModel.swift in Sources */,
 				11AD394A2AE865C200833426 /* Audio.swift in Sources */,
 				1124D0E22AEB5520001D774F /* CategoryItem.swift in Sources */,
@@ -592,6 +606,7 @@
 				11A92EE02AE761A6007F5DF4 /* WorkModeButton.swift in Sources */,
 				11A92EC02AE4F7C5007F5DF4 /* AccountMenu.swift in Sources */,
 				11A92EBC2AE4C317007F5DF4 /* NetworkService.swift in Sources */,
+				1124D0E62AEC410C001D774F /* LargeText.swift in Sources */,
 				1124D0E02AEAC3DC001D774F /* CategoryState.swift in Sources */,
 				116D19172ACFDE4D00CB4F1D /* StandardFrameModifer.swift in Sources */,
 				11A92ED52AE5B724007F5DF4 /* ProfileView.swift in Sources */,
@@ -599,7 +614,8 @@
 				116D190B2ACFDA8F00CB4F1D /* AppError.swift in Sources */,
 				114AFDE42AC765B700AB9A8B /* Flow_WorkApp.swift in Sources */,
 				11A92EBE2AE4C36F007F5DF4 /* NetworkServiceProtocol.swift in Sources */,
-				11C839ED2AD7AC9300DE62D2 /* AvatarView.swift in Sources */,
+				1124D0E82AEC41AF001D774F /* SmallIcon.swift in Sources */,
+				11C839ED2AD7AC9300DE62D2 /* Avatar.swift in Sources */,
 				1106E6D92AD8CC100026600A /* AppAssembler.swift in Sources */,
 				110C430E2AD052FF00201CD5 /* SessionView.swift in Sources */,
 				116D18F32ACF8A7700CB4F1D /* SessionService.swift in Sources */,

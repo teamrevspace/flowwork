@@ -16,8 +16,6 @@ struct SessionView: View {
     @FocusState private var focusedTodoIndex: Int?
     @FocusState private var focusedCategoryIndex: Int?
     
-    @State private var isSidebarVisible: Bool = false
-    @State private var isEditingDraftCategory: Bool = false
     @State private var isHoveringSidebarButton: Bool = false
     
     var body: some View {
@@ -29,15 +27,11 @@ struct SessionView: View {
                             HStack {
                                 Button(action: {
                                     withAnimation {
-                                        isSidebarVisible.toggle()
+                                        viewModel.isSidebarVisible.toggle()
                                     }
                                 }) {
                                     HStack(spacing: 5) {
-                                        Image(systemName: "line.3.horizontal")
-                                            .resizable()
-                                            .aspectRatio(contentMode: .fit)
-                                            .frame(width: 15, height: 15)
-                                            .foregroundColor(Color("Primary").opacity(0.75))
+                                        SmallIcon(image: "line.3.horizontal", foregroundColor: Color("Primary").opacity(0.75))
                                         Text(viewModel.categoryState.selectedCategory?.title ?? "All")
                                             .font(.body)
                                             .fontWeight(.medium)
@@ -46,7 +40,7 @@ struct SessionView: View {
                                     .contentShape(Rectangle())
                                 }
                                 .buttonStyle(PlainButtonStyle())
-                                .background(self.isHoveringSidebarButton ? Color.secondary.opacity(0.25) : Color.clear )
+                                .background(self.isHoveringSidebarButton ? Color.secondary.opacity(0.25) : Color.secondary.opacity(0.1))
                                 .cornerRadius(5)
                                 .padding(.horizontal, 5)
                                 .onHover { isHovering in
@@ -62,10 +56,7 @@ struct SessionView: View {
                                     Text("Copy Invite Link")
                                 }
                             } label: {
-                                Image(systemName: "gearshape.fill")
-                                    .resizable()
-                                    .aspectRatio(contentMode: .fit)
-                                    .frame(width: 15, height: 15)
+                                SmallIcon(image: "gearshape.fill")
                             }
                             .buttonStyle(PlainButtonStyle())
                         }
@@ -80,19 +71,11 @@ struct SessionView: View {
                                 .lineLimit(1)
                                 .truncationMode(.tail)
                             if (viewModel.networkService.connected) {
-                                Image(systemName: "cloud.fill")
-                                    .resizable()
-                                    .aspectRatio(contentMode: .fit)
-                                    .frame(width: 15, height: 15)
-                                    .foregroundColor(Color.secondary)
-                                    .opacity(viewModel.isUpdating ? 0.75 : 0)
-                                    .animation(Animation.default, value: viewModel.isUpdating)
+                                SmallIcon(image: "cloud.fill")
+                                    .opacity(viewModel.isCloudSyncing ? 0.75 : 0)
+                                    .animation(Animation.default, value: viewModel.isCloudSyncing)
                             } else {
-                                Image(systemName: "icloud.slash.fill")
-                                    .resizable()
-                                    .aspectRatio(contentMode: .fit)
-                                    .frame(width: 15, height: 15)
-                                    .foregroundColor(Color.secondary)
+                                SmallIcon(image: "icloud.slash.fill")
                             }
                             Spacer()
                         }
@@ -133,7 +116,7 @@ struct SessionView: View {
                                             }
                                             .padding(.horizontal, 20)
                                             .onChange(of: self.scrollToTodoIndex) { newIndex in
-                                                if let newIndex = newIndex, newIndex < self.viewModel.todoState.todoItems.count {
+                                                if let newIndex = newIndex, newIndex < viewModel.todoState.todoItems.count {
                                                     withAnimation(Animation.linear(duration: Double(viewModel.todoState.todoItems.count) * 0.5)) {
                                                         scrollView.scrollTo(newIndex, anchor: .bottom)
                                                     }
@@ -141,7 +124,7 @@ struct SessionView: View {
                                                 }
                                             }
                                         }
-                                        .frame(minHeight: 150)
+                                        .frame(minHeight: 120)
                                         Divider()
                                         VStack {
                                             let draftTodo = viewModel.todoState.draftTodo
@@ -168,15 +151,8 @@ struct SessionView: View {
                                 } else {
                                     VStack {
                                         Spacer()
-                                        Image(systemName: "cup.and.saucer.fill")
-                                            .resizable()
-                                            .aspectRatio(contentMode: .fit)
-                                            .frame(width: 30, height: 30)
-                                            .foregroundColor(Color.secondary)
-                                        Text("Take a break")
-                                            .font(.title2)
-                                            .fontWeight(.semibold)
-                                            .foregroundColor(Color.secondary)
+                                        LargeIcon(image: "cup.and.saucer.fill")
+                                        LargeText(text: "Take a break")
                                         Spacer()
                                     }
                                     .padding(.vertical, 10)
@@ -226,7 +202,7 @@ struct SessionView: View {
                             HStack {
                                 if (!viewModel.networkService.connected || !viewModel.sessionState.isConnected || (viewModel.sessionState.currentSessionUsers ?? []).isEmpty) {
                                     ZStack {
-                                        AvatarView(avatarURL: viewModel.authState.currentUser?.avatarURL)
+                                        Avatar(avatarURL: viewModel.authState.currentUser?.avatarURL)
                                             .opacity(0.5)
                                         if (!viewModel.networkService.connected) {
                                             Circle()
@@ -246,7 +222,7 @@ struct SessionView: View {
                                                     } label: {
                                                         if user.id == viewModel.authState.currentUser?.id {
                                                             ZStack {
-                                                                AvatarView(avatarURL: user.avatarURL)
+                                                                Avatar(avatarURL: user.avatarURL)
                                                                 Circle()
                                                                     .frame(width: 10, height: 10)
                                                                     .foregroundColor(viewModel.sessionState.isConnected ? .green : .yellow)
@@ -254,7 +230,7 @@ struct SessionView: View {
                                                             }
                                                             .frame(width: 30, height: 30)
                                                         } else {
-                                                            AvatarView(avatarURL: user.avatarURL)
+                                                            Avatar(avatarURL: user.avatarURL)
                                                         }
                                                     }
                                                     .buttonStyle(PlainButtonStyle())
@@ -279,7 +255,6 @@ struct SessionView: View {
                     .onAppear() {
                         if !viewModel.categoryState.isCategoryListInitialized {
                             viewModel.fetchCategoryList()
-                            viewModel.todoService.selectCategory(category: nil)
                         }
                         switch (viewModel.sessionState.selectedMode) {
                         case .lounge:
@@ -287,7 +262,7 @@ struct SessionView: View {
                         case .pomodoro:
                             viewModel.resetTimer()
                             viewModel.startTimer()
-                            viewModel.playTickSound()
+                            viewModel.playWindUpSound()
                         case .focus:
                             viewModel.saveSessionGlobal()
                             viewModel.playCongaSound()
@@ -296,7 +271,7 @@ struct SessionView: View {
                     .onChange(of: viewModel.categoryState.selectedCategory?.id) { [oldCategory = viewModel.categoryState.selectedCategory] newCategoryId in
                         focusedTodoIndex = nil
                         focusedCategoryIndex = nil
-                        isEditingDraftCategory = false
+                        viewModel.isEditingDraftCategory = false
                         scrollToTodoIndex = nil
                         scrollToCategoryIndex = nil
                         viewModel.todoState.isTodoListInitialized = false
@@ -308,35 +283,14 @@ struct SessionView: View {
                     VStack(spacing: 10) {
                         Spacer()
                         if (!viewModel.networkService.connected) {
-                            Image(systemName: "icloud.slash.fill")
-                                .resizable()
-                                .aspectRatio(contentMode: .fit)
-                                .frame(width: 30, height: 30)
-                                .foregroundColor(Color.secondary)
-                            Text("No internet connection. Try again later.")
-                                .font(.title2)
-                                .fontWeight(.semibold)
-                                .foregroundColor(Color.secondary)
+                            LargeIcon(image: "icloud.slash.fill")
+                            LargeText(text: "No internet connection. Try again later.")
                         } else if (viewModel.sessionState.maxRetriesReached) {
-                            Image(systemName: "sailboat.fill")
-                                .resizable()
-                                .aspectRatio(contentMode: .fit)
-                                .frame(width: 30, height: 30)
-                                .foregroundColor(Color.secondary)
-                            Text("Disconnected.")
-                                .font(.title2)
-                                .fontWeight(.semibold)
-                                .foregroundColor(Color.secondary)
+                            LargeIcon(image: "sailboat.fill")
+                            LargeText(text: "Disconnected")
                         } else {
-                            Image(systemName: "antenna.radiowaves.left.and.right")
-                                .resizable()
-                                .aspectRatio(contentMode: .fit)
-                                .frame(width: 30, height: 30)
-                                .foregroundColor(Color.secondary)
-                            Text("Joining...")
-                                .font(.title2)
-                                .fontWeight(.semibold)
-                                .foregroundColor(Color.secondary)
+                            LargeIcon(image: "antenna.radiowaves.left.and.right")
+                            LargeText(text: "Joining...")
                         }
                         Spacer()
                         HStack {
@@ -357,122 +311,7 @@ struct SessionView: View {
                     .standardFrame()
                 }
             }
-            
-            // MARK: sidebar
-            VStack(alignment: .leading) {
-                Button(action: {
-                    withAnimation {
-                        isSidebarVisible.toggle()
-                    }
-                }) {
-                    Image(systemName: "chevron.left.2")
-                        .resizable()
-                        .aspectRatio(contentMode: .fit)
-                        .frame(width: 10, height: 10)
-                        .foregroundColor(Color("Primary").opacity(0.75))
-                        .padding(5)
-                        .contentShape(Rectangle())
-                }
-                .buttonStyle(PlainButtonStyle())
-                .background(self.isHoveringSidebarButton ? Color.secondary.opacity(0.25) : Color.clear )
-                .cornerRadius(5)
-                .onHover { isHovering in
-                    self.isHoveringSidebarButton = isHovering
-                }
-                if (viewModel.categoryState.isCategoryListInitialized) {
-                    Group {
-                        ScrollViewReader { scrollView in
-                            ScrollView(.vertical) {
-                                LazyVStack(alignment: .leading, spacing: 0) {
-                                    if let userId = viewModel.authState.currentUser?.id {
-                                        Group {
-                                            CategoryItem(
-                                                category: Category(id: userId, title: "All"),
-                                                selectedCategory: $viewModel.categoryState.selectedCategory,
-                                                isSidebarVisible: $isSidebarVisible,
-                                                onSelect: {
-                                                    viewModel.todoService.selectCategory(category: nil)
-                                                }
-                                            )
-                                            ForEach(viewModel.categoryState.categoryItems, id: \.id) { category in
-                                                CategoryItem(
-                                                    category: category,
-                                                    selectedCategory: $viewModel.categoryState.selectedCategory,
-                                                    isSidebarVisible: $isSidebarVisible,
-                                                    onSelect: {
-                                                        viewModel.todoService.selectCategory(category: category)
-                                                    }
-                                                )
-                                                .contextMenu {
-                                                    Button("Removed") {
-                                                        self.viewModel.storeService.removeUserFromCategory(userId: userId, categoryId: category.id ?? userId)
-                                                    }
-                                                }
-                                            }
-                                            if (self.isEditingDraftCategory) {
-                                                TextField("New list", text: $viewModel.categoryState.draftCategory.title, axis: .vertical)
-                                                    .padding(5)
-                                                    .textFieldStyle(PlainTextFieldStyle())
-                                                    .listRowBackground(Color.clear)
-                                                    .foregroundColor(Color("Primary"))
-                                                    .frame(maxWidth: .infinity, alignment: .leading)
-                                                    .fixedSize(horizontal: false, vertical: true)
-                                                    .contentShape(Rectangle())
-                                                    .onSubmit {
-                                                        self.isEditingDraftCategory = false
-                                                        self.scrollToCategoryIndex = -1
-                                                        withAnimation {
-                                                            viewModel.addDraftCategory()
-                                                        }
-                                                    }
-                                                    .focused($focusedCategoryIndex, equals: -2)
-                                                    .id(-2)
-                                            }
-                                            Spacer()
-                                                .frame(height: 30)
-                                                .id(-1)
-                                        }
-                                    }
-                                }
-                                .onChange(of: self.scrollToCategoryIndex) { newIndex in
-                                    if let newIndex = newIndex, newIndex < viewModel.categoryState.categoryItems.count {
-                                        withAnimation(Animation.linear(duration: Double(viewModel.categoryState.categoryItems.count) * 0.5)) {
-                                            scrollView.scrollTo(newIndex, anchor: .bottom)
-                                        }
-                                        self.scrollToCategoryIndex = nil
-                                    }
-                                }
-                            }
-                            .padding(0)
-                            .listStyle(.plain)
-                        }
-                    }
-                } else {
-                    VStack(alignment: .center) {
-                        Spacer()
-                        ProgressView()
-                        Spacer()
-                    }
-                    .padding(.vertical, 10)
-                }
-                Divider()
-                HStack {
-                    FButton(image: "plus", text: "New List") {
-                        self.isEditingDraftCategory = true
-                        self.focusedCategoryIndex = -2
-                        self.scrollToCategoryIndex = -2
-                    }
-                }
-                .frame(height: 30)
-                .padding(.horizontal, 5)
-            }
-            .contentShape(Rectangle())
-            .padding(.vertical, 20)
-            .padding(.horizontal, 15)
-            .background(.ultraThinMaterial, in: Rectangle())
-            .frame(width: 180)
-            .offset(x: isSidebarVisible ? -90 : -360)
-            .zIndex(10)
+            SideBarView(viewModel: viewModel)
         }
         .onChange(of: viewModel.networkService.connected) { value in
             guard let userId = viewModel.authState.currentUser?.id else { return }
@@ -498,7 +337,6 @@ struct SessionView: View {
             }
             if (viewModel.categoryState.isCategoryListInitialized) {
                 viewModel.todoService.sanitizeCategoryItems()
-                viewModel.todoService.selectCategory(category: nil)
             }
             switch (viewModel.sessionState.selectedMode) {
             case .lounge:
@@ -511,5 +349,131 @@ struct SessionView: View {
             viewModel.storeService.stopTodoListListener()
             viewModel.storeService.stopCategoryListListener()
         }
+    }
+}
+
+
+struct SideBarView: View {
+    @ObservedObject var viewModel: SessionViewModel
+
+    @FocusState private var focusedCategoryIndex: Int?
+    @State private var scrollToCategoryIndex: Int? = nil
+    @State private var isHoveringSidebarButton: Bool = false
+    
+    var body: some View {
+        VStack(alignment: .leading) {
+            Button(action: {
+                withAnimation {
+                    viewModel.isSidebarVisible.toggle()
+                }
+            }) {
+                Image(systemName: "chevron.left.2")
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)
+                    .frame(width: 10, height: 10)
+                    .foregroundColor(Color("Primary").opacity(0.75))
+                    .padding(5)
+                    .contentShape(Rectangle())
+            }
+            .buttonStyle(PlainButtonStyle())
+            .background(self.isHoveringSidebarButton ? Color.secondary.opacity(0.25) : Color.clear )
+            .cornerRadius(5)
+            .onHover { isHovering in
+                self.isHoveringSidebarButton = isHovering
+            }
+            if (viewModel.categoryState.isCategoryListInitialized) {
+                Group {
+                    ScrollViewReader { scrollView in
+                        ScrollView(.vertical) {
+                            LazyVStack(alignment: .leading, spacing: 0) {
+                                if let userId = viewModel.authState.currentUser?.id {
+                                    Group {
+                                        CategoryItem(
+                                            category: Category(id: userId, title: "All"),
+                                            selectedCategory: $viewModel.categoryState.selectedCategory,
+                                            isSidebarVisible: $viewModel.isSidebarVisible,
+                                            onSelect: {
+                                                viewModel.todoService.selectCategory(category: nil)
+                                            }
+                                        )
+                                        ForEach(viewModel.categoryState.categoryItems, id: \.id) { category in
+                                            CategoryItem(
+                                                category: category,
+                                                selectedCategory: $viewModel.categoryState.selectedCategory,
+                                                isSidebarVisible: $viewModel.isSidebarVisible,
+                                                onSelect: {
+                                                    viewModel.todoService.selectCategory(category: category)
+                                                }
+                                            )
+                                            .contextMenu {
+                                                Button("Removed") {
+                                                    viewModel.storeService.removeUserFromCategory(userId: userId, categoryId: category.id ?? userId)
+                                                }
+                                            }
+                                        }
+                                        if (viewModel.isEditingDraftCategory) {
+                                            TextField("New list", text: $viewModel.categoryState.draftCategory.title, axis: .vertical)
+                                                .padding(5)
+                                                .textFieldStyle(PlainTextFieldStyle())
+                                                .listRowBackground(Color.clear)
+                                                .foregroundColor(Color("Primary"))
+                                                .frame(maxWidth: .infinity, alignment: .leading)
+                                                .fixedSize(horizontal: false, vertical: true)
+                                                .contentShape(Rectangle())
+                                                .onSubmit {
+                                                    viewModel.isEditingDraftCategory = false
+                                                    self.scrollToCategoryIndex = -1
+                                                    withAnimation {
+                                                        viewModel.addDraftCategory()
+                                                    }
+                                                }
+                                                .focused($focusedCategoryIndex, equals: -2)
+                                                .id(-2)
+                                        }
+                                        Spacer()
+                                            .frame(height: 30)
+                                            .id(-1)
+                                    }
+                                }
+                            }
+                            .onChange(of: self.scrollToCategoryIndex) { newIndex in
+                                if let newIndex = newIndex, newIndex < viewModel.categoryState.categoryItems.count {
+                                    withAnimation(Animation.linear(duration: Double(viewModel.categoryState.categoryItems.count) * 0.5)) {
+                                        scrollView.scrollTo(newIndex, anchor: .bottom)
+                                    }
+                                    self.scrollToCategoryIndex = nil
+                                }
+                            }
+                        }
+                        .padding(0)
+                        .listStyle(.plain)
+                    }
+                }
+            } else {
+                VStack(alignment: .center) {
+                    Spacer()
+                    ProgressView()
+                    Spacer()
+                }
+                .padding(.vertical, 10)
+            }
+            Divider()
+            HStack {
+                FButton(image: "plus", text: "New List") {
+                    viewModel.isEditingDraftCategory = true
+                    self.focusedCategoryIndex = -2
+                    self.scrollToCategoryIndex = -2
+                }
+            }
+            .frame(height: 30)
+            .padding(.horizontal, 5)
+        }
+        .contentShape(Rectangle())
+        .padding(.vertical, 20)
+        .padding(.horizontal, 15)
+        .background(.ultraThinMaterial, in: Rectangle())
+        .frame(width: 180)
+        .offset(x: viewModel.isSidebarVisible ? -90 : -360)
+        .zIndex(10)
     }
 }

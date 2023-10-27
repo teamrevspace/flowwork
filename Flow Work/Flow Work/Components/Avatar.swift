@@ -1,5 +1,5 @@
 //
-//  AvatarView.swift
+//  Avatar.swift
 //  Flow Work
 //
 //  Created by Allen Lin on 10/12/23.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct AvatarView: View {
+struct Avatar: View {
     let avatarURL: URL?
     @State private var isHovering: Bool = false
     

@@ -22,7 +22,7 @@ class RoomService: NSObject, RoomServiceProtocol, ObservableObject {
     @Published var inboundStream: RTCMediaStream?
     @Published var storeService: StoreServiceProtocol
     
-    private let stunServerUrl = "stun:stun.l.google.com:19302"
+    private let stunServerURL = "stun:stun.l.google.com:19302"
     private let resolver: Resolver
     
     init(resolver: Resolver) {
@@ -32,7 +32,7 @@ class RoomService: NSObject, RoomServiceProtocol, ObservableObject {
         self.storeService = resolver.resolve(StoreServiceProtocol.self)!
         
         let configuration = RTCConfiguration()
-        configuration.iceServers = [RTCIceServer(urlStrings: [stunServerUrl])]
+        configuration.iceServers = [RTCIceServer(urlStrings: [stunServerURL])]
         
         let constraints = RTCMediaConstraints(mandatoryConstraints: nil, optionalConstraints: nil)
         self.peerConnection = self.peerConnectionFactory.peerConnection(

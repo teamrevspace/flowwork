@@ -26,8 +26,8 @@ class HelperAppDelegate: NSObject, NSApplicationDelegate {
                 components.removeLast(4)
                 return NSString.path(withComponents: components)
             }()
-            let appUrl = URL(fileURLWithPath: appPath)
-            NSWorkspace.shared.openApplication(at: appUrl, configuration: NSWorkspace.OpenConfiguration(), completionHandler: nil)
+            let appURL = URL(fileURLWithPath: appPath)
+            NSWorkspace.shared.openApplication(at: appURL, configuration: NSWorkspace.OpenConfiguration(), completionHandler: nil)
         }
     }
 }

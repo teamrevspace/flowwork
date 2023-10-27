@@ -44,18 +44,32 @@ struct PomodoroTimer: View {
                         .buttonStyle(PlainButtonStyle())
                     }
                 }
-                Button(action: {
-                    viewModel.resetTimer()
-                    viewModel.startTimer()
-                    viewModel.playTickSound()
-                }) {
-                    Image(systemName: "arrow.counterclockwise.circle.fill")
-                        .resizable()
-                        .aspectRatio(contentMode: .fit)
-                        .frame(width: 20, height: 20)
-                        .foregroundColor(Color("Primary").opacity(0.75))
+                if viewModel.timerType == .pomodoro {
+                    Button(action: {
+                        viewModel.resetTimer()
+                        viewModel.startTimer()
+                        viewModel.playWindUpSound()
+                    }) {
+                        Image(systemName: "arrow.counterclockwise.circle.fill")
+                            .resizable()
+                            .aspectRatio(contentMode: .fit)
+                            .frame(width: 20, height: 20)
+                            .foregroundColor(Color("Primary").opacity(0.75))
+                    }
+                    .buttonStyle(PlainButtonStyle())
+                } else {
+                    Button(action: {
+                        viewModel.skipTimer()
+                        viewModel.playTickSound()
+                    }) {
+                        Image(systemName: "arrow.right.to.line.circle.fill")
+                            .resizable()
+                            .aspectRatio(contentMode: .fit)
+                            .frame(width: 20, height: 20)
+                            .foregroundColor(Color("Primary").opacity(0.75))
+                    }
+                    .buttonStyle(PlainButtonStyle())
                 }
-                .buttonStyle(PlainButtonStyle())
             }
         }
         .padding(0)
