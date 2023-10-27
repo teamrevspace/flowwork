@@ -13,7 +13,10 @@ import WebRTC
 class StoreService: StoreServiceProtocol, ObservableObject {
     private let db = Firestore.firestore()
     private let settings = FirestoreSettings()
+    
     private var lobbyListener: ListenerRegistration?
+    private var todoListListener: ListenerRegistration?
+    private var categoryListListener: ListenerRegistration?
     
     private let resolver: Resolver
     
@@ -114,10 +117,17 @@ class StoreService: StoreServiceProtocol, ObservableObject {
         ])
     }
     
+    func stopLobbyListener() {
+        lobbyListener?.remove()
+        lobbyListener = nil
+    }
+    
     // MARK: todos collection
     
     func findTodosByUserId(userId: String, completion: @escaping ([Todo]) -> Void) {
-        db.collection("todos").whereField("userIds", arrayContains: userId)
+        todoListListener?.remove()
+        
+        todoListListener = db.collection("todos").whereField("userIds", arrayContains: userId)
             .addSnapshotListener({(snapshot, error) in
                 guard let documents = snapshot?.documents else {
                     completion([])
@@ -140,7 +150,9 @@ class StoreService: StoreServiceProtocol, ObservableObject {
     }
     
     func findTodosByCategoryId(categoryId: String, completion: @escaping ([Todo]) -> Void) {
-        db.collection("todos").whereField("categoryIds", arrayContains: categoryId)
+        todoListListener?.remove()
+        
+        todoListListener = db.collection("todos").whereField("categoryIds", arrayContains: categoryId)
             .addSnapshotListener({(snapshot, error) in
                 guard let documents = snapshot?.documents else {
                     completion([])
@@ -166,14 +178,16 @@ class StoreService: StoreServiceProtocol, ObservableObject {
         var data: [String: Any] = [
             "title": todo.title,
             "completed": todo.completed,
-            "userIds": todo.userIds ?? [],
-            "createdAt": FieldValue.serverTimestamp()
+            "createdAt": FieldValue.serverTimestamp(),
         ]
-        if (todo.userIds != nil) {
-            data.updateValue(todo.userIds!, forKey: "userIds")
-        }
         if (todo.completed) {
             data.updateValue(FieldValue.serverTimestamp(), forKey: "completedAt")
+        }
+        if let userIds = todo.userIds {
+            data.updateValue(userIds, forKey: "userIds")
+        }
+        if let categoryIds = todo.categoryIds {
+            data.updateValue(categoryIds, forKey: "categoryIds")
         }
         db.collection("todos").addDocument(data: data)
         completion()
@@ -184,14 +198,16 @@ class StoreService: StoreServiceProtocol, ObservableObject {
         var newData: [String: Any] = [
             "title": todo.title,
             "completed": todo.completed,
-            "userIds": todo.userIds ?? [],
             "updatedAt": FieldValue.serverTimestamp()
         ]
-        if (todo.userIds != nil) {
-            newData.updateValue(todo.userIds!, forKey: "userIds")
-        }
         if (todo.completed) {
             newData.updateValue(FieldValue.serverTimestamp(), forKey: "completedAt")
+        }
+        if let userIds = todo.userIds {
+            newData.updateValue(userIds, forKey: "userIds")
+        }
+        if let categoryIds = todo.categoryIds {
+            newData.updateValue(categoryIds, forKey: "categoryIds")
         }
         db.collection("todos").document(todoId).updateData(newData)
         completion()
@@ -202,10 +218,17 @@ class StoreService: StoreServiceProtocol, ObservableObject {
         completion()
     }
     
+    func stopTodoListListener() {
+        todoListListener?.remove()
+        todoListListener = nil
+    }
+    
     // MARK: categories collection
     
     func findCategoriesByUserId(userId: String, completion: @escaping ([Category]) -> Void) {
-        db.collection("categories").whereField("userIds", arrayContains: userId)
+        categoryListListener?.remove()
+        
+        categoryListListener = db.collection("categories").whereField("userIds", arrayContains: userId)
             .addSnapshotListener({(snapshot, error) in
                 guard let documents = snapshot?.documents else {
                     completion([])
@@ -228,11 +251,10 @@ class StoreService: StoreServiceProtocol, ObservableObject {
     func addCategory(category: Category, completion: @escaping (() -> Void)) {
         var newData: [String: Any] = [
             "title": category.title,
-            "userIds": category.userIds ?? [],
             "createdAt": FieldValue.serverTimestamp()
         ]
-        if (category.userIds != nil) {
-            newData.updateValue(category.userIds!, forKey: "userIds")
+        if let userIds = category.userIds {
+            newData.updateValue(userIds, forKey: "userIds")
         }
         db.collection("categories").addDocument(data: newData)
         completion()
@@ -247,11 +269,10 @@ class StoreService: StoreServiceProtocol, ObservableObject {
         guard let categoryId = category.id else { return }
         var newData: [String: Any] = [
             "title": category.title,
-            "userIds": category.userIds ?? [],
             "updatedAt": FieldValue.serverTimestamp()
         ]
-        if (category.userIds != nil) {
-            newData.updateValue(category.userIds!, forKey: "userIds")
+        if let userIds = category.userIds {
+            newData.updateValue(userIds, forKey: "userIds")
         }
         db.collection("categories").document(categoryId).updateData(newData)
         completion()
@@ -263,11 +284,9 @@ class StoreService: StoreServiceProtocol, ObservableObject {
         ])
     }
     
-    // MARK: miscellaneous
-    
-    func stopLobbyListener() {
-        lobbyListener?.remove()
-        lobbyListener = nil
+    func stopCategoryListListener() {
+        categoryListListener?.remove()
+        categoryListListener = nil
     }
     
     // MARK: rooms collection

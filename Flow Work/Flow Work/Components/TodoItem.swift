@@ -14,10 +14,7 @@ struct TodoItem: View {
     @Binding var todo: Todo
     var isEditingDraft: Bool?
     var isHoveringAction: Bool
-    var onCheck: (Bool) -> Void
     var onAdd: (() -> Void)?
-    var onUpdate: (() -> Void)?
-    var onDelete: (() -> Void)?
     var onHoverAction: (Bool) -> Void
     var showActionButton: Bool
     
@@ -31,7 +28,7 @@ struct TodoItem: View {
                     set: { newValue in
                         withAnimation {
                             todo.completed = newValue
-                            onCheck(newValue)
+                            viewModel.checkTodoCompleted(todo: todo, completed: newValue)
                         }
                     }
                 ))
@@ -72,7 +69,9 @@ struct TodoItem: View {
                 }
                 .onReceive(Just(todo.title)) { _ in
                     if (isEditing) {
-                        viewModel.syncToCloud(onUpdate)
+                        viewModel.syncToCloud() {
+                            viewModel.updateTodo(todo: todo)
+                        }
                         isEditing = false
                     }
                 }
@@ -87,7 +86,7 @@ struct TodoItem: View {
                 Button(action: {
                     isEditing = false
                     withAnimation {
-                        onDelete?()
+                        viewModel.removeTodo(todoId: todo.id)
                     }
                 }) {
                     Image(systemName: "xmark")

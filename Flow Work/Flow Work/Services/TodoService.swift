@@ -41,38 +41,44 @@ class TodoService: TodoServiceProtocol, ObservableObject {
     
     func initTodoList(todos: [Todo]) {
         let todoList = todos.filter({!$0.completed}).sorted(by: { $1.createdAt.seconds > $0.createdAt.seconds })
-        self.todoState.todoItems = todoList
-        self.resetTodoList(todos: todoList)
-        self.todoState.isTodoListInitialized = true
-    }
-    
-    private func resetTodoList(todos: [Todo]) {
-        self.todoState.isHoveringActionButtons = Array(repeating: false, count: todos.count + 1)
+        DispatchQueue.main.async {
+            self.todoState.todoItems = todoList
+            self.todoState.isTodoListInitialized = true
+            self.todoState.isHoveringActionButtons = Array(repeating: false, count: todoList.count + 1)
+        }
     }
     
     func sanitizeTodoItems() {
         if (self.todoState.todoItems.count > 1) {
-            self.todoState.todoItems = self.todoState.todoItems.enumerated().filter { (index, item) in
-                return !item.title.isEmpty
-            }.map { $0.element }
+            DispatchQueue.main.async {
+                self.todoState.todoItems = self.todoState.todoItems.enumerated().filter { (index, item) in
+                    return !item.title.isEmpty
+                }.map { $0.element }
+            }
         }
     }
     
     func updateDraftTodo(todo: Todo) {
-        self.todoState.draftTodo = todo
+        DispatchQueue.main.async {
+            self.todoState.draftTodo = todo
+        }
     }
     
     func initCategoryList(categories: [Category]) {
         let categoryList = categories.sorted(by: { $1.createdAt.seconds > $0.createdAt.seconds })
-        self.categoryState.categoryItems = categoryList
-        self.categoryState.isCategoryListInitialized = true
+        DispatchQueue.main.async {
+            self.categoryState.categoryItems = categoryList
+            self.categoryState.isCategoryListInitialized = true
+        }
     }
     
     func sanitizeCategoryItems() {
         if (self.categoryState.categoryItems.count > 1) {
-            self.categoryState.categoryItems = self.categoryState.categoryItems.enumerated().filter { (index, item) in
-                return !item.title.isEmpty
-            }.map { $0.element }
+            DispatchQueue.main.async {
+                self.categoryState.categoryItems = self.categoryState.categoryItems.enumerated().filter { (index, item) in
+                    return !item.title.isEmpty
+                }.map { $0.element }
+            }
         }
     }
     
@@ -82,10 +88,10 @@ class TodoService: TodoServiceProtocol, ObservableObject {
         }
     }
     
-    func selectCategory(categoryId: String?) {
+    func selectCategory(category: Category?) {
         guard let currentUserId = self.authState.currentUser?.id else { return }
         DispatchQueue.main.async {
-            self.categoryState.selectedCategoryId = categoryId ?? currentUserId
+            self.categoryState.selectedCategory = category ?? Category(id: currentUserId, title: "All")
         }
         
     }

@@ -16,20 +16,21 @@ protocol StoreServiceProtocol {
     func findSessionsByUserId(userId: String, completion: @escaping ([Session]) -> Void)
     func addUserToSession(userId: String, sessionId: String) -> Void
     func removeUserFromSession(userId: String, sessionId: String) -> Void
+    func stopLobbyListener()
     
     func findTodosByUserId(userId: String, completion: @escaping ([Todo]) -> Void)
     func findTodosByCategoryId(categoryId: String, completion: @escaping ([Todo]) -> Void)
     func addTodo(todo: Todo, completion: @escaping (() -> Void))
     func removeTodo(todoId: String, completion: @escaping (() -> Void))
     func updateTodo(todo: Todo, completion: @escaping (() -> Void))
+    func stopTodoListListener()
     
     func findCategoriesByUserId(userId: String, completion: @escaping ([Category]) -> Void)
     func addCategory(category: Category, completion: @escaping (() -> Void))
     func removeCategory(categoryId: String, completion: @escaping (() -> Void))
     func updateCategory(category: Category, completion: @escaping (() -> Void))
     func removeUserFromCategory(userId: String, categoryId: String) -> Void
-    
-    func stopLobbyListener()
+    func stopCategoryListListener()
     
     func addRTCOfferToRoom(rtcOffer: RTCOffer, roomId: String)
     func addRTCAnswerToRoom(rtcAnswer: RTCAnswer, roomId: String)

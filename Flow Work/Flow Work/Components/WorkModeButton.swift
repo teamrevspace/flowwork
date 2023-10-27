@@ -35,7 +35,7 @@ struct WorkModeButton: View {
                 .frame(maxWidth: .infinity, alignment: .leading)
         }
         .padding(10)
-        .background(isSelected ? mode.color.opacity(0.9) : Color.secondary.opacity(0.1))
+        .background(isSelected ? mode.color.opacity(0.9) : Color.secondary.opacity(0.25))
         .foregroundColor(isSelected ? Color.white : Color("Primary").opacity(0.75))
         .cornerRadius(10)
         .gesture(TapGesture(count: 2).onEnded {

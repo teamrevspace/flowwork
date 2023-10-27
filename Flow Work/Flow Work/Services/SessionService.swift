@@ -277,6 +277,7 @@ extension SessionService {
         DispatchQueue.main.async {
             if response.topic.starts(with: "coworking_session:") && response.event == "phx_join" && response.payload?.status == "ok" {
                 self.state.hasJoinedSession = true
+                print("connected")
             } else if response.topic.starts(with: "coworking_session:") && response.event == "phx_close" {
                 self.state.currentSessionUsers = nil
             }

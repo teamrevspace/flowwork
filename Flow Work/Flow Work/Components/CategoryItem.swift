@@ -10,7 +10,7 @@ import SwiftUI
 
 struct CategoryItem: View {
     var category: Category
-    @Binding var selectedCategoryId: String?
+    @Binding var selectedCategory: Category?
     @Binding var isSidebarVisible: Bool
     var onSelect: () -> Void
     
@@ -24,7 +24,7 @@ struct CategoryItem: View {
             .frame(maxWidth: .infinity, alignment: .leading)
             .fixedSize(horizontal: false, vertical: true)
             .padding(5)
-            .background(selectedCategoryId == category.id ? Color.secondary.opacity(0.25) : Color.clear)
+            .background(selectedCategory?.id == category.id ? Color.secondary.opacity(0.25) : Color.clear)
             .contentShape(Rectangle())
             .cornerRadius(5)
             .onTapGesture {

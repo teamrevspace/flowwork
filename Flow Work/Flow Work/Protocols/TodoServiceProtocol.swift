@@ -19,5 +19,5 @@ protocol TodoServiceProtocol {
     func initCategoryList(categories: [Category])
     func sanitizeCategoryItems()
     func updateDraftCategory(category: Category)
-    func selectCategory(categoryId: String?)
+    func selectCategory(category: Category?)
 }

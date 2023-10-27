@@ -45,10 +45,6 @@ class SessionViewModel: ObservableObject {
     @Published var isUpdating: Bool = false
     private var sessionPassword: String? = nil
     
-    // MARK: task grouping feature
-    @Published var selectedCategory: String = "All"
-    @Published var newCategoryName: String = ""
-    
     // MARK: pomodoro mode
     @Published var timerType: TimerType = .pomodoro
     @Published var timeRemaining: Int = Constants.pomodoroTime
@@ -65,7 +61,6 @@ class SessionViewModel: ObservableObject {
     private var updateQueue: Int = 0
     
     @Published var savePublisher = PassthroughSubject<(() -> Void)?, Never>()
-    private let throttleSavePublisher = PassthroughSubject<(() -> Void)?, Never>()
     
     private let resolver: Resolver
     private var cancellables = Set<AnyCancellable>()
@@ -97,21 +92,24 @@ class SessionViewModel: ObservableObject {
         setupCloudSync()
     }
     
-    func fetchTodoList() {
-        guard let currentUserId = self.authState.currentUser?.id else { return }
-        self.storeService.findTodosByUserId(userId: currentUserId) { todos in
-            self.todoService.initTodoList(todos: todos)
-        }
+    func reconnectToSession(_ userId: String) {
+        self.sessionService.resetMaxRetries()
+        self.sessionService.connect(userId)
+        self.rejoinSession()
     }
     
-    func filterTodoListByCategoryId(categoryId: String?) {
+    func fetchTodoList(categoryId: String?) {
         guard let currentUserId = self.authState.currentUser?.id else { return }
-        if let categoryId = categoryId, categoryId != currentUserId {
-            self.storeService.findTodosByCategoryId(categoryId: categoryId) { todos in
-                self.todoService.initTodoList(todos: todos)
+        if (!self.todoState.isTodoListInitialized) {
+            if let categoryId = categoryId, categoryId != currentUserId {
+                self.storeService.findTodosByCategoryId(categoryId: categoryId) { todos in
+                    self.todoService.initTodoList(todos: todos)
+                }
+            } else {
+                self.storeService.findTodosByUserId(userId: currentUserId) { todos in
+                    self.todoService.initTodoList(todos: todos)
+                }
             }
-        } else {
-            self.fetchTodoList()
         }
     }
     
@@ -119,14 +117,13 @@ class SessionViewModel: ObservableObject {
         guard let currentUserId = self.authState.currentUser?.id else { return }
         self.storeService.findCategoriesByUserId(userId: currentUserId) { categories in
             self.todoService.initCategoryList(categories: categories)
-            self.categoryState.selectedCategoryId = currentUserId
+            self.todoService.selectCategory(category: nil)
         }
     }
     
     func setupCloudSync() {
         savePublisher
-            .debounce(for: 0.5, scheduler: DispatchQueue.main)
-            .merge(with: throttleSavePublisher.throttle(for: 1.0, scheduler: DispatchQueue.main, latest: true))
+            .debounce(for: 1.0, scheduler: DispatchQueue.main)
             .sink { onCloudSync in
                 onCloudSync?()
                 self.setUpdateStatus(false)
@@ -184,6 +181,8 @@ class SessionViewModel: ObservableObject {
             guard let currentUserId = self.authState.currentUser?.id else { return }
             var newTodo = self.todoState.draftTodo
             newTodo.userIds = [currentUserId]
+            let currentCategoryId = self.categoryState.selectedCategory?.id ?? currentUserId
+            newTodo.categoryIds = [currentCategoryId]
             self.todoService.updateDraftTodo(todo: Todo())
             self.todoState.isHoveringActionButtons.append(false)
             self.storeService.addTodo(todo: newTodo) {
