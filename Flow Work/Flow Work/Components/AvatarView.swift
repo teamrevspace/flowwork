@@ -20,6 +20,7 @@ struct AvatarView: View {
                         .aspectRatio(contentMode: .fit)
                         .frame(width: 30, height: 30)
                         .foregroundColor(Color.secondary.opacity(0.5))
+                        .contentShape(Circle())
                         .cornerRadius(.infinity)
                         .aspectRatio(contentMode: .fit)
                 } else if phase.error != nil {
@@ -44,6 +45,7 @@ struct PlaceholderAvatar: View {
             .aspectRatio(contentMode: .fit)
             .frame(width: 30, height: 30)
             .foregroundColor(Color.secondary.opacity(0.5))
+            .contentShape(Circle())
             .cornerRadius(.infinity)
             .aspectRatio(contentMode: .fit)
     }
