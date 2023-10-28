@@ -179,14 +179,14 @@ export default function Home() {
                 <button
                   onClick={(e) => signup(e)}
                   type='button'
-                  className='w-2/5 rounded-xl border-none bg-electric-blue px-5 py-3 text-lg font-medium text-white hover:bg-electric-blue-accent'
+                  className='w-2/5 whitespace-nowrap rounded-xl border-none bg-electric-blue px-5 py-3 text-lg font-medium text-white hover:bg-electric-blue-accent'
                 >
                   {loading ? (
                     <div className='flex h-7 w-full items-center justify-center'>
                       <Image className='animate-spin' width={24} height={24} src='spinner.svg' alt={'Loading...'} />
                     </div>
                   ) : (
-                    'Download'
+                    'Get Flow Work'
                   )}
                 </button>
               </>
@@ -210,7 +210,13 @@ export default function Home() {
       <div id='footer' className='flex w-full flex-grow flex-row items-end justify-between px-12 py-8'>
         <p className='font-medium text-metallic-gray'>
           © 2023{' '}
-          <a href='https://rev.school' target='_blank' referrerPolicy='no-referrer' className='hover:underline'>
+          <a
+            href='https://rev.school'
+            target='_blank'
+            referrerPolicy='no-referrer'
+            className='hover:underline'
+            onClick={() => captureClick('rev')}
+          >
             rev
           </a>
         </p>
@@ -218,8 +224,9 @@ export default function Home() {
           <a
             target='_blank'
             referrerPolicy='no-referrer'
-            href='https://twitter.com/rev_neu'
+            href='https://twitter.com/FlowWorkHQ'
             className='font-medium text-metallic-gray hover:underline'
+            onClick={() => captureClick('twitter')}
           >
             Twitter
           </a>
@@ -228,6 +235,7 @@ export default function Home() {
             referrerPolicy='no-referrer'
             href='https://github.com/teamrevspace/flowwork'
             className='font-medium text-metallic-gray hover:underline'
+            onClick={() => captureClick('github')}
           >
             Github
           </a>
