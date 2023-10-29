@@ -230,15 +230,6 @@ export default function Home() {
           >
             Twitter
           </a>
-          <a
-            target='_blank'
-            referrerPolicy='no-referrer'
-            href='https://github.com/teamrevspace/flowwork'
-            className='font-medium text-metallic-gray hover:underline'
-            onClick={() => captureClick('github')}
-          >
-            Github
-          </a>
         </div>
       </div>
     </div>
