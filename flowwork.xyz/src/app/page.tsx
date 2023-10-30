@@ -117,12 +117,6 @@ export default function Home() {
 
   return (
     <div className='flex h-full min-h-screen w-full flex-col bg-white lg:h-screen'>
-      <Head>
-        <title>Flow Work</title>
-        <meta name='description' content={`A social productivity tool designed to help you find your flow.`} />
-        <link rel='icon' href='/favicon.ico' />
-      </Head>
-
       <div id='nav' className='flex w-full flex-row justify-between px-12 py-8'></div>
       <div
         id='main'
