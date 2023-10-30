@@ -9,6 +9,10 @@ import Foundation
 import Combine
 import Swinject
 
+private struct Constants {
+    static let defaultSessionId = "8Bg42oZXM09n4FjcXV0v"
+}
+
 protocol LobbyViewModelDelegate: AnyObject {
     func showSessionView()
     func showHomeView()
@@ -69,7 +73,11 @@ class LobbyViewModel: ObservableObject {
                 case .failure(_):
                     print(AppError.invalidURLFormat)
                 }
-                self.sessionService.initSessionList(sessions: sessionList)
+                guard let currentUserId = self.authState.currentUser?.id else { return }
+                self.storeService.findSessionBySessionId(sessionId: Constants.defaultSessionId) { defaultSession in
+                    self.storeService.addUserToSession(userId: currentUserId, sessionId: Constants.defaultSessionId)
+                    self.sessionService.initSessionList(sessions: sessionList, defaultSession: defaultSession)
+                }
                 self.isSessionListLoading = false
             }
         }

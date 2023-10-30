@@ -21,8 +21,8 @@ struct AccountMenu: View {
             Button("Settings") {
                 viewModel.goToSettings()
             }
-            Button("Quit App") {
-                NSApp.terminate(nil)
+            Button("Sign out") {
+                viewModel.signOut()
             }
         } label: {
             Avatar(avatarURL: viewModel.authState.currentUser?.avatarURL)
