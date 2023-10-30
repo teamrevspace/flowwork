@@ -84,7 +84,7 @@ struct SessionView: View {
                                     viewModel.sessionService.updateWorkMode(.focus)
                                 }) {
                                     Image(systemName: "moon.fill")
-                                    Text("Focus Mode")
+                                    Text("Focus Mode (Beta)")
                                 }
                                 .disabled(viewModel.sessionState.selectedMode == .focus)
                             } label: {
@@ -106,6 +106,9 @@ struct SessionView: View {
                         .padding(.trailing, 20)
                         
                         HStack(spacing: 10) {
+                            if viewModel.defaultSessionId == viewModel.sessionState.currentSession?.id {
+                                SmallIcon(image: "checkmark.seal.fill", foregroundColor: Color.blue)
+                            }
                             Text("\(viewModel.sessionState.currentSession?.name ?? "Session")")
                                 .fontWeight(.bold)
                                 .font(.title2)

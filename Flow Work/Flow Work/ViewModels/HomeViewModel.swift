@@ -58,6 +58,10 @@ class HomeViewModel: ObservableObject {
         self.authService.signInWithGoogle()
     }
     
+    func signOut() {
+        self.authService.signOut()
+    }
+    
     func goToProfile() {
         self.delegate?.showProfileView()
     }

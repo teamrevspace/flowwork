@@ -59,7 +59,8 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
                 button.image = image
             }
             button.target = self
-            button.action = #selector(togglePopover(_:))
+            button.action = #selector(didClickStatusBarButton(_:))
+            button.sendAction(on: [.leftMouseUp, .rightMouseUp])
         }
         
         coordinator.$shouldShowPopover
@@ -115,6 +116,45 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
                     self.openMenuPopover(nil)
                 }
             }
+        }
+    }
+    
+    @objc private func didClickStatusBarButton(_ sender: NSStatusBarButton) {
+        let event = NSApp.currentEvent!
+
+        if event.type == .leftMouseUp {
+            hideContextMenu()
+            togglePopover(sender)
+        }
+        if event.type == .rightMouseUp {
+            showContextMenu(sender)
+        }
+    }
+    
+    private func showContextMenu(_ sender: NSStatusBarButton) {
+        let menu = NSMenu()
+        menu.addItem(NSMenuItem(title: "Rate on App Store", action: #selector(rateOnAppStore), keyEquivalent: "r"))
+        menu.addItem(NSMenuItem(title: "Send Feedback", action: #selector(sendFeedback), keyEquivalent: "f"))
+        menu.addItem(NSMenuItem.separator())
+        menu.addItem(NSMenuItem(title: "Quit Flow Work", action: #selector(NSApp.terminate(_:)), keyEquivalent: "q"))
+        statusBarItem.menu = menu
+        statusBarItem.button?.performClick(nil)
+        statusBarItem.menu = nil
+    }
+    
+    private func hideContextMenu() {
+        statusBarItem.menu = nil
+    }
+    
+    @objc func rateOnAppStore() {
+        if let url = URL(string: "itms-apps://apple.com/app/id6469406796?action=write-review") {
+            NSWorkspace.shared.open(url)
+        }
+    }
+    
+    @objc func sendFeedback() {
+        if let url = URL(string: "https://flowwork.xyz/feedback") {
+            NSWorkspace.shared.open(url)
         }
     }
     

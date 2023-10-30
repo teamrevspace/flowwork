@@ -45,6 +45,7 @@ class SessionViewModel: ObservableObject {
     @Published var isCloudSyncing: Bool = false
     @Published var isSidebarVisible: Bool = false
     @Published var isEditingDraftCategory: Bool = false
+    @Published var defaultSessionId = "8Bg42oZXM09n4FjcXV0v"
     private var sessionPassword: String? = nil
     
     // MARK: pomodoro mode
@@ -54,8 +55,9 @@ class SessionViewModel: ObservableObject {
     private var pomodoroTimer: Timer?
     
     // MARK: focus mode
+    @Published var inFocusMode: Bool = false
     private let defaults = UserDefaults.standard
-    private let ignoreSystemWindows: Bool = false
+    private let ignoreSystemWindows: Bool = true
     private let terminateApps: Bool = false
     private let keepRunningAppOpen: Bool = false
     
@@ -103,12 +105,23 @@ class SessionViewModel: ObservableObject {
     func launchSession() {
         switch (self.sessionState.selectedMode) {
         case .lounge:
+            if self.inFocusMode {
+                self.restoreSessionGlobal()
+            }
+            self.resetTimer()
+            
             self.audioService.playSound(.door)
         case .pomodoro:
+            if self.inFocusMode {
+                self.restoreSessionGlobal()
+            }
             self.resetTimer()
+            
             self.startTimer()
             self.playWindUpSound()
         case .focus:
+            self.resetTimer()
+            
             self.saveSessionGlobal()
             self.audioService.playSound(.conga)
         }
@@ -284,7 +297,7 @@ extension SessionViewModel {
             if self.timeRemaining > 1 {
                 self.timeRemaining -= 1
                 
-                if self.timeRemaining <= 5 {
+                if self.timeRemaining <= 3 {
                     self.audioService.playSound(.ticking)
                 }
             } else {
@@ -441,6 +454,8 @@ extension SessionViewModel {
         defaults.set(String(totalSessions), forKey: "totalSessions")
         updateSession()
         
+        self.inFocusMode = true
+        
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
             self.delegate?.didRedirectToApp()
         }
@@ -467,6 +482,8 @@ extension SessionViewModel {
                 noSessions()
             }
         }
+        
+        self.inFocusMode = false
         
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
             self.delegate?.didRedirectToApp()

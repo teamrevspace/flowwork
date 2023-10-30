@@ -43,8 +43,16 @@ class SessionService: SessionServiceProtocol, ObservableObject {
         self.disconnect()
     }
     
-    func initSessionList(sessions: [Session]) {
-        self.state.availableSessions = sessions
+    func initSessionList(sessions: [Session], defaultSession: Session?) {
+        if let defaultSession = defaultSession {
+            if !sessions.contains(where: { $0.id == defaultSession.id }) {
+                self.state.availableSessions = [defaultSession] + sessions
+            } else {
+                self.state.availableSessions = sessions
+            }
+        } else {
+            self.state.availableSessions = sessions
+        }
     }
     
     func updateAuthToken(_ authToken: String?) {
