@@ -23,3 +23,16 @@ Bonus features:
 ## 9/27/23 Prototype
 
 https://github.com/teamrevspace/flowwork/assets/16998534/01c3498d-b6a3-4da3-ae9b-ad3ed5165cc5
+
+## 10/13/23 v1
+
+https://github.com/teamrevspace/flowwork/assets/16998534/06d0f2ea-1468-434b-8dc2-341554f97054
+
+## 10/23/23 v2
+
+https://github.com/teamrevspace/flowwork/assets/16998534/b854dd5c-c051-45f4-a2ab-0da6732cc9ae
+
+## 10/29/23 v3 (twitter launch)
+
+https://github.com/teamrevspace/flowwork/assets/16998534/9417a447-e636-40b0-91e1-7355b2a8cd72
+
