@@ -21,8 +21,10 @@ struct AccountMenu: View {
             Button("Settings") {
                 viewModel.goToSettings()
             }
-            Button("Sign out") {
-                viewModel.signOut()
+            if viewModel.authState.isSignedIn {
+                Button("Log out") {
+                    viewModel.signOut()
+                }
             }
         } label: {
             Avatar(avatarURL: viewModel.authState.currentUser?.avatarURL)

@@ -84,7 +84,7 @@ struct TodoItem: View {
                     }
                 }
             
-            if todo.userIds?.count ?? 0 > 1 {
+            if (todo.userIds?.count ?? 0) > 1 {
                 Button(action: {
                     showCollaboratorsPopover.toggle()
                 }) {
@@ -105,7 +105,7 @@ struct TodoItem: View {
             
             if showActionButton && todo.id != nil {
                 Menu {
-                    if viewModel.sessionState.currentSessionUsers != nil {
+                    if (viewModel.sessionState.currentSession?.userIds?.count ?? 0) > 1 {
                         Button("Manage Access") {
                             showManageAccessPopover = true
                         }
@@ -259,11 +259,13 @@ struct ManageAccessPopover: View {
             } else {
                 viewModel.storeService.removeUserFromTodo(userId: user.id, todoId: todoId) {
                     selectedUserIds.remove(user.id)
+                    todo.userIds?.removeAll(where: { $0 == user.id })
                 }
             }
         } else {
             viewModel.storeService.addUserToTodo(userId: user.id, todoId: todoId) {
                 selectedUserIds.insert(user.id)
+                todo.userIds?.append(user.id)
             }
         }
     }
