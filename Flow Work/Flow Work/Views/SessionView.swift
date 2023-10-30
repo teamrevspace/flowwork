@@ -176,7 +176,7 @@ struct SessionView: View {
                                             .padding(.horizontal, 20)
                                             .onChange(of: self.scrollToTodoIndex) { newIndex in
                                                 if let newIndex = newIndex, newIndex < viewModel.todoState.todoItems.count {
-                                                    withAnimation(Animation.linear(duration: Double(viewModel.todoState.todoItems.count) * 0.5)) {
+                                                    withAnimation(.easeIn(duration: 0.3)) {
                                                         scrollView.scrollTo(newIndex, anchor: .bottom)
                                                     }
                                                     self.scrollToTodoIndex = nil
@@ -263,12 +263,10 @@ struct SessionView: View {
                                     ZStack {
                                         Avatar(avatarURL: viewModel.authState.currentUser?.avatarURL)
                                             .opacity(0.5)
-                                        if (!viewModel.networkService.connected) {
                                             Circle()
                                                 .frame(width: 10, height: 10)
-                                                .foregroundColor(.gray)
+                                                .foregroundColor(viewModel.networkService.connected ? .yellow : .gray)
                                                 .offset(x: 10, y: 10)
-                                        }
                                     }
                                     .frame(width: 30, height: 30)
                                 } else  {
@@ -284,7 +282,7 @@ struct SessionView: View {
                                                                 Avatar(avatarURL: user.avatarURL)
                                                                 Circle()
                                                                     .frame(width: 10, height: 10)
-                                                                    .foregroundColor(viewModel.sessionState.isConnected ? .green : .yellow)
+                                                                    .foregroundColor(.green)
                                                                     .offset(x: 10, y: 10)
                                                             }
                                                             .frame(width: 30, height: 30)

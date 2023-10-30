@@ -133,8 +133,8 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
     
     private func showContextMenu(_ sender: NSStatusBarButton) {
         let menu = NSMenu()
-        menu.addItem(NSMenuItem(title: "Rate on App Store", action: #selector(rateOnAppStore), keyEquivalent: "r"))
-        menu.addItem(NSMenuItem(title: "Send Feedback", action: #selector(sendFeedback), keyEquivalent: "f"))
+        menu.addItem(NSMenuItem(title: "Rate on App Store", action: #selector(rateOnAppStore), keyEquivalent: ""))
+        menu.addItem(NSMenuItem(title: "Send Feedback", action: #selector(sendFeedback), keyEquivalent: ""))
         menu.addItem(NSMenuItem.separator())
         menu.addItem(NSMenuItem(title: "Quit Flow Work", action: #selector(NSApp.terminate(_:)), keyEquivalent: "q"))
         statusBarItem.menu = menu

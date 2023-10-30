@@ -40,7 +40,7 @@ struct HomeView: View {
                     
                     WorkModeButton(viewModel: viewModel, mode: .pomodoro, iconName: "deskclock.fill", title: "Pomodoro Mode", description: "Set a timer to focus on your task. Take a short break after each Pomodoro.")
                     
-                    WorkModeButton(viewModel: viewModel, mode: .focus, iconName: "moon.fill", title: "Focus Mode", description: "Hide all your apps to focus on your task. Restore them after your session.")
+                    WorkModeButton(viewModel: viewModel, mode: .focus, iconName: "moon.fill", title: "Focus Mode (Beta)", description: "Hide all your apps to focus on your task. Restore them after your session.")
                 }
             } else {
                 VStack(alignment: .leading, spacing: 20) {

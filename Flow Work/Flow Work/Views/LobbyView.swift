@@ -61,7 +61,7 @@ struct CreateSessionView: View {
                 Button(action: {
                     viewModel.showPassword.toggle()
                 }) {
-                    Image(systemName: viewModel.showPassword ? "eye.slash" : "eye")
+                    Image(systemName: viewModel.showPassword ? "eye" : "eye.slash")
                         .accentColor(.gray)
                 }
             }

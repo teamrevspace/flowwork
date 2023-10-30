@@ -23,6 +23,8 @@ protocol StoreServiceProtocol {
     func addTodo(todo: Todo, completion: @escaping (() -> Void))
     func removeTodo(todoId: String, completion: @escaping (() -> Void))
     func updateTodo(todo: Todo, completion: @escaping (() -> Void))
+    func addUserToTodo(userId: String, todoId: String, completion: @escaping (() -> Void))
+    func removeUserFromTodo(userId: String, todoId: String, completion: @escaping (() -> Void))
     func stopTodoListListener()
     
     func findCategoriesByUserId(userId: String, completion: @escaping ([Category]) -> Void)

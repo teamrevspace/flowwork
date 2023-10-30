@@ -223,6 +223,20 @@ class StoreService: StoreServiceProtocol, ObservableObject {
         todoListListener = nil
     }
     
+    func addUserToTodo(userId: String, todoId: String, completion: @escaping (() -> Void)) {
+        db.collection("todos").document(todoId).updateData([
+            "userIds": FieldValue.arrayUnion([userId])
+        ])
+        completion()
+    }
+    
+    func removeUserFromTodo(userId: String, todoId: String, completion: @escaping (() -> Void)) {
+        db.collection("todos").document(todoId).updateData([
+            "userIds": FieldValue.arrayRemove([userId])
+        ])
+        completion()
+    }
+    
     // MARK: categories collection
     
     func findCategoriesByUserId(userId: String, completion: @escaping ([Category]) -> Void) {
