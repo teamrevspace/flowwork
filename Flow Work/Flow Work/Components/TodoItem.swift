@@ -180,7 +180,7 @@ struct ManageAccessPopover: View {
     @State private var searchText: String = ""
     @State private var selectedUserIds: Set<String> = []
     @State private var isHoveringUser: [String: Bool] = [:]
-    @State private var users: [User] = []
+    @State private var collaborators: [User] = []
     @State private var showAlert: Bool = false
     
     var body: some View {
@@ -197,13 +197,14 @@ struct ManageAccessPopover: View {
             Divider()
             ScrollView(.vertical) {
                 LazyVStack(alignment: .leading, spacing: 0) {
-                    ForEach(users.filter { user in
+                    ForEach(collaborators.filter { user in
                         user.name.contains(searchText) || user.emailAddress.contains(searchText) || searchText.isEmpty
                     }) { user in
-                        let hasCollaborators = !(selectedUserIds.count <= 1 && user.id == viewModel.authState.currentUser?.id)
                         HStack {
                             Avatar(avatarURL: user.avatarURL)
                             Text(user.name)
+                                .lineLimit(1)
+                                .truncationMode(.tail)
                             Spacer()
                             if selectedUserIds.contains(user.id) {
                                 SmallIcon(image: "checkmark.circle.fill", foregroundColor: Color.blue.opacity(0.75))
@@ -212,14 +213,14 @@ struct ManageAccessPopover: View {
                         .contentShape(Rectangle())
                         .padding(.vertical, 5)
                         .padding(.horizontal, 20)
-                        .opacity(hasCollaborators ? 1.0 : 0.5)
-                        .background(hasCollaborators && isHoveringUser[user.id] == true ? Color.secondary.opacity(0.25) : Color.clear)
+                        .opacity(!(selectedUserIds.count <= 1 && user.id == viewModel.authState.currentUser?.id) && viewModel.sessionState.currentSession?.userIds?.contains(user.id) == true ? 1.0 : 0.5)
+                        .background(!(selectedUserIds.count <= 1 && user.id == viewModel.authState.currentUser?.id) && viewModel.sessionState.currentSession?.userIds?.contains(user.id) == true && isHoveringUser[user.id] == true ? Color.secondary.opacity(0.25) : Color.clear)
                         .onHover { hovering in
                             isHoveringUser[user.id] = hovering
                         }
                         .id(user.id)
                         .onTapGesture {
-                            if (hasCollaborators) {
+                            if (!(selectedUserIds.count <= 1 && user.id == viewModel.authState.currentUser?.id) && viewModel.sessionState.currentSession?.userIds?.contains(user.id) == true) {
                                 toggleUserSelection(user: user)
                             }
                         }
@@ -268,19 +269,19 @@ struct ManageAccessPopover: View {
     }
     
     private func initState() {
-        if let sessionUserIds = viewModel.sessionState.currentSession?.userIds {
-            viewModel.storeService.findUsersByUserIds(userIds: sessionUserIds) { fetchedUsers in
-                users = fetchedUsers
-            }
-        }
-        if let todoUserIds = todo.userIds {
+        if let sessionUserIds = viewModel.sessionState.currentSession?.userIds,
+           let todoUserIds = todo.userIds {
             selectedUserIds = Set(todoUserIds)
+            let collaboratorIds = Array(Set(sessionUserIds + todoUserIds))
+            viewModel.storeService.findUsersByUserIds(userIds: collaboratorIds) { users in
+                collaborators = users
+            }
         }
     }
     
     private func resetState() {
         isHoveringUser = [:]
         selectedUserIds = []
-        users = []
+        collaborators = []
     }
 }
