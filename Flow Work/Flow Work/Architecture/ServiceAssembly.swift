@@ -48,5 +48,10 @@ final class ServiceAssembly: Assembly {
             AudioService(resolver: r)
         }
         .inObjectScope(.container)
+        
+        container.register(StorageServiceProtocol.self) { r in
+            StorageService(resolver: r)
+        }
+        .inObjectScope(.container)
     }
 }

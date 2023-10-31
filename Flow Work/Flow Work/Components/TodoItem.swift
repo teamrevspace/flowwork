@@ -115,7 +115,7 @@ struct TodoItem: View {
                         viewModel.removeTodo(todoId: todo.id)
                     }
                 } label: {
-                    SmallIcon(image: "ellipsis")
+                    SmallIcon(icon: "ellipsis")
                         .padding(1.5)
                         .foregroundColor(isHoveringAction ? Color.white : Color.secondary.opacity(0.75))
                         .background(isHoveringAction ? Color.secondary.opacity(0.25) : Color.clear)
@@ -207,7 +207,7 @@ struct ManageAccessPopover: View {
                                 .truncationMode(.tail)
                             Spacer()
                             if selectedUserIds.contains(user.id) {
-                                SmallIcon(image: "checkmark.circle.fill", foregroundColor: Color.blue.opacity(0.75))
+                                SmallIcon(icon: "checkmark.circle.fill", foregroundColor: Color.blue.opacity(0.75))
                             }
                         }
                         .contentShape(Rectangle())

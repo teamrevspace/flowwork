@@ -46,7 +46,7 @@ struct SessionView: View {
                                     }
                                 }) {
                                     HStack(spacing: 5) {
-                                        SmallIcon(image: "line.3.horizontal", foregroundColor: Color("Primary").opacity(0.75))
+                                        SmallIcon(icon: "line.3.horizontal", foregroundColor: Color("Primary").opacity(0.75))
                                         Text(viewModel.categoryState.selectedCategory?.title ?? "All")
                                             .font(.body)
                                             .fontWeight(.medium)
@@ -89,7 +89,7 @@ struct SessionView: View {
                                 .disabled(viewModel.sessionState.selectedMode == .focus)
                             } label: {
                                 HStack(spacing: 5) {
-                                    SmallIcon(image: viewModel.sessionState.selectedMode == .lounge ? "sofa.fill" : viewModel.sessionState.selectedMode == .pomodoro ? "deskclock.fill" : "moon.fill")
+                                    SmallIcon(icon: viewModel.sessionState.selectedMode == .lounge ? "sofa.fill" : viewModel.sessionState.selectedMode == .pomodoro ? "deskclock.fill" : "moon.fill")
                                     Text(viewModel.sessionState.selectedMode == .lounge ? "Lounge" : viewModel.sessionState.selectedMode == .pomodoro ? "Pomodoro" : "Focus")
                                         .font(.body)
                                         .fontWeight(.medium)
@@ -107,7 +107,7 @@ struct SessionView: View {
                         
                         HStack(spacing: 10) {
                             if viewModel.defaultSessionId == viewModel.sessionState.currentSession?.id {
-                                SmallIcon(image: "checkmark.seal.fill", foregroundColor: Color.blue)
+                                SmallIcon(icon: "checkmark.seal.fill", foregroundColor: Color.blue)
                             }
                             Text("\(viewModel.sessionState.currentSession?.name ?? "Session")")
                                 .fontWeight(.bold)
@@ -116,11 +116,11 @@ struct SessionView: View {
                                 .truncationMode(.tail)
                             
                             if (viewModel.networkService.connected) {
-                                SmallIcon(image: "cloud.fill")
+                                SmallIcon(icon: "cloud.fill")
                                     .opacity(viewModel.isCloudSyncing ? 0.75 : 0)
                                     .animation(Animation.default, value: viewModel.isCloudSyncing)
                             } else {
-                                SmallIcon(image: "icloud.slash.fill")
+                                SmallIcon(icon: "icloud.slash.fill")
                             }
                             
                             Spacer()
@@ -133,7 +133,7 @@ struct SessionView: View {
                                     Text("Copy Invite Link")
                                 }
                             } label: {
-                                SmallIcon(image: "gearshape.fill")
+                                SmallIcon(icon: "gearshape.fill")
                             }
                             .buttonStyle(PlainButtonStyle())
                         }
@@ -210,7 +210,7 @@ struct SessionView: View {
                                 } else {
                                     VStack {
                                         Spacer()
-                                        LargeIcon(image: "cup.and.saucer.fill")
+                                        LargeIcon(icon: "cup.and.saucer.fill")
                                         LargeText(text: "Take a break")
                                         Spacer()
                                     }
@@ -298,7 +298,7 @@ struct SessionView: View {
                                 }
                                 
                                 Spacer()
-                                FButton(image: "hand.wave.fill", text: "Leave quietly") {
+                                FButton(icon: "hand.wave.fill", text: "Leave quietly") {
                                     viewModel.leaveSession()
                                 }
                             }
@@ -331,13 +331,13 @@ struct SessionView: View {
                     VStack(spacing: 10) {
                         Spacer()
                         if (!viewModel.networkService.connected) {
-                            LargeIcon(image: "icloud.slash.fill")
+                            LargeIcon(icon: "icloud.slash.fill")
                             LargeText(text: "No internet connection. Try again later.")
                         } else if (viewModel.sessionState.maxRetriesReached) {
-                            LargeIcon(image: "sailboat.fill")
+                            LargeIcon(icon: "sailboat.fill")
                             LargeText(text: "Disconnected")
                         } else {
-                            LargeIcon(image: "antenna.radiowaves.left.and.right")
+                            LargeIcon(icon: "antenna.radiowaves.left.and.right")
                             LargeText(text: "Joining...")
                         }
                         Spacer()
@@ -511,7 +511,7 @@ struct SidebarView: View {
             }
             Divider()
             HStack {
-                FButton(image: "plus", text: "New List") {
+                FButton(icon: "plus", text: "New List") {
                     viewModel.isEditingDraftCategory.toggle()
                     self.focusedCategoryIndex = -2
                     self.scrollToCategoryIndex = -2

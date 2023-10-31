@@ -11,6 +11,6 @@ struct User: Identifiable {
     var id: String
     var name: String
     var emailAddress: String
-    var avatarURL: URL
+    var avatarURL: URL?
 }
 

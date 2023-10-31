@@ -8,13 +8,23 @@
 import SwiftUI
 
 struct LargeIcon: View {
-    var image: String
+    var icon: String?
+    var image: String?
+    var foregroundColor: Color? = Color.secondary
     
     var body: some View {
-        Image(systemName: image)
-            .resizable()
-            .aspectRatio(contentMode: .fit)
-            .frame(width: 30, height: 30)
-            .foregroundColor(Color.secondary)
+        if let imageName = image {
+            Image(imageName)
+                .resizable()
+                .aspectRatio(contentMode: .fit)
+                .frame(width: 30, height: 30)
+                .foregroundColor(foregroundColor)
+        } else if let iconName = icon {
+            Image(systemName: iconName)
+                .resizable()
+                .aspectRatio(contentMode: .fit)
+                .frame(width: 30, height: 30)
+                .foregroundColor(foregroundColor)
+        }
     }
 }

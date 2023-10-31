@@ -26,6 +26,9 @@ class AppCoordinator: ObservableObject {
     @Published var sessionService: SessionServiceProtocol
     @Published var storeService: StoreServiceProtocol
     @Published var apiService: APIServiceProtocol
+    @Published var roomService: RoomServiceProtocol
+    @Published var networkService: NetworkServiceProtocol
+    @Published var storageService: StorageServiceProtocol
     
     @Published var homeViewModel: HomeViewModel
     @Published var sessionViewModel: SessionViewModel
@@ -51,6 +54,9 @@ class AppCoordinator: ObservableObject {
         self.todoService = resolver.resolve(TodoServiceProtocol.self)!
         self.storeService = resolver.resolve(StoreServiceProtocol.self)!
         self.apiService = resolver.resolve(APIServiceProtocol.self)!
+        self.roomService = resolver.resolve(RoomServiceProtocol.self)!
+        self.networkService = resolver.resolve(NetworkServiceProtocol.self)!
+        self.storageService = resolver.resolve(StorageServiceProtocol.self)!
         
         self.homeViewModel = resolver.resolve(HomeViewModel.self)!
         self.sessionViewModel = resolver.resolve(SessionViewModel.self)!
@@ -121,7 +127,7 @@ extension AppCoordinator: AuthServiceDelegate {
         shouldShowPopover = true
     }
     
-    func resetPopoverFlag() {
+    func didHideApp() {
         shouldShowPopover = false
     }
 }
@@ -166,9 +172,5 @@ extension AppCoordinator: HomeViewModelDelegate, LobbyViewModelDelegate, Session
     
     func showProfileView() {
         navigate(to: .Profile)
-    }
-    
-    func didRedirectToAppSession() {
-        shouldShowPopover = true
     }
 }

@@ -25,8 +25,18 @@ class BetterHostingController<Content: View>: NSHostingController<Content> {
 
 class InvisibleWindow: NSWindow {
     override init(contentRect: NSRect, styleMask style: NSWindow.StyleMask, backing backingStoreType: NSWindow.BackingStoreType, defer flag: Bool) {
-        let offscreenRect = NSRect(x: -1000, y: -1000, width: 1, height: 1)
-        super.init(contentRect: offscreenRect, styleMask: [], backing: .buffered, defer: false)
+        
+        var contentRect: NSRect = NSRect(x: -1000, y: -1000, width: 1, height: 1)
+        
+        if let screenFrame = NSScreen.main?.frame {
+            let panelWidth: CGFloat = 600
+            let panelHeight: CGFloat = 400
+            let xPos = (screenFrame.width - panelWidth) / 2
+            let yPos = (screenFrame.height - panelHeight) / 2
+            contentRect = NSRect(x: xPos, y: yPos, width: panelWidth, height: panelHeight)
+        }
+        
+        super.init(contentRect: contentRect, styleMask: [], backing: .buffered, defer: false)
         self.alphaValue = 0.0
         self.hasShadow = false
         self.ignoresMouseEvents = true
@@ -67,7 +77,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
             .sink { [weak self] shouldShow in
                 if !(self?.popover.isShown ?? false) && shouldShow {
                     self?.openMenuPopover(nil)
-                    coordinator.resetPopoverFlag()
+                    coordinator.didHideApp()
                 }
             }
             .store(in: &cancellables)
@@ -136,7 +146,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
         menu.addItem(NSMenuItem(title: "Rate on App Store", action: #selector(rateOnAppStore), keyEquivalent: ""))
         menu.addItem(NSMenuItem(title: "Send Feedback", action: #selector(sendFeedback), keyEquivalent: ""))
         menu.addItem(NSMenuItem.separator())
-        menu.addItem(NSMenuItem(title: "Quit Flow Work", action: #selector(NSApp.terminate(_:)), keyEquivalent: "q"))
+        menu.addItem(NSMenuItem(title: "Quit Flow Work", action: #selector(NSApp.terminate(_:)), keyEquivalent: ""))
         statusBarItem.menu = menu
         statusBarItem.button?.performClick(nil)
         statusBarItem.menu = nil

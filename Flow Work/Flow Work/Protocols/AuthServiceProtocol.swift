@@ -6,11 +6,13 @@
 //
 
 import Combine
+import Foundation
 
 protocol AuthServiceDelegate: AnyObject {
     func didSignIn()
     func didSignOut()
     func didRedirectToApp()
+    func didHideApp()
 }
 
 protocol AuthServiceProtocol {
@@ -18,6 +20,10 @@ protocol AuthServiceProtocol {
     
     var statePublisher: AnyPublisher<AuthState, Never> { get }
     
+    func getAuthMethods() -> [String]
+    func updateProfilePicture(url: URL)
+    func updateDisplayName(name: String)
     func signInWithGoogle()
+    func signInWithApple()
     func signOut()
 }

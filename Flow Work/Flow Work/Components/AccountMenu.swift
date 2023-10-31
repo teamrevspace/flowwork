@@ -12,7 +12,6 @@ struct AccountMenu: View {
     
     var body: some View {
         Menu {
-            Text("Hi \(viewModel.authState.currentUser?.name ?? "there")!")
             if viewModel.authState.isSignedIn {
                 Button("Profile") {
                     viewModel.goToProfile()

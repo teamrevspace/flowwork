@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct FButton: View {
+    var icon: String?
     var image: String?
     var text: String
     var action: () -> Void
@@ -16,7 +17,12 @@ struct FButton: View {
         Button(action: action) {
             HStack(alignment: .center, spacing: 5) {
                 if let imageName = image {
-                    Image(systemName: imageName)
+                    Image(imageName)
+                        .resizable()
+                        .aspectRatio(contentMode: .fit)
+                        .frame(width: 15, height: 15)
+                } else if let iconName = icon {
+                    Image(systemName: iconName)
                         .resizable()
                         .aspectRatio(contentMode: .fit)
                         .frame(width: 15, height: 15)
