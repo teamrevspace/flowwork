@@ -9,6 +9,7 @@ import WebRTC
 
 protocol RoomServiceDelegate: AnyObject {
     func didAddRemoteAudio(audioTrack: RTCAudioTrack)
+    func didAddRemoteVideo(videoTrack: RTCVideoTrack)
 }
 
 protocol RoomServiceProtocol {

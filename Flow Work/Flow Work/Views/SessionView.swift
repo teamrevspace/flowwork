@@ -259,7 +259,7 @@ struct SessionView: View {
                             .padding(.horizontal, 20)
                             
                             HStack {
-                                if (!viewModel.networkService.connected || !viewModel.sessionState.isConnected || (viewModel.sessionState.currentSessionUsers ?? []).isEmpty) {
+                                if (!viewModel.networkService.connected ||   !viewModel.sessionState.isConnected) {
                                     ZStack {
                                         Avatar(avatarURL: viewModel.authState.currentUser?.avatarURL)
                                             .opacity(0.5)
@@ -369,7 +369,7 @@ struct SessionView: View {
         }
         .onChange(of: viewModel.sessionState.isConnected ) { value in
             guard let userId = viewModel.authState.currentUser?.id else { return }
-            if (viewModel.sessionState.isConnected) {
+            if (!viewModel.sessionState.isConnected) {
                 viewModel.reconnectToSession(userId)
             }
         }

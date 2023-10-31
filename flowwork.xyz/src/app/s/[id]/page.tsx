@@ -18,7 +18,7 @@ export default function JoinSessionPage({ params }: { params: { id: string } }) 
 
   const joinSession = useCallback(async () => {
     location.href = `flowwork://join?sessionId=${params.id}`;
-    setHasJoined(true)
+    setHasJoined(true);
   }, [params.id]);
 
   useEffect(() => {
@@ -63,30 +63,30 @@ export default function JoinSessionPage({ params }: { params: { id: string } }) 
             Either this session doesn&apos;t exist or it has been removed.
           </p>
         ) : null}
-        {(networkError || sessionName) && (hasJoined ? (
-          <p className='text-center text-sm text-[#999999] sm:text-base h-[52px] flex items-center'>
-          Don&apos;t have Flow Work installed?&nbsp;
-          <button
-            onClick={(e) => {
-              e.preventDefault();
-              downloadApp();
-            }}
-            className='text-electric-blue'
-          >{`Download here`}</button>
-        </p>
-        ) :
-        (
-          <button
-            onClick={(e) => {
-              e.preventDefault();
-              joinSession();
-            }}
-            type='button'
-            className='rounded-xl border-none bg-electric-blue px-8 py-2 text-base font-medium text-white hover:bg-electric-blue-accent sm:px-12 sm:py-3 sm:text-lg'
-          >
-            Join session
-          </button>
-        ))}
+        {(networkError || sessionName) &&
+          (hasJoined ? (
+            <p className='flex h-[52px] items-center text-center text-sm text-[#999999] sm:text-base'>
+              Don&apos;t have Flow Work installed?&nbsp;
+              <button
+                onClick={(e) => {
+                  e.preventDefault();
+                  downloadApp();
+                }}
+                className='text-electric-blue'
+              >{`Download here`}</button>
+            </p>
+          ) : (
+            <button
+              onClick={(e) => {
+                e.preventDefault();
+                joinSession();
+              }}
+              type='button'
+              className='rounded-xl border-none bg-electric-blue px-8 py-2 text-base font-medium text-white hover:bg-electric-blue-accent sm:px-12 sm:py-3 sm:text-lg'
+            >
+              Join session
+            </button>
+          ))}
         {(networkError || sessionName) && (
           <p className='text-center text-sm text-[#999999] sm:text-base'>
             or copy-paste the session code:&nbsp;

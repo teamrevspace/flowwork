@@ -14,10 +14,11 @@ import AVFoundation
 class RoomService: NSObject, RoomServiceProtocol, ObservableObject {
     weak var delegate: RoomServiceDelegate?
     
-    private var peerConnectionFactory: RTCPeerConnectionFactory
+    private var factory: RTCPeerConnectionFactory
     private var peerConnection: RTCPeerConnection?
     
     @Published var audioTransceiver: RTCRtpTransceiver?
+    @Published var videoTransceiver: RTCRtpTransceiver?
     @Published var mediaConstraints: RTCMediaConstraints
     @Published var inboundStream: RTCMediaStream?
     @Published var storeService: StoreServiceProtocol
@@ -27,7 +28,7 @@ class RoomService: NSObject, RoomServiceProtocol, ObservableObject {
     
     init(resolver: Resolver) {
         self.resolver = resolver
-        self.peerConnectionFactory = RTCPeerConnectionFactory()
+        self.factory = RTCPeerConnectionFactory()
         
         self.storeService = resolver.resolve(StoreServiceProtocol.self)!
         
@@ -35,7 +36,7 @@ class RoomService: NSObject, RoomServiceProtocol, ObservableObject {
         configuration.iceServers = [RTCIceServer(urlStrings: [stunServerURL])]
         
         let constraints = RTCMediaConstraints(mandatoryConstraints: nil, optionalConstraints: nil)
-        self.peerConnection = self.peerConnectionFactory.peerConnection(
+        self.peerConnection = self.factory.peerConnection(
             with: configuration,
             constraints: constraints,
             delegate: nil
@@ -48,6 +49,9 @@ class RoomService: NSObject, RoomServiceProtocol, ObservableObject {
         if let audio = stream.audioTracks.first {
             self.delegate?.didAddRemoteAudio(audioTrack: audio)
         }
+        if let video = stream.videoTracks.first {
+            self.delegate?.didAddRemoteVideo(videoTrack: video)
+        }
     }
     
     func createRoom(roomId: String) {
@@ -59,12 +63,17 @@ class RoomService: NSObject, RoomServiceProtocol, ObservableObject {
     }
     
     private func setupPeerConnection(completion: @escaping (Bool) -> Void) {
-        let audioSource = peerConnectionFactory.audioSource(with: self.mediaConstraints)
-        let audioTrack = peerConnectionFactory.audioTrack(with: audioSource, trackId: "audio0")
+        let audioSource = factory.audioSource(with: self.mediaConstraints)
+        let audioTrack = factory.audioTrack(with: audioSource, trackId: "audio0")
+        
+        let videoSource = factory.videoSource(forScreenCast: true)
+        let videoTrack = factory.videoTrack(with: videoSource, trackId: "video0")
         
         self.audioTransceiver = peerConnection?.addTransceiver(with: audioTrack)
+        self.videoTransceiver = peerConnection?.addTransceiver(with: videoTrack)
         var error: NSError?
         self.audioTransceiver?.setDirection(.sendRecv, error: &error)
+        self.videoTransceiver?.setDirection(.sendRecv, error: &error)
         if let error = error {
             print("Failed to set transceiver direction: \(error.localizedDescription)")
             completion(false)
