@@ -9,6 +9,7 @@ import { useCallback, useEffect, useState } from 'react';
 export default function JoinSessionPage({ params }: { params: { id: string } }) {
   const [sessionName, setSessionName] = useState<string | null | undefined>(undefined);
   const [networkError, setNetworkError] = useState(false);
+  const [hasJoined, setHasJoined] = useState(false);
   const router = useRouter();
 
   const downloadApp = async () => {
@@ -17,6 +18,7 @@ export default function JoinSessionPage({ params }: { params: { id: string } }) 
 
   const joinSession = useCallback(async () => {
     location.href = `flowwork://join?sessionId=${params.id}`;
+    setHasJoined(true)
   }, [params.id]);
 
   useEffect(() => {
@@ -48,7 +50,7 @@ export default function JoinSessionPage({ params }: { params: { id: string } }) 
           </p>
         )}
         <h1 className='text-center text-2xl font-bold text-[#2a2a2a] sm:text-4xl'>
-          {networkError
+          {networkError || hasJoined
             ? `Launching Flow Work 🚀`
             : sessionName
             ? `${sessionName}`
@@ -61,7 +63,19 @@ export default function JoinSessionPage({ params }: { params: { id: string } }) 
             Either this session doesn&apos;t exist or it has been removed.
           </p>
         ) : null}
-        {(networkError || sessionName) && (
+        {(networkError || sessionName) && (hasJoined ? (
+          <p className='text-center text-sm text-[#999999] sm:text-base h-[52px] flex items-center'>
+          Don&apos;t have Flow Work installed?&nbsp;
+          <button
+            onClick={(e) => {
+              e.preventDefault();
+              downloadApp();
+            }}
+            className='text-electric-blue'
+          >{`Download here`}</button>
+        </p>
+        ) :
+        (
           <button
             onClick={(e) => {
               e.preventDefault();
@@ -72,7 +86,7 @@ export default function JoinSessionPage({ params }: { params: { id: string } }) 
           >
             Join session
           </button>
-        )}
+        ))}
         {(networkError || sessionName) && (
           <p className='text-center text-sm text-[#999999] sm:text-base'>
             or copy-paste the session code:&nbsp;
@@ -80,16 +94,6 @@ export default function JoinSessionPage({ params }: { params: { id: string } }) 
           </p>
         )}
       </div>
-      <p className='text-center text-sm text-[#999999] sm:text-base'>
-        Don&apos;t have Flow Work installed?&nbsp;
-        <button
-          onClick={(e) => {
-            e.preventDefault();
-            downloadApp();
-          }}
-          className='text-electric-blue'
-        >{`Download here`}</button>
-      </p>
     </div>
   );
 }
