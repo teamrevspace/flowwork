@@ -10,6 +10,7 @@ import WebRTC
 
 protocol StoreServiceProtocol {
     func addUser(user: Firebase.User) -> Void
+    func updateUser(user: User) -> Void
     func findUsersByUserIds(userIds: [String], completion: @escaping ([User]) -> Void)
     
     func findSessionBySessionId(sessionId: String, completion: @escaping (Session?) -> Void)

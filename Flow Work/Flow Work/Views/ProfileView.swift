@@ -75,17 +75,18 @@ struct ProfileView: View {
             Spacer()
             HStack(spacing: 10) {
                 FButton(text: "Back") {
-                     viewModel.returnToHome()
+                    viewModel.returnToHome()
                 }
                 FButton(text: "Save") {
                     if let inputImage = self.inputImage,
                        let imageData = inputImage.tiffRepresentation, updatedPhoto {
-                        self.viewModel.updateProfilePicture(imageData: imageData)
+                        self.viewModel.updatePhoto(imageData: imageData)
                     }
                     if !self.displayName.isEmpty, updatedName {
                         viewModel.updateDisplayName(name: self.displayName)
                     }
-                     viewModel.returnToHome()
+                    viewModel.saveProfile()
+                    viewModel.returnToHome()
                 }
             }
         }

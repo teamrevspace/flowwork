@@ -31,6 +31,7 @@ struct FButton: View {
             }
             .padding(.vertical, 5)
             .padding(.horizontal, 10)
+            .contentShape(Rectangle())
         }
         .background(Color.secondary.opacity(0.25))
         .cornerRadius(5)

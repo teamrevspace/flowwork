@@ -26,7 +26,18 @@ class BetterHostingController<Content: View>: NSHostingController<Content> {
 class InvisibleWindow: NSWindow {
     override init(contentRect: NSRect, styleMask style: NSWindow.StyleMask, backing backingStoreType: NSWindow.BackingStoreType, defer flag: Bool) {
         
-        var contentRect: NSRect = NSRect(x: -1000, y: -1000, width: 1, height: 1)
+        let contentRect = NSRect(x: -1000, y: -1000, width: 1, height: 1)
+        super.init(contentRect: contentRect, styleMask: [], backing: .buffered, defer: false)
+        self.alphaValue = 0.0
+        self.hasShadow = false
+        self.ignoresMouseEvents = true
+    }
+}
+
+class CenteredWindow: NSWindow {
+    override init(contentRect: NSRect, styleMask style: NSWindow.StyleMask, backing backingStoreType: NSWindow.BackingStoreType, defer flag: Bool) {
+        
+        var contentRect = NSRect(x: -1000, y: -1000, width: 1, height: 1)
         
         if let screenFrame = NSScreen.main?.frame {
             let panelWidth: CGFloat = 600
@@ -131,7 +142,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
     
     @objc private func didClickStatusBarButton(_ sender: NSStatusBarButton) {
         let event = NSApp.currentEvent!
-
+        
         if event.type == .leftMouseUp {
             hideContextMenu()
             togglePopover(sender)

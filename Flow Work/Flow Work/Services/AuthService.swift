@@ -205,7 +205,7 @@ extension AuthService: NetworkServiceDelegate {
 
 extension AuthService: ASAuthorizationControllerDelegate, ASAuthorizationControllerPresentationContextProviding {
     func presentationAnchor(for controller: ASAuthorizationController) -> ASPresentationAnchor {
-        let authWindow = InvisibleWindow()
+        let authWindow = CenteredWindow()
         authWindow.makeKey()
         authWindow.orderFrontRegardless()
         return authWindow

@@ -77,7 +77,13 @@ class ProfileViewModel: ObservableObject {
         self.delegate?.didRedirectToApp()
     }
     
-    func updateProfilePicture(imageData: Data) {
+    func saveProfile() {
+        if let currentUser = self.authState.currentUser {
+            self.storeService.updateUser(user: currentUser)
+        }
+    }
+    
+    func updatePhoto(imageData: Data) {
         self.storageService.uploadProfilePicture(imageData: imageData) { url in
             self.authService.updateProfilePicture(url: url)
         }

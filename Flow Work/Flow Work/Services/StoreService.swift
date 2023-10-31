@@ -41,6 +41,21 @@ class StoreService: StoreServiceProtocol, ObservableObject {
         }
     }
     
+    func updateUser(user: User) -> Void {
+        db.collection("users").document(user.id).updateData([
+            "id": user.id,
+            "name": user.name,
+            "emailAddress": user.emailAddress,
+            "avatarURL": user.avatarURL?.absoluteString ?? "",
+        ]) { error in
+            if let error = error {
+                print("Error updating user: \(error.localizedDescription)")
+            } else {
+                print("User updated")
+            }
+        }
+    }
+    
     func findUsersByUserIds(userIds: [String], completion: @escaping ([User]) -> Void) {
         db.collection("users").whereField("id", in: userIds).getDocuments {
             (snapshot, error) in
