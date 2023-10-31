@@ -109,8 +109,6 @@ class SessionViewModel: ObservableObject {
                 self.restoreSessionGlobal()
             }
             self.resetTimer()
-            
-            self.audioService.playSound(.door)
         case .pomodoro:
             if self.inFocusMode {
                 self.restoreSessionGlobal()

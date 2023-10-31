@@ -138,6 +138,7 @@ class SessionService: SessionServiceProtocol, ObservableObject {
             payload: [:] as [String: Any]
         )
         self.sendMessage(message: joinSessionMessage)
+        self.state.hasJoinedSession = true
         self.delegate?.didJoinSession(sessionId)
     }
     

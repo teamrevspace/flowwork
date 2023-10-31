@@ -109,7 +109,7 @@ struct SessionView: View {
                             if viewModel.defaultSessionId == viewModel.sessionState.currentSession?.id {
                                 SmallIcon(icon: "checkmark.seal.fill", foregroundColor: Color.blue)
                             }
-                            Text("\(viewModel.sessionState.currentSession?.name ?? "Session")")
+                            Text(viewModel.sessionState.currentSession?.name ?? "Loading...")
                                 .fontWeight(.bold)
                                 .font(.title2)
                                 .lineLimit(1)

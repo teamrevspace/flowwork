@@ -25,6 +25,7 @@ class AppCoordinator: ObservableObject {
     @Published var todoService: TodoServiceProtocol
     @Published var sessionService: SessionServiceProtocol
     @Published var storeService: StoreServiceProtocol
+    @Published var audioService: AudioServiceProtocol
     @Published var apiService: APIServiceProtocol
     @Published var roomService: RoomServiceProtocol
     @Published var networkService: NetworkServiceProtocol
@@ -54,6 +55,7 @@ class AppCoordinator: ObservableObject {
         self.todoService = resolver.resolve(TodoServiceProtocol.self)!
         self.storeService = resolver.resolve(StoreServiceProtocol.self)!
         self.apiService = resolver.resolve(APIServiceProtocol.self)!
+        self.audioService = resolver.resolve(AudioServiceProtocol.self)!
         self.roomService = resolver.resolve(RoomServiceProtocol.self)!
         self.networkService = resolver.resolve(NetworkServiceProtocol.self)!
         self.storageService = resolver.resolve(StorageServiceProtocol.self)!
@@ -139,6 +141,7 @@ extension AppCoordinator: SessionServiceDelegate {
             return
         }
         self.storeService.addUserToSession(userId: userId, sessionId: sessionId)
+        self.audioService.playSound(.door)
         navigate(to: .Session)
     }
     
